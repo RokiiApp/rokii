@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { clipboard } from "electron";
+// @ts-ignore
 import { focusableSelector } from "@cerebroapp/cerebro-ui";
 import { Autocomplete } from "./Autocomplete";
 
@@ -14,7 +15,7 @@ import {
 
 import * as config from "common/config";
 import ResultsList from "../ResultsList";
-import StatusBar from "../StatusBar";
+import { StatusBar } from "../StatusBar";
 import styles from "./styles.module.css";
 
 import { getCurrentWindow } from "@electron/remote";
@@ -93,10 +94,10 @@ const updateElectronWindow = (results: any[], visibleResults: number) => {
   win.setPosition(x, y);
 };
 
-const onDocumentKeydown = (event) => {
-  if (event.keyCode === 27) {
+const onDocumentKeydown = (event: KeyboardEvent) => {
+  if (event.key === "escape") {
     event.preventDefault();
-    document.getElementById("main-input").focus();
+    (document.getElementById("main-input") as HTMLInputElement).focus();
   }
 };
 
@@ -106,13 +107,16 @@ const onDocumentKeydown = (event) => {
  * TODO: Split to more components
  */
 function Cerebro() {
+  const [results, selected, visibleResults, term, prevTerm, statusBarText] =
+    useRokiStore((s) => [
+      s.results,
+      s.selected,
+      s.visibleResults,
+      s.term,
+      s.prevTerm,
+      s.statusBarText,
+    ]);
   const [
-    results,
-    selected,
-    visibleResults,
-    term,
-    prevTerm,
-    statusBarText,
     updateTerm,
     reset,
     hide,
@@ -122,12 +126,6 @@ function Cerebro() {
     setVisibleResults,
     setSelected,
   ] = useRokiStore((s) => [
-    s.results,
-    s.selected,
-    s.visibleResults,
-    s.term,
-    s.prevTerm,
-    s.statusBarText,
     s.updateTerm,
     s.reset,
     s.hide,
@@ -137,7 +135,7 @@ function Cerebro() {
     s.setVisibleResults,
     s.select,
   ]);
-  const mainInput = useRef<HTMLInputElement>();
+  const mainInput = useRef<any>();
   const [mainInputFocused, setMainInputFocused] = useState(false);
   const [prevResultsLenght, setPrevResultsLenght] = useState(
     () => results.length
@@ -348,7 +346,7 @@ function Cerebro() {
    * @param  {[type]} item [description]
    * @return {[type]}      [description]
    */
-  const selectItem = (item, realEvent) => {
+  const selectItem = (item: any, realEvent: any) => {
     reset();
     const event = wrapEvent(realEvent);
     item.onSelect(event);
@@ -359,7 +357,7 @@ function Cerebro() {
   /**
    * Autocomple search term from highlighted result
    */
-  const autocomplete = (event) => {
+  const autocomplete = (event: React.KeyboardEvent<HTMLInputElement>) => {
     const { term: highlightedTerm } = highlightedResult();
     if (highlightedTerm && highlightedTerm !== term) {
       updateTerm(highlightedTerm);
@@ -391,9 +389,6 @@ function Cerebro() {
         />
       </div>
       <ResultsList
-        results={results}
-        selected={selected}
-        visibleResults={visibleResults}
         onItemHover={setSelected}
         onSelect={selectItem}
         mainInputFocused={mainInputFocused}

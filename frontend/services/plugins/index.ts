@@ -18,7 +18,6 @@ const EMPTY_PACKAGE_JSON = JSON.stringify(
   2
 );
 
-// TODO - enable this env variable
 export const rokiPath = path.join(app.getPath("appData"), "roki");
 export const pluginsPath = path.join(rokiPath, "plugins");
 export const modulesDirectory = path.join(pluginsPath, "node_modules");

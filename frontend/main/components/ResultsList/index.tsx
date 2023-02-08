@@ -1,15 +1,19 @@
-import PropTypes from 'prop-types'
-import { List } from 'react-virtualized'
-import { RESULT_HEIGHT } from 'common/constants/ui'
+import PropTypes from "prop-types";
+import { List } from "react-virtualized";
+import { RESULT_HEIGHT } from "common/constants/ui";
 
-import Row from './Row'
-import styles from './styles.module.scss'
+import Row from "./Row";
+import styles from "./styles.module.scss";
+import { useRokiStore } from "@/state/rokiStore";
 
-function ResultsList({
-  results, selected, visibleResults, onSelect, mainInputFocused, onItemHover
-}) {
+function ResultsList({ onSelect, mainInputFocused, onItemHover }) {
+  const [results, selected, visibleResults] = useRokiStore((s) => [
+    s.results,
+    s.selected,
+    s.visibleResults,
+  ]);
   const rowRenderer = ({ index, key, style }) => {
-    const result = results[index]
+    const result = results[index];
     const attrs = {
       ...result,
       // TODO: think about events
@@ -19,36 +23,40 @@ function ResultsList({
       onSelect: (event) => onSelect(result, event),
       // Move selection to item under cursor
       onMouseMove: (event) => {
-        const { movementX, movementY } = event.nativeEvent
-        if (index === selected || !mainInputFocused) return false
+        const { movementX, movementY } = event.nativeEvent;
+        if (index === selected || !mainInputFocused) return false;
 
         if (movementX || movementY) {
           // Hover item only when we had real movement of mouse
           // We should prevent changing of selection when user uses keyboard
-          onItemHover(index)
+          onItemHover(index);
         }
       },
-    }
-    return <Row key={key} style={style} {...attrs} />
-  }
+    };
+    return <Row key={key} style={style} {...attrs} />;
+  };
 
   const renderPreview = () => {
-    const selectedResult = results[selected]
-    console.log(selectedResult)
-    if (!selectedResult.getPreview) return null
+    const selectedResult = results[selected];
 
-    const preview = selectedResult.getPreview()
+    if (!selectedResult.getPreview) return null;
 
-    if (typeof preview === 'string') {
+    const preview = selectedResult.getPreview();
+
+    if (typeof preview === "string") {
       // Fallback for html previews intead of react component
-      return <div dangerouslySetInnerHTML={{ __html: preview }} />
+      return <div dangerouslySetInnerHTML={{ __html: preview }} />;
     }
-    console.log(preview)
-    return preview
-  }
 
-  const classNames = [styles.resultsList, mainInputFocused ? styles.focused : styles.unfocused].join(' ')
-  if (results.length === 0) return null
+    return preview;
+  };
+
+  const classNames = [
+    styles.resultsList,
+    mainInputFocused ? styles.focused : styles.unfocused,
+  ].join(" ");
+
+  if (results.length === 0) return null;
 
   return (
     <div className={styles.wrapper}>
@@ -59,7 +67,11 @@ function ResultsList({
         rowCount={results.length}
         rowHeight={RESULT_HEIGHT}
         rowRenderer={rowRenderer}
-        width={(results[selected] !== undefined && results[selected].getPreview) ? 250 : 10000}
+        width={
+          results[selected] !== undefined && results[selected].getPreview
+            ? 250
+            : 10000
+        }
         scrollToIndex={selected}
         // Disable accesebility of VirtualScroll by tab
         tabIndex={null}
@@ -68,16 +80,13 @@ function ResultsList({
         {renderPreview()}
       </div>
     </div>
-  )
+  );
 }
 
 ResultsList.propTypes = {
-  results: PropTypes.array,
-  selected: PropTypes.number,
-  visibleResults: PropTypes.number,
   onItemHover: PropTypes.func,
   onSelect: PropTypes.func,
   mainInputFocused: PropTypes.bool,
-}
+};
 
-export default ResultsList
+export default ResultsList;
