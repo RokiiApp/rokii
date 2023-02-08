@@ -1,11 +1,11 @@
 import debounce from "just-debounce";
 import chokidar from "chokidar";
 import { parse } from "path";
-import { initPlugin } from "@/services/plugins/initPlugin";
+import { initPlugin } from "@/services/plugins/initializePlugins";
 import {
   modulesDirectory,
   ensureRokiNeededFiles,
-  settings,
+  pluginSettings,
 } from "@/services/plugins";
 import { pluginSchema } from ".";
 
@@ -86,7 +86,7 @@ const setupPluginsWatcher = () => {
         console.groupEnd();
         return;
       }
-      if (!settings.validate(plugin)) {
+      if (!pluginSettings.validate(plugin)) {
         console.log("Invalid plugins settings");
         console.groupEnd();
         return;

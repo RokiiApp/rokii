@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { SmartIcon } from '@cerebroapp/cerebro-ui'
-import styles from './styles.module.css'
+import styles from './styles.module.scss'
 
 function Row({
   selected, icon, title, onSelect, onMouseMove, subtitle, style

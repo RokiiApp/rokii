@@ -1,10 +1,9 @@
-import React from 'react'
 import PropTypes from 'prop-types'
 import { List } from 'react-virtualized'
 import { RESULT_HEIGHT } from 'common/constants/ui'
 
 import Row from './Row'
-import styles from './styles.module.css'
+import styles from './styles.module.scss'
 
 function ResultsList({
   results, selected, visibleResults, onSelect, mainInputFocused, onItemHover
@@ -35,6 +34,7 @@ function ResultsList({
 
   const renderPreview = () => {
     const selectedResult = results[selected]
+    console.log(selectedResult)
     if (!selectedResult.getPreview) return null
 
     const preview = selectedResult.getPreview()
@@ -43,6 +43,7 @@ function ResultsList({
       // Fallback for html previews intead of react component
       return <div dangerouslySetInnerHTML={{ __html: preview }} />
     }
+    console.log(preview)
     return preview
   }
 

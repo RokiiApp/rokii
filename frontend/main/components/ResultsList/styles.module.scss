@@ -30,12 +30,14 @@
   bottom: 0;
   right: 0;
   overflow: auto;
+
   /*
     Instead of using `justify-content: center` we have to use this hack.
     In this case child element that is bigger than `.preview ` will be placed on left border
     instead of moving outside of container
    */
-  &::before, &::after {
+  &::before,
+  &::after {
     content: '';
     margin: auto;
   }
@@ -51,6 +53,7 @@
   }
 
   :global {
+
     /* Styles for react-select */
     .Select {
       .Select-control {
@@ -58,31 +61,37 @@
         background: var(--preview-input-background);
         color: var(--preview-input-color);
       }
+
       .Select-menu-outer {
         border: var(--preview-input-border);
         background: var(--preview-input-background);
       }
+
       .Select-input input {
         border: 0;
       }
+
       .Select-value-label {
         color: var(--preview-input-color) !important;
       }
+
       .Select-option {
         background: var(--preview-input-background);
         color: var(--preview-input-color);
+
         &.is-selected {
           color: var(--selected-result-title-color);
           background: var(--selected-result-background);
         }
+
         &.is-focused {
           color: var(--selected-result-title-color);
           background: var(--selected-result-background);
           filter: opacity(50%);
         }
       }
-      .Select-option.is-selected {
-      }
+
+      .Select-option.is-selected {}
     }
   }
 }

@@ -62,7 +62,6 @@ const installPackage = async (
  * @param  dir Path to npm package directory
  */
 export default (dir: string) => {
-  console.log(dir);
   const packageJson = path.join(dir, "package.json");
   const setConfig = (config: any) =>
     fs.writeFileSync(packageJson, JSON.stringify(config, null, 2));

@@ -6,6 +6,7 @@ export type pluginSchema = {
   name?: string;
   icon?: string;
   keyword?: string;
+  initialize?: (args?: any) => void;
   initializeAsync?: (args?: any) => void;
   onMessage?: (args?: any) => void;
   settings: Record<NamedCurve, any>;

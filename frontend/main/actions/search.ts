@@ -2,7 +2,7 @@ import { pluginsService } from "@/plugins";
 import * as config from "common/config";
 import { shell, clipboard } from "electron";
 
-import { settings as pluginSettings } from "@/services/plugins";
+import { pluginSettings } from "@/services/plugins";
 import {
   UPDATE_TERM,
   MOVE_CURSOR,
@@ -16,7 +16,7 @@ import {
 
 import store from "../store";
 
-const remote = require("@electron/remote");
+import { getCurrentWindow } from "@electron/remote";
 
 /**
  * Default scope object would be first argument for plugins
@@ -29,7 +29,7 @@ const DEFAULT_SCOPE = {
     reveal: (q) => shell.showItemInFolder(q),
     copyToClipboard: (q) => clipboard.writeText(q),
     replaceTerm: (term) => store.dispatch(updateTerm(term)),
-    hideWindow: () => remote.getCurrentWindow().hide(),
+    hideWindow: () => getCurrentWindow().hide(),
   },
 };
 

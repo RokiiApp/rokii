@@ -1,23 +1,18 @@
-import { every } from 'lodash/fp'
+import type { pluginSchema } from "@/plugins";
 
-const VALID_TYPES = new Set([
-  'string',
-  'number',
-  'bool',
-  'option',
-])
+const VALID_TYPES = new Set(["string", "number", "bool", "option"]);
 
 const validSetting = ({ type, options }) => {
   // General validation of settings
-  if (!type || !VALID_TYPES.has(type)) return false
+  if (!type || !VALID_TYPES.has(type)) return false;
 
   // Type-specific validations
-  if (type === 'option') return Array.isArray(options) && options.length
+  if (type === "option") return Array.isArray(options) && options.length;
 
-  return true
-}
+  return true;
+};
 
-export default ({ settings }) => {
-  if (!settings) return true
-  return every(validSetting)(settings)
-}
+export const validate = ({ settings }: pluginSchema) => {
+  if (!settings) return true;
+  return Object.values(settings).every(validSetting);
+};

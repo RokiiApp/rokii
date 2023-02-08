@@ -1,5 +1,5 @@
 import icon from '../icon.png'
-
+import { app } from "@electron/remote"
 // Settings plugin name
 const NAME = 'Cerebro Version'
 
@@ -12,8 +12,6 @@ const KEYWORDS = [
   'ver',
   'version'
 ]
-
-const { CEREBRO_VERSION } = process.env
 
 /**
  * Plugin to show app settings in results list
@@ -30,7 +28,7 @@ const versionPlugin = ({ term, display, actions }) => {
       icon,
       title: NAME,
       term: NAME,
-      getPreview: () => (<div><strong>{CEREBRO_VERSION}</strong></div>),
+      getPreview: () => (<div><strong>{app.getVersion()}</strong></div>),
       onSelect: (event) => {
         event.preventDefault()
         actions.replaceTerm(NAME)

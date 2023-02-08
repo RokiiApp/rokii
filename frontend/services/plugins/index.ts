@@ -32,4 +32,4 @@ export const ensureRokiNeededFiles = async () => {
 };
 
 export const client = npm(pluginsPath);
-export { default as settings } from "./settings";
+export { default as pluginSettings } from "./settings";

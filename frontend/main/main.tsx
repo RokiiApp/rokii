@@ -1,12 +1,12 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import App from "./App";
 import { Provider } from "react-redux";
 import * as config from "common/config";
 import { on } from "@/services/rpc";
 import Cerebro from "./components/Cerebro";
 import store from "./store";
 import "./globals.css";
+import { initializePlugins } from "@/services/plugins/initializePlugins";
 
 /**
  * Change current theme
@@ -27,6 +27,8 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     </Provider>
   </React.StrictMode>
 );
+
+initializePlugins();
 
 // Handle `showTerm` rpc event and replace search term with payload
 // on("showTerm", );

@@ -14,8 +14,6 @@ const getExistingSettings = (pluginName: string) =>
  * We use packageJsonName to avoid conflicts with plugins that export
  * a different name from the bundle. Two plugins can export the same name
  * but can't have the same package.json name
- * @param plugin
- * @param packageJsonName
  * @returns An object with keys and values of the plugin settings
  */
 const getUserSettings = (plugin: pluginSchema, packageJsonName: string) => {

@@ -1,9 +1,6 @@
 import { pluginsService } from "@/plugins";
 import { on, send } from "@/services/rpc";
-import {
-  settings as pluginSettings,
-  modulesDirectory,
-} from "@/services/plugins";
+import { pluginSettings, modulesDirectory } from "@/services/plugins";
 
 on("initializePluginAsync", ({ name }: { name: any }) => {
   const { corePlugins } = pluginsService;
