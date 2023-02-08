@@ -1,10 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { Provider } from "react-redux";
 import * as config from "common/config";
 import { on } from "@/services/rpc";
 import Cerebro from "./components/Cerebro";
-import store from "./store";
 import "./globals.css";
 import { initializePlugins } from "@/services/plugins/initializePlugins";
 
@@ -22,9 +20,7 @@ changeTheme(config.get("theme"));
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
-    <Provider store={store}>
-      <Cerebro />
-    </Provider>
+    <Cerebro />
   </React.StrictMode>
 );
 

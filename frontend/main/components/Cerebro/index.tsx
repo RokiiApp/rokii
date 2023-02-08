@@ -1,9 +1,6 @@
 /* eslint default-case: 0 */
 
 import { useEffect, useRef, useState } from "react";
-import PropTypes from "prop-types";
-import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
 import { clipboard } from "electron";
 import { focusableSelector } from "@cerebroapp/cerebro-ui";
 import { Autocomplete } from "./Autocomplete";
@@ -14,7 +11,6 @@ import {
   RESULT_HEIGHT,
   MIN_VISIBLE_RESULTS,
 } from "common/constants/ui";
-import * as searchActions from "@/main/actions/search";
 
 import * as config from "common/config";
 import ResultsList from "../ResultsList";
@@ -24,7 +20,7 @@ import styles from "./styles.module.css";
 import { getCurrentWindow } from "@electron/remote";
 import { useRokiStore } from "@/state/rokiStore";
 import { pluginsService } from "@/plugins";
-import { DEFAULT_SCOPE } from "@/main/actions/search";
+import { DEFAULT_SCOPE } from "@/main/utils/pluginDefaultScope";
 import { pluginSettings } from "@/services/plugins";
 import { getAutocompleteValue } from "@/main/utils/getAutocompleteValue";
 
@@ -107,18 +103,9 @@ const onDocumentKeydown = (event) => {
 /**
  * Main search container
  *
- * TODO: Remove redux
  * TODO: Split to more components
  */
-function Cerebro({
-  // results,
-  // selected,
-  // visibleResults,
-  actions,
-  // term,
-  // prevTerm,
-  // statusBarText,
-}) {
+function Cerebro() {
   const [
     results,
     selected,
@@ -133,6 +120,7 @@ function Cerebro({
     addResult,
     moveCursor,
     setVisibleResults,
+    setSelected,
   ] = useRokiStore((s) => [
     s.results,
     s.selected,
@@ -147,8 +135,9 @@ function Cerebro({
     s.addResult,
     s.moveCursor,
     s.setVisibleResults,
+    s.select,
   ]);
-  const mainInput = useRef(null);
+  const mainInput = useRef<HTMLInputElement>();
   const [mainInputFocused, setMainInputFocused] = useState(false);
   const [prevResultsLenght, setPrevResultsLenght] = useState(
     () => results.length
@@ -157,7 +146,7 @@ function Cerebro({
   const focusMainInput = () => {
     mainInput.current?.focus();
     if (config.get("selectOnShow")) {
-      mainInput.current.select();
+      mainInput.current?.select();
     }
   };
 
@@ -191,6 +180,7 @@ function Cerebro({
       try {
         plugin.fn?.({
           ...DEFAULT_SCOPE,
+          replaceTerm: (newTerm: string) => updateTerm(newTerm),
           term,
           hide: (id: string) => hide(`${name}-${id}`),
           update: (id: string, result: any) =>
@@ -271,7 +261,7 @@ function Cerebro({
     // shortcuts for ctrl+...
     if ((event.metaKey || event.ctrlKey) && !event.altKey) {
       // Copy to clipboard on cmd+c
-      if (event.keyCode === 67) {
+      if (event.key === "c") {
         const text = highlightedResult()?.clipboard || term;
         if (text) {
           clipboard.writeText(text);
@@ -285,14 +275,14 @@ function Cerebro({
       }
 
       // Select text on cmd+a
-      if (event.keyCode === 65) {
-        mainInput.current.select();
+      if (event.key === "a") {
+        mainInput.current?.select();
         event.preventDefault();
       }
 
       // Select element by number
-      if (event.keyCode >= 49 && event.keyCode <= 57) {
-        const number = Math.abs(49 - event.keyCode);
+      if (isFinite(+event.key)) {
+        const number = Number(event.key);
         const result = results[number];
 
         if (result) return selectItem(result, event);
@@ -380,7 +370,8 @@ function Cerebro({
   /**
    * Select highlighted element
    */
-  const selectCurrent = (event) => selectItem(highlightedResult(), event);
+  const selectCurrent = (event: React.KeyboardEvent<HTMLInputElement>) =>
+    selectItem(highlightedResult(), event);
 
   return (
     <div className={styles.search}>
@@ -403,7 +394,7 @@ function Cerebro({
         results={results}
         selected={selected}
         visibleResults={visibleResults}
-        onItemHover={actions.selectElement}
+        onItemHover={setSelected}
         onSelect={selectItem}
         mainInputFocused={mainInputFocused}
       />
@@ -412,37 +403,4 @@ function Cerebro({
   );
 }
 
-Cerebro.propTypes = {
-  actions: PropTypes.shape({
-    reset: PropTypes.func,
-    moveCursor: PropTypes.func,
-    updateTerm: PropTypes.func,
-    changeVisibleResults: PropTypes.func,
-    selectElement: PropTypes.func,
-  }),
-  results: PropTypes.array,
-  selected: PropTypes.number,
-  visibleResults: PropTypes.number,
-  term: PropTypes.string,
-  statusBarText: PropTypes.string,
-  prevTerm: PropTypes.string,
-};
-
-function mapStateToProps(state) {
-  return {
-    selected: state.search.selected,
-    results: state.search.resultIds.map((id) => state.search.resultsById[id]),
-    term: state.search.term,
-    statusBarText: state.statusBar.text,
-    prevTerm: state.search.prevTerm,
-    visibleResults: state.search.visibleResults,
-  };
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    actions: bindActionCreators(searchActions, dispatch),
-  };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Cerebro);
+export default Cerebro;
