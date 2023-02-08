@@ -27,6 +27,7 @@
     },
   },
   "include": [
+    "common",
     "frontend",
     "frontend/App.tsx"
   ],
