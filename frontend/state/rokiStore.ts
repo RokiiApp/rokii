@@ -21,6 +21,9 @@ interface RokiStore {
   updateTerm: (term: string) => void;
   hide: (id: string) => void;
   updateResult: (id: string, result: any) => void;
+  moveCursor: (direction: number) => void;
+  setVisibleResults: (count: number) => void;
+  select: (index: number) => void;
 }
 const defaultState = {
   results: [],
@@ -102,4 +105,14 @@ export const useRokiStore = create<RokiStore>((set) => ({
         results: newResults,
       };
     }),
+  moveCursor: (direction) =>
+    set((state) => {
+      const newSelected = state.selected + direction;
+      if (newSelected < 0 || newSelected >= state.results.length) {
+        return state;
+      }
+      return { ...state, selected: newSelected };
+    }),
+  setVisibleResults: (count) => set({ visibleResults: count }),
+  select: (index: number) => set({ selected: index }),
 }));

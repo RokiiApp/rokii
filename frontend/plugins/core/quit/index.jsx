@@ -1,11 +1,11 @@
-import { ipcRenderer } from 'electron'
+import { app } from "@electron/remote"
 import { search } from 'cerebro-tools'
 import icon from '../icon.png'
 
 const KEYWORDS = ['Quit', 'Exit']
 
 const subtitle = 'Quit from Cerebro'
-const onSelect = () => ipcRenderer.send('quit')
+const onSelect = () => app.quit()
 
 /**
  * Plugin to exit from Cerebro

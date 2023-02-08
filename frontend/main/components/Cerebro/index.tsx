@@ -131,6 +131,8 @@ function Cerebro({
     hide,
     updateResult,
     addResult,
+    moveCursor,
+    setVisibleResults,
   ] = useRokiStore((s) => [
     s.results,
     s.selected,
@@ -143,6 +145,8 @@ function Cerebro({
     s.hide,
     s.updateResult,
     s.addResult,
+    s.moveCursor,
+    s.setVisibleResults,
   ]);
   const mainInput = useRef(null);
   const [mainInputFocused, setMainInputFocused] = useState(false);
@@ -218,7 +222,7 @@ function Cerebro({
     );
     maxVisibleResults = Math.max(MIN_VISIBLE_RESULTS, maxVisibleResults);
     if (maxVisibleResults !== visibleResults) {
-      actions.changeVisibleResults(maxVisibleResults);
+      setVisibleResults(maxVisibleResults);
     }
   };
 
@@ -250,15 +254,15 @@ function Cerebro({
       },
 
       arrowDown: () => {
-        actions.moveCursor(1);
+        moveCursor(1);
         event.preventDefault();
       },
 
       arrowUp: () => {
         if (results.length > 0) {
-          actions.moveCursor(-1);
+          moveCursor(-1);
         } else if (prevTerm) {
-          actions.updateTerm(prevTerm);
+          updateTerm(prevTerm);
         }
         event.preventDefault();
       },
@@ -368,7 +372,7 @@ function Cerebro({
   const autocomplete = (event) => {
     const { term: highlightedTerm } = highlightedResult();
     if (highlightedTerm && highlightedTerm !== term) {
-      actions.updateTerm(highlightedTerm);
+      updateTerm(highlightedTerm);
       event.preventDefault();
     }
   };
