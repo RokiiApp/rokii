@@ -6,7 +6,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { clipboard } from "electron";
 import { focusableSelector } from "@cerebroapp/cerebro-ui";
-import escapeStringRegexp from "escape-string-regexp";
+import { Autocomplete } from "./Autocomplete";
 
 import {
   WINDOW_WIDTH,
@@ -22,6 +22,11 @@ import StatusBar from "../StatusBar";
 import styles from "./styles.module.css";
 
 import { getCurrentWindow } from "@electron/remote";
+import { useRokiStore } from "@/state/rokiStore";
+import { pluginsService } from "@/plugins";
+import { DEFAULT_SCOPE } from "@/main/actions/search";
+import { pluginSettings } from "@/services/plugins";
+import { getAutocompleteValue } from "@/main/utils/getAutocompleteValue";
 
 /**
  * Wrap click or mousedown event to custom `select-item` event,
@@ -44,7 +49,7 @@ const wrapEvent = (realEvent) => {
  */
 const focusPreview = () => {
   const previewDom = document.getElementById("preview");
-  const firstFocusable = previewDom.querySelector(focusableSelector);
+  const firstFocusable = previewDom?.querySelector(focusableSelector);
   if (firstFocusable) {
     firstFocusable.focus();
   }
@@ -63,9 +68,9 @@ const electronWindow = getCurrentWindow();
 /**
  * Set resizable and size for main electron window when results count is changed
  */
-const updateElectronWindow = (results, visibleResults) => {
+const updateElectronWindow = (results: any[], visibleResults: number) => {
   const { length } = results;
-  const win = electronWindow;
+  const win = getCurrentWindow();
   const [width] = win.getSize();
 
   // When results list is empty window is not resizable
@@ -75,7 +80,7 @@ const updateElectronWindow = (results, visibleResults) => {
     win.setMinimumSize(WINDOW_WIDTH, INPUT_HEIGHT);
     win.setSize(width, INPUT_HEIGHT);
     const [x, y] = config.get("winPosition");
-    win.setPosition(50, 50);
+    win.setPosition(x, y);
     return;
   }
 
@@ -89,7 +94,7 @@ const updateElectronWindow = (results, visibleResults) => {
   win.setMinimumSize(WINDOW_WIDTH, minHeightWithResults);
   win.setSize(width, heightWithResults);
   const [x, y] = config.get("winPosition");
-  win.setPosition(50, 50);
+  win.setPosition(x, y);
 };
 
 const onDocumentKeydown = (event) => {
@@ -99,18 +104,6 @@ const onDocumentKeydown = (event) => {
   }
 };
 
-function Autocomplete({ autocompleteCalculator }) {
-  const autocompleteTerm = autocompleteCalculator();
-
-  return autocompleteTerm ? (
-    <div className={styles.autocomplete}>{autocompleteTerm}</div>
-  ) : null;
-}
-
-Autocomplete.propTypes = {
-  autocompleteCalculator: PropTypes.func.isRequired,
-};
-
 /**
  * Main search container
  *
@@ -118,14 +111,39 @@ Autocomplete.propTypes = {
  * TODO: Split to more components
  */
 function Cerebro({
-  results,
-  selected,
-  visibleResults,
+  // results,
+  // selected,
+  // visibleResults,
   actions,
-  term,
-  prevTerm,
-  statusBarText,
+  // term,
+  // prevTerm,
+  // statusBarText,
 }) {
+  const [
+    results,
+    selected,
+    visibleResults,
+    term,
+    prevTerm,
+    statusBarText,
+    updateTerm,
+    reset,
+    hide,
+    updateResult,
+    addResult,
+  ] = useRokiStore((s) => [
+    s.results,
+    s.selected,
+    s.visibleResults,
+    s.term,
+    s.prevTerm,
+    s.statusBarText,
+    s.updateTerm,
+    s.reset,
+    s.hide,
+    s.updateResult,
+    s.addResult,
+  ]);
   const mainInput = useRef(null);
   const [mainInputFocused, setMainInputFocused] = useState(false);
   const [prevResultsLenght, setPrevResultsLenght] = useState(
@@ -133,7 +151,7 @@ function Cerebro({
   );
 
   const focusMainInput = () => {
-    mainInput.current.focus();
+    mainInput.current?.focus();
     if (config.get("selectOnShow")) {
       mainInput.current.select();
     }
@@ -161,6 +179,28 @@ function Cerebro({
     };
   }, []);
 
+  useEffect(() => {
+    const { allPlugins } = pluginsService;
+    // TODO: order results by frequency?
+    Object.keys(allPlugins).forEach((name) => {
+      const plugin = allPlugins[name];
+      try {
+        plugin.fn?.({
+          ...DEFAULT_SCOPE,
+          term,
+          hide: (id: string) => hide(`${name}-${id}`),
+          update: (id: string, result: any) =>
+            updateResult(`${name}-${id}`, result),
+          display: (payload: any) => addResult(payload),
+          settings: pluginSettings.getUserSettings(plugin, name),
+        });
+      } catch (error) {
+        // Do not fail on plugin errors, just log them to console
+        console.log("Error running plugin", name, error);
+      }
+    });
+  }, [term]);
+
   if (results.length !== prevResultsLenght) {
     // Resize electron window when results count changed
     updateElectronWindow(results, visibleResults);
@@ -171,7 +211,7 @@ function Cerebro({
    * Handle resize window and change count of visible results depends on window size
    */
   const onWindowResize = () => {
-    if (results.length <= MIN_VISIBLE_RESULTS) return false;
+    if (results.length <= MIN_VISIBLE_RESULTS) return;
 
     let maxVisibleResults = Math.floor(
       (window.outerHeight - INPUT_HEIGHT) / RESULT_HEIGHT
@@ -185,7 +225,7 @@ function Cerebro({
   /**
    * Handle keyboard shortcuts
    */
-  const onKeyDown = (event) => {
+  const onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     const highlighted = highlightedResult();
     // TODO: go to first result on cmd+up and last result on cmd+down
     if (highlighted && highlighted.onKeyDown) highlighted.onKeyDown(event);
@@ -199,7 +239,7 @@ function Cerebro({
 
       arrowRight: () => {
         if (cursorInEndOfInut(event.target)) {
-          if (autocompleteValue()) {
+          if (getAutocompleteValue(results[selected], term)) {
             // Autocomplete by arrow right only if autocomple value is shown
             autocomplete(event);
           } else {
@@ -231,7 +271,7 @@ function Cerebro({
         const text = highlightedResult()?.clipboard || term;
         if (text) {
           clipboard.writeText(text);
-          actions.reset();
+          reset();
           if (!event.defaultPrevented) {
             electronWindow.hide();
           }
@@ -288,7 +328,7 @@ function Cerebro({
         keyActions.select();
         break;
       case 27:
-        actions.reset();
+        reset();
         electronWindow.hide();
         break;
     }
@@ -306,7 +346,6 @@ function Cerebro({
 
   /**
    * Get highlighted result
-   * @return {Object}
    */
   const highlightedResult = () => results[selected];
 
@@ -316,7 +355,7 @@ function Cerebro({
    * @return {[type]}      [description]
    */
   const selectItem = (item, realEvent) => {
-    actions.reset();
+    reset();
     const event = wrapEvent(realEvent);
     item.onSelect(event);
 
@@ -339,29 +378,18 @@ function Cerebro({
    */
   const selectCurrent = (event) => selectItem(highlightedResult(), event);
 
-  const autocompleteValue = () => {
-    const selectedResult = highlightedResult();
-    if (selectedResult && selectedResult.term) {
-      const regexp = new RegExp(`^${escapeStringRegexp(term)}`, "i");
-      if (selectedResult.term.match(regexp)) {
-        return selectedResult.term.replace(regexp, term);
-      }
-    }
-    return "";
-  };
-
   return (
     <div className={styles.search}>
-      <Autocomplete autocompleteCalculator={autocompleteValue} />
+      <Autocomplete />
       <div className={styles.inputWrapper}>
         <input
-          placeholder="Cerebro Search"
+          placeholder="RoKI Search"
           type="text"
           id="main-input"
           ref={mainInput}
           value={term}
           className={styles.input}
-          onChange={(e) => actions.updateTerm(e.target.value)}
+          onChange={(e) => updateTerm(e.target.value)}
           onKeyDown={onKeyDown}
           onFocus={onMainInputFocus}
           onBlur={onMainInputBlur}

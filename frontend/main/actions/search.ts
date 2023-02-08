@@ -22,7 +22,7 @@ import { getCurrentWindow } from "@electron/remote";
  * Default scope object would be first argument for plugins
  *
  */
-const DEFAULT_SCOPE = {
+export const DEFAULT_SCOPE = {
   config,
   actions: {
     open: (q) => shell.openExternal(q),
@@ -96,10 +96,7 @@ export function updateTerm(term) {
   if (term === "") return reset();
 
   return (dispatch) => {
-    dispatch({
-      type: UPDATE_TERM,
-      payload: term,
-    });
+    dispatch({ type: UPDATE_TERM, payload: term });
     eachPlugin(term, (plugin, payload) => {
       let result = Array.isArray(payload) ? payload : [payload];
       result = result.map((x) => ({

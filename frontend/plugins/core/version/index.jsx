@@ -1,5 +1,6 @@
 import icon from '../icon.png'
 import { app } from "@electron/remote"
+import { search } from 'cerebro-tools'
 // Settings plugin name
 const NAME = 'Cerebro Version'
 
@@ -20,22 +21,20 @@ const KEYWORDS = [
  * @param  {Function} options.display
  */
 const versionPlugin = ({ term, display, actions }) => {
-  const found = true;
-
-  if (found) {
-    const results = [{
-      order,
-      icon,
-      title: NAME,
-      term: NAME,
-      getPreview: () => (<div><strong>{app.getVersion()}</strong></div>),
-      onSelect: (event) => {
-        event.preventDefault()
-        actions.replaceTerm(NAME)
-      }
-    }]
-    display(results)
-  }
+  const result = search(KEYWORDS, term).map((title) => ({
+    order,
+    icon,
+    title,
+    getPreview: () => (<div><strong>{app.getVersion()}</strong></div>),
+    onSelect: (event) => {
+      event.preventDefault()
+      actions.replaceTerm(NAME)
+    },
+    term: title,
+  }))
+  
+  display(result)
+  
 }
 
 export default { name: NAME, fn: versionPlugin }

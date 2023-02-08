@@ -1,3 +1,4 @@
-import version from './version'
+import version from "./version";
+import quit from "./quit";
 
-export { version }
+export { version, quit };
