@@ -26,12 +26,12 @@
         "frontend/*"
       ],
       "common/*": [
-        "common/*"
+        "server/common/*"
       ]
     },
   },
   "include": [
-    "common",
+    "server/common",
     "frontend",
     "frontend/App.tsx"
   ],

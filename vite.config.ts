@@ -16,7 +16,7 @@ export default defineConfig(({ command }) => {
     root: "./frontend",
     resolve: {
       alias: {
-        common: path.join(__dirname, "common"),
+        common: path.join(__dirname, "server", "common"),
         "@": path.join(__dirname, "frontend"),
       },
     },
