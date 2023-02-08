@@ -1,6 +1,6 @@
 import {
   SET_STATUS_BAR_TEXT
-} from '../constants/actionTypes'
+} from '../../../server/common/constants/actionTypes'
 
 export function reset() {
   return {

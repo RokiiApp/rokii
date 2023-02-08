@@ -1,8 +1,8 @@
-import { pluginsService } from '@/plugins'
-import * as config from 'common/config'
-import { shell, clipboard } from 'electron'
+import { pluginsService } from "@/plugins";
+import * as config from "common/config";
+import { shell, clipboard } from "electron";
 
-import { settings as pluginSettings } from '@/services/plugins'
+import { settings as pluginSettings } from "@/services/plugins";
 import {
   UPDATE_TERM,
   MOVE_CURSOR,
@@ -12,16 +12,15 @@ import {
   UPDATE_RESULT,
   RESET,
   CHANGE_VISIBLE_RESULTS,
-} from '@/main/constants/actionTypes'
+} from "common/constants/actionTypes";
 
-import store from '../store'
+import store from "../store";
 
-const remote = require('@electron/remote')
+const remote = require("@electron/remote");
 
 /**
  * Default scope object would be first argument for plugins
  *
- * @type {Object}
  */
 const DEFAULT_SCOPE = {
   config,
@@ -30,35 +29,36 @@ const DEFAULT_SCOPE = {
     reveal: (q) => shell.showItemInFolder(q),
     copyToClipboard: (q) => clipboard.writeText(q),
     replaceTerm: (term) => store.dispatch(updateTerm(term)),
-    hideWindow: () => remote.getCurrentWindow().hide()
-  }
-}
+    hideWindow: () => remote.getCurrentWindow().hide(),
+  },
+};
 
 /**
  * Pass search term to all plugins and handle their results
- * @param {String} term Search term
- * @param {Function} display Callback function that receives used search term and found results
+ * @param term Search term
+ * @param display Callback function that receives used search term and found results
  */
-const eachPlugin = (term, display) => {
-  const { allPlugins } = pluginsService
+const eachPlugin = (term: string, display: Function) => {
+  const { allPlugins } = pluginsService;
   // TODO: order results by frequency?
   Object.keys(allPlugins).forEach((name) => {
-    const plugin = allPlugins[name]
+    const plugin = allPlugins[name];
     try {
       plugin.fn?.({
         ...DEFAULT_SCOPE,
         term,
         hide: (id) => store.dispatch(hideElement(`${name}-${id}`)),
-        update: (id, result) => store.dispatch(updateElement(`${name}-${id}`, result)),
+        update: (id, result) =>
+          store.dispatch(updateElement(`${name}-${id}`, result)),
         display: (payload) => display(name, payload),
-        settings: pluginSettings.getUserSettings(plugin, name)
-      })
+        settings: pluginSettings.getUserSettings(plugin, name),
+      });
     } catch (error) {
       // Do not fail on plugin errors, just log them to console
-      console.log('Error running plugin', name, error)
+      console.log("Error running plugin", name, error);
     }
-  })
-}
+  });
+};
 
 /**
  * Handle results found by plugin
@@ -73,8 +73,8 @@ function onResultFound(term, result) {
     payload: {
       result,
       term,
-    }
-  }
+    },
+  };
 }
 
 /**
@@ -83,7 +83,7 @@ function onResultFound(term, result) {
  * @return {Object}  redux action
  */
 export function reset() {
-  return { type: RESET }
+  return { type: RESET };
 }
 
 /**
@@ -93,28 +93,28 @@ export function reset() {
  * @return {Object}  redux action
  */
 export function updateTerm(term) {
-  if (term === '') return reset()
+  if (term === "") return reset();
 
   return (dispatch) => {
     dispatch({
       type: UPDATE_TERM,
       payload: term,
-    })
+    });
     eachPlugin(term, (plugin, payload) => {
-      let result = Array.isArray(payload) ? payload : [payload]
+      let result = Array.isArray(payload) ? payload : [payload];
       result = result.map((x) => ({
         ...x,
         plugin,
         // Scope result ids with plugin name and use title if id is empty
-        id: `${plugin}-${x.id || x.title}`
-      }))
+        id: `${plugin}-${x.id || x.title}`,
+      }));
       if (result.length === 0) {
         // Do not dispatch for empty results
-        return
+        return;
       }
-      dispatch(onResultFound(term, result))
-    })
-  }
+      dispatch(onResultFound(term, result));
+    });
+  };
 }
 
 /**
@@ -125,8 +125,8 @@ export function updateTerm(term) {
 export function moveCursor(diff) {
   return {
     type: MOVE_CURSOR,
-    payload: diff
-  }
+    payload: diff,
+  };
 }
 
 /**
@@ -137,8 +137,8 @@ export function moveCursor(diff) {
 export function selectElement(index) {
   return {
     type: SELECT_ELEMENT,
-    payload: index
-  }
+    payload: index,
+  };
 }
 
 /**
@@ -149,8 +149,8 @@ export function selectElement(index) {
 export function hideElement(id) {
   return {
     type: HIDE_RESULT,
-    payload: { id }
-  }
+    payload: { id },
+  };
 }
 
 /**
@@ -161,8 +161,8 @@ export function hideElement(id) {
 export function updateElement(id, result) {
   return {
     type: UPDATE_RESULT,
-    payload: { id, result }
-  }
+    payload: { id, result },
+  };
 }
 
 /**
@@ -172,5 +172,5 @@ export function changeVisibleResults(count) {
   return {
     type: CHANGE_VISIBLE_RESULTS,
     payload: count,
-  }
+  };
 }

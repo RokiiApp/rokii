@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { List } from 'react-virtualized'
-import { RESULT_HEIGHT } from '@/main/constants/ui'
+import { RESULT_HEIGHT } from 'common/constants/ui'
 
 import Row from './Row'
 import styles from './styles.module.css'

@@ -13,7 +13,7 @@ import {
   INPUT_HEIGHT,
   RESULT_HEIGHT,
   MIN_VISIBLE_RESULTS,
-} from "@/main/constants/ui";
+} from "common/constants/ui";
 import * as searchActions from "@/main/actions/search";
 
 import * as config from "common/config";

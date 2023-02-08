@@ -9,9 +9,9 @@ import {
   UPDATE_RESULT,
   RESET,
   CHANGE_VISIBLE_RESULTS
-} from '@/main/constants/actionTypes'
+} from 'common/constants/actionTypes'
 
-import { MIN_VISIBLE_RESULTS } from '@/main/constants/ui'
+import { MIN_VISIBLE_RESULTS } from 'common/constants/ui'
 
 const initialState = {
   // Search term in main input
