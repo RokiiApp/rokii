@@ -7,5 +7,7 @@ declare namespace NodeJS {
     DIST: string;
     /** /dist/ or /public/ */
     PUBLIC: string;
+    ROKI_DATA_PATH: string;
+    ROKI_VERSION: string;
   }
 }

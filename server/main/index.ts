@@ -4,6 +4,7 @@ import { release } from "node:os";
 import { createMainWindow } from "./createMainWindow";
 import { initAutoUpdater } from "./initAutoupdater";
 import { AppTray } from "./AppTray";
+import { createBackgroundWindow } from "./createBackgroundWindow";
 
 // Disable GPU Acceleration for Windows 7
 if (release().startsWith("6.1")) app.disableHardwareAcceleration();
@@ -17,9 +18,19 @@ if (!app.requestSingleInstanceLock()) {
 }
 
 let win: BrowserWindow | null = null;
+let backgroundWin: BrowserWindow | null = null;
 
 app.whenReady().then(async () => {
   win = createMainWindow();
+
+  require("@electron/remote/main").initialize();
+
+  require("@electron/remote/main").enable(win.webContents);
+
+  backgroundWin = createBackgroundWindow();
+
+  require("@electron/remote/main").enable(backgroundWin.webContents);
+
   initAutoUpdater(win);
   const tray = new AppTray({
     src: "src/assets/icon.png",
@@ -32,6 +43,7 @@ app.whenReady().then(async () => {
 
 app.on("window-all-closed", () => {
   win = null;
+  backgroundWin = null;
   if (process.platform !== "darwin") app.quit();
 });
 
@@ -49,5 +61,6 @@ app.on("activate", () => {
     allWindows[0].focus();
   } else {
     win = createMainWindow();
+    backgroundWin = createBackgroundWindow();
   }
 });

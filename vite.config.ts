@@ -16,6 +16,7 @@ export default defineConfig(({ command }) => {
     root: "./frontend",
     resolve: {
       alias: {
+        common: path.join(__dirname, "common"),
         "@": path.join(__dirname, "frontend"),
       },
     },
@@ -47,6 +48,9 @@ export default defineConfig(({ command }) => {
       // Use Node.js API in the Renderer-process
       renderer({
         nodeIntegration: true,
+        optimizeDeps: {
+          include: ["fs-extra"],
+        },
       }),
     ],
     server: !!process.env.VSCODE_DEBUG

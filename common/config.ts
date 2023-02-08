@@ -38,7 +38,10 @@ const schema: Schema<settingsSchema> = {
   winPosition: { default: [] },
 };
 
-const store = new Store({ schema });
+const store = new Store({
+  schema,
+  name: "test",
+});
 
 /**
  * Get a value from global configuration
