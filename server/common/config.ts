@@ -18,6 +18,7 @@ type settingsSchema = {
   isMigratedPlugins: boolean;
   openAtLogin: boolean;
   winPosition: number[];
+  proxy?: string;
 };
 
 const schema: Schema<settingsSchema> = {
@@ -36,6 +37,7 @@ const schema: Schema<settingsSchema> = {
   isMigratedPlugins: { default: false },
   openAtLogin: { default: true },
   winPosition: { default: [] },
+  proxy: { default: "" },
 };
 
 const store = new Store({

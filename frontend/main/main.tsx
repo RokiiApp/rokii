@@ -6,6 +6,8 @@ import Cerebro from "./components/Cerebro";
 import "./globals.css";
 import { initializePlugins } from "@/services/plugins/initializePlugins";
 
+window.React = React;
+
 /**
  * Change current theme
  *
