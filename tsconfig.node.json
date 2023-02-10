@@ -5,12 +5,6 @@
     "moduleResolution": "Node",
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true,
-    "baseUrl": "./",
-    "paths": {
-      "common/*": [
-        "server/common/*"
-      ]
-    },
   },
   "include": [
     "vite.config.ts",

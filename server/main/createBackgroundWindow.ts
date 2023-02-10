@@ -5,7 +5,7 @@ const url = join(process.env.VITE_DEV_SERVER_URL, "worker.html");
 const indexHtml = join(process.env.DIST, "worker.html");
 export const createBackgroundWindow = () => {
   const backgroundWindow = new BrowserWindow({
-    show: true,
+    show: false,
     webPreferences: {
       nodeIntegration: true,
       nodeIntegrationInSubFrames: false,

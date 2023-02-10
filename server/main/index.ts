@@ -5,6 +5,8 @@ import { createMainWindow } from "./createMainWindow";
 import { initAutoUpdater } from "./initAutoupdater";
 import { AppTray } from "./AppTray";
 import { createBackgroundWindow } from "./createBackgroundWindow";
+import { setupRTRCommunication } from "./services/setupInterRendererCommunication";
+import { setupSettingsListener } from "./services/settingsListener";
 
 // Disable GPU Acceleration for Windows 7
 if (release().startsWith("6.1")) app.disableHardwareAcceleration();
@@ -39,6 +41,9 @@ app.whenReady().then(async () => {
   });
 
   tray.show();
+
+  setupSettingsListener({ win, tray: null });
+  setupRTRCommunication(win, backgroundWin);
 });
 
 app.on("window-all-closed", () => {

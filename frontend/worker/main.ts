@@ -17,6 +17,8 @@ on("initializePluginAsync", ({ name }: { name: any }) => {
     }
 
     console.log("running `initializeAsync`");
+
+    // TODO: BREAKING CHANGE: move to promise-based API
     initializeAsync((data: any) => {
       console.log("Done! Sending data back to main window");
       // Send message back to main window with initialization result
@@ -25,6 +27,5 @@ on("initializePluginAsync", ({ name }: { name: any }) => {
   } catch (err) {
     console.log("Failed", err);
   }
-
   console.groupEnd();
 });
