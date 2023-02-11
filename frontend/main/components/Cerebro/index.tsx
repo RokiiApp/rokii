@@ -24,6 +24,7 @@ import { pluginsService } from "@/plugins";
 import { DEFAULT_SCOPE } from "@/main/utils/pluginDefaultScope";
 import { pluginSettings } from "@/services/plugins";
 import { getAutocompleteValue } from "@/main/utils/getAutocompleteValue";
+import { calculateMaxVisibleResults } from "./utils";
 
 /**
  * Wrap click or mousedown event to custom `select-item` event,
@@ -150,10 +151,9 @@ function Cerebro() {
 
   // suscribe to events
   useEffect(() => {
-    focusMainInput();
     updateElectronWindow(results, visibleResults);
     // Listen for window.resize and change default space for results to user's value
-    window.addEventListener("resize", onWindowResize);
+    window.addEventListener("resize", handleResize);
     // Add some global key handlers
     window.addEventListener("keydown", onDocumentKeydown);
     // Cleanup event listeners on unload
@@ -200,18 +200,11 @@ function Cerebro() {
   }
 
   /**
-   * Handle resize window and change count of visible results depends on window size
+   * Change count of visible results depends on window size
    */
-  const onWindowResize = () => {
-    if (results.length <= MIN_VISIBLE_RESULTS) return;
-
-    let maxVisibleResults = Math.floor(
-      (window.outerHeight - INPUT_HEIGHT) / RESULT_HEIGHT
-    );
-    maxVisibleResults = Math.max(MIN_VISIBLE_RESULTS, maxVisibleResults);
-    if (maxVisibleResults !== visibleResults) {
-      setVisibleResults(maxVisibleResults);
-    }
+  const handleResize = (setVisibleResults: any) => {
+    const newMaxVisibleResults = calculateMaxVisibleResults(results);
+    setVisibleResults(newMaxVisibleResults);
   };
 
   /**
@@ -330,7 +323,7 @@ function Cerebro() {
   const onMainInputBlur = () => setMainInputFocused(false);
 
   const cleanup = () => {
-    window.removeEventListener("resize", onWindowResize);
+    window.removeEventListener("resize", handleResize);
     window.removeEventListener("keydown", onDocumentKeydown);
     window.removeEventListener("beforeunload", cleanup);
     electronWindow.removeAllListeners("show");
@@ -376,6 +369,7 @@ function Cerebro() {
       <Autocomplete />
       <div className={styles.inputWrapper}>
         <input
+          autoFocus
           placeholder="RoKI Search"
           type="text"
           id="main-input"

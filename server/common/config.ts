@@ -17,7 +17,7 @@ type settingsSchema = {
   plugins: Record<string, unknown>;
   isMigratedPlugins: boolean;
   openAtLogin: boolean;
-  winPosition: number[];
+  winPosition: [x: number, y: number];
   proxy?: string;
 };
 

@@ -22,6 +22,9 @@ if (!app.requestSingleInstanceLock()) {
 let win: BrowserWindow | null = null;
 let backgroundWin: BrowserWindow | null = null;
 
+/**
+ * Here we control the lifecycle of the application
+ */
 app.whenReady().then(async () => {
   win = createMainWindow();
 
@@ -56,14 +59,14 @@ app.on("second-instance", () => {
   if (win) {
     // Focus on the main window if the user tried to open another
     if (win.isMinimized()) win.restore();
-    win.focus();
+    win.show();
   }
 });
 
 app.on("activate", () => {
   const allWindows = BrowserWindow.getAllWindows();
   if (allWindows.length) {
-    allWindows[0].focus();
+    allWindows[0].show();
   } else {
     win = createMainWindow();
     backgroundWin = createBackgroundWindow();

@@ -33,6 +33,10 @@ const SETTING_HANDLERS: Record<string, HandlerFunction> = {
   theme: (value: string, { win }) => {
     win.webContents.send("updateTheme", value);
   },
+
+  proxy: (value: string, { win }) => {
+    win.webContents.session.setProxy({ proxyRules: value });
+  },
 };
 
 const setupSettingsListener = (args: SettingsListenerOptions) => {

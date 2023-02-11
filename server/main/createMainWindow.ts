@@ -1,8 +1,9 @@
 import { app, BrowserWindow, globalShortcut, shell } from "electron";
-import debounce from "just-debounce";
 import { join } from "node:path";
 import * as config from "../common/config";
+import { INPUT_HEIGHT, WINDOW_WIDTH } from "../common/constants/ui";
 import { toggleWindow } from "./services/togglewindow";
+import { blurListener, hideListener, moveListener } from "./windowListeners";
 
 const url = process.env.VITE_DEV_SERVER_URL;
 const indexHtml = join(process.env.DIST, "index.html");
@@ -13,14 +14,15 @@ export function createMainWindow() {
   const win = new BrowserWindow({
     x,
     y,
-    width: 900,
-    minWidth: 500,
-    height: 400,
+    width: WINDOW_WIDTH,
+    minWidth: WINDOW_WIDTH,
+    height: INPUT_HEIGHT,
     frame: false,
     transparent: false,
-    resizable: true,
-    title: "Main window",
+    resizable: false,
+    title: "RoKI",
     icon: join(process.env.PUBLIC, "favicon.ico"),
+    show: config.get("firstStart"),
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
@@ -28,7 +30,7 @@ export function createMainWindow() {
   });
 
   // Workaround to set the position the first time (centers the window)
-  config.set("winPosition", win.getPosition());
+  config.set("winPosition", win.getPosition() as [number, number]);
 
   if (process.env.VITE_DEV_SERVER_URL) {
     // electron-vite-vue#298
@@ -48,36 +50,14 @@ const configureListeners = (mainWindow: BrowserWindow) => {
   // Get global shortcut from app settings
   let shortcut = config.get("hotkey");
 
-  // Function to toggle main window
-  const toggleMainWindow = () => toggleWindow(mainWindow);
-  // Function to show main window
-  const showMainWindow = () => {
-    mainWindow.show();
-    mainWindow.focus();
-  };
-
   // Setup event listeners for main window
-  globalShortcut.register(shortcut, toggleMainWindow);
+  globalShortcut.register(shortcut, () => toggleWindow(mainWindow));
 
-  mainWindow.on("blur", () => {
-    if (config.get("hideOnBlur")) {
-      // Hide window on blur in production
-      // In development we usually use developer tools that can blur a window
-      mainWindow.hide();
-    }
-  });
+  mainWindow.on("hide", () => hideListener(mainWindow));
+  mainWindow.on("blur", () => blurListener(mainWindow));
 
   // Save window position when it is being moved
-  mainWindow.on(
-    "move",
-    debounce(() => {
-      if (!mainWindow.isVisible()) {
-        return;
-      }
-
-      config.set("winPosition", mainWindow.getPosition());
-    }, 100)
-  );
+  mainWindow.on("move", () => moveListener(mainWindow));
 
   mainWindow.on("close", app.quit);
 
@@ -93,25 +73,4 @@ const configureListeners = (mainWindow: BrowserWindow) => {
     if (url.startsWith("https:")) shell.openExternal(url);
     return { action: "deny" };
   });
-
-  // // Change global hotkey if it is changed in app settings
-  // mainWindow.settingsChanges.on('hotkey', (value) => {
-  //   globalShortcut.unregister(shortcut)
-  //   shortcut = value
-  //   globalShortcut.register(shortcut, toggleMainWindow)
-  // })
-
-  // // Change theme css file
-  // mainWindow.settingsChanges.on('theme', (value) => {
-  //   mainWindow.webContents.send('message', {
-  //     message: 'updateTheme',
-  //     payload: value
-  //   })
-  // })
-
-  // mainWindow.settingsChanges.on('proxy', (value) => {
-  //   mainWindow.webContents.session.setProxy({
-  //     proxyRules: value
-  //   })
-  // })
 };
