@@ -345,8 +345,7 @@ function Cerebro() {
    * Autocomple search term from highlighted result
    */
   const autocomplete = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    const highlightedTerm = getAutocompleteValue(highlightedResult(), term);
-    console.log("autocomplete", highlightedTerm);
+    const { term: highlightedTerm } = highlightedResult();
     if (highlightedTerm && highlightedTerm !== term) {
       updateTerm(highlightedTerm);
       event.preventDefault();
