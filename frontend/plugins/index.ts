@@ -9,12 +9,7 @@ export type pluginSchema = {
   initialize?: (args?: any) => void;
   initializeAsync?: (args?: any) => void;
   onMessage?: (args?: any) => void;
-  getPreview?: () => JSX.Element | string;
   settings: Record<NamedCurve, any>;
-};
-
-export type pluginSchemaWithPreview = pluginSchema & {
-  getPreview: () => JSX.Element;
 };
 
 export const pluginsService = {

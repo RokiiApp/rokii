@@ -42,7 +42,7 @@ const schema: Schema<settingsSchema> = {
 
 const store = new Store({
   schema,
-  name: "test",
+  clearInvalidConfig: true,
 });
 
 /**

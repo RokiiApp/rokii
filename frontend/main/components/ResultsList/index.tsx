@@ -3,10 +3,13 @@ import { RESULT_HEIGHT } from "common/constants/ui";
 
 import Row from "./Row";
 import styles from "./styles.module.scss";
-import { useRokiStore } from "@/state/rokiStore";
-import { pluginSchema, pluginSchemaWithPreview } from "@/plugins";
+import { PluginResult, useRokiStore } from "@/state/rokiStore";
 
-const PluginPreview = ({ plugin }: { plugin: pluginSchemaWithPreview }) => {
+const PluginPreview = ({
+  plugin,
+}: {
+  plugin: PluginResult & { getPreview: () => JSX.Element };
+}) => {
   const preview = plugin.getPreview();
   const previewIsString = typeof preview === "string";
 
@@ -42,7 +45,7 @@ const ResultsList = ({
   ]);
 
   const rowRenderer = ({ index, style }: ListChildComponentProps) => {
-    const result = results[index] as pluginSchema;
+    const result = results[index];
     const isSelected = index === selected;
     const attrs = {
       ...result,
@@ -91,6 +94,7 @@ const ResultsList = ({
         {(a) => rowRenderer(a)}
       </VariableSizeList>
       {typeof selectedResult.getPreview === "function" && (
+        // @ts-ignore
         <PluginPreview plugin={selectedResult} />
       )}
     </div>

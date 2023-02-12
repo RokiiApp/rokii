@@ -55,8 +55,6 @@ const focusPreview = () => {
   }
 };
 
-const electronWindow = getCurrentWindow();
-
 /**
  * Set resizable and size for main electron window when results count is changed
  */
@@ -98,6 +96,7 @@ const onDocumentKeydown = (event: KeyboardEvent) => {
  * TODO: Split to more components
  */
 function Cerebro() {
+  const electronWindow = getCurrentWindow();
   const [results, selected, visibleResults, term, prevTerm, statusBarText] =
     useRokiStore((s) => [
       s.results,
@@ -128,11 +127,9 @@ function Cerebro() {
   ]);
   const mainInput = useRef<HTMLInputElement>(null);
   const [mainInputFocused, setMainInputFocused] = useState(false);
-  const [prevResultsLenght, setPrevResultsLenght] = useState(
-    () => results.length
-  );
+  const prevResultsLenght = useRef(results.length);
 
-  const focusMainInput = () => {
+  const handleShowEvent = () => {
     mainInput.current?.focus();
     if (config.get("selectOnShow")) {
       mainInput.current?.select();
@@ -149,10 +146,7 @@ function Cerebro() {
     // Cleanup event listeners on unload
     // NOTE: when page refreshed (location.reload) componentWillUnmount is not called
     window.addEventListener("beforeunload", cleanup);
-    electronWindow.on("show", focusMainInput);
-    electronWindow.on("show", () =>
-      updateElectronWindow(results, visibleResults)
-    );
+    electronWindow.on("show", handleShowEvent);
     ipcRenderer.on("clearInput", () => {
       updateTerm("");
     });
@@ -164,7 +158,6 @@ function Cerebro() {
   }, []);
 
   useEffect(() => {
-    updateElectronWindow(results, visibleResults);
     if (term === "") return;
 
     const { allPlugins } = pluginsService;
@@ -174,7 +167,10 @@ function Cerebro() {
       try {
         plugin.fn?.({
           ...DEFAULT_SCOPE,
-          replaceTerm: (newTerm: string) => updateTerm(newTerm),
+          actions: {
+            ...DEFAULT_SCOPE.actions,
+            replaceTerm: (newTerm: string) => updateTerm(newTerm),
+          },
           term,
           hide: (id: string) => hide(`${name}-${id}`),
           update: (id: string, result: any) =>
@@ -189,10 +185,10 @@ function Cerebro() {
     });
   }, [term]);
 
-  if (results.length !== prevResultsLenght) {
+  if (results.length !== prevResultsLenght.current) {
+    prevResultsLenght.current = results.length;
     // Resize electron window when results count changed
     updateElectronWindow(results, visibleResults);
-    setPrevResultsLenght(results.length);
   }
 
   /**
@@ -220,10 +216,7 @@ function Cerebro() {
 
       arrowRight: () => {
         if (cursorInEndOfInput(event.target as HTMLInputElement)) {
-          const autocompleteValue = getAutocompleteValue(
-            highlightedResult(),
-            term
-          );
+          const autocompleteValue = getAutocompleteValue(highlighted, term);
           if (autocompleteValue) {
             // Autocomplete by arrow right only if autocomple value is shown
             autocomplete(event);
@@ -253,7 +246,7 @@ function Cerebro() {
     if ((event.metaKey || event.ctrlKey) && !event.altKey) {
       // Copy to clipboard on cmd+c
       if (event.code === "KeyC") {
-        const text = highlightedResult()?.clipboard || term;
+        const text = highlighted?.clipboard || term;
         if (text) {
           clipboard.writeText(text);
           reset();
@@ -353,6 +346,7 @@ function Cerebro() {
    */
   const autocomplete = (event: React.KeyboardEvent<HTMLInputElement>) => {
     const highlightedTerm = getAutocompleteValue(highlightedResult(), term);
+    console.log("autocomplete", highlightedTerm);
     if (highlightedTerm && highlightedTerm !== term) {
       updateTerm(highlightedTerm);
       event.preventDefault();
