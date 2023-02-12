@@ -3,9 +3,8 @@ import {
   MIN_VISIBLE_RESULTS,
   RESULT_HEIGHT,
 } from "common/constants/ui";
-import debounce from "just-debounce";
 
-const calculateMaxVisibleResultsWithoutDebounce = (results: any[]) => {
+export const calculateMaxVisibleResults = (results: any[]) => {
   if (results.length <= MIN_VISIBLE_RESULTS) return MIN_VISIBLE_RESULTS;
 
   let maxVisibleResults = Math.floor(
@@ -15,7 +14,11 @@ const calculateMaxVisibleResultsWithoutDebounce = (results: any[]) => {
   return maxVisibleResults;
 };
 
-export const calculateMaxVisibleResults = debounce(
-  calculateMaxVisibleResultsWithoutDebounce,
-  100
-);
+/**
+ * Check if cursor in the end of input.
+ * This is needed to prevent autocomplete when user is typing in the middle of input
+ */
+export const cursorInEndOfInput = (input: HTMLInputElement) => {
+  const { selectionStart, selectionEnd, value } = input;
+  return selectionStart === selectionEnd && selectionStart === value.length;
+};

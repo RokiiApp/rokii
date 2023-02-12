@@ -21,6 +21,7 @@
     "@types/auto-launch": "^5.0.2",
     "@types/react": "^18.0.27",
     "@types/react-dom": "^18.0.10",
+    "@types/react-window": "^1.8.5",
     "@types/tar-fs": "^2.0.1",
     "@vitejs/plugin-react": "^3.0.1",
     "electron": "^22.0.3",
@@ -47,7 +48,7 @@
     "fs-extra": "^11.1.0",
     "just-debounce": "^1.1.0",
     "normalize.css": "^8.0.1",
-    "react-virtualized": "^9.22.3",
+    "react-window": "^1.8.8",
     "tar-fs": "^2.1.1",
     "zustand": "^4.3.2"
   },

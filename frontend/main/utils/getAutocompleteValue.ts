@@ -1,6 +1,9 @@
 import escapeStringRegexp from "escape-string-regexp";
 
-export const getAutocompleteValue = (selectedResult: any, term: string) => {
+export const getAutocompleteValue = (
+  selectedResult: any,
+  term: string
+): string => {
   if (term === "") return "";
   if (selectedResult && selectedResult.term) {
     const regexp = new RegExp(`^${escapeStringRegexp(term)}`, "i");

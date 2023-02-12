@@ -24,7 +24,9 @@ import { pluginsService } from "@/plugins";
 import { DEFAULT_SCOPE } from "@/main/utils/pluginDefaultScope";
 import { pluginSettings } from "@/services/plugins";
 import { getAutocompleteValue } from "@/main/utils/getAutocompleteValue";
-import { calculateMaxVisibleResults } from "./utils";
+import { calculateMaxVisibleResults, cursorInEndOfInput } from "./utils";
+import debounce from "just-debounce";
+import { ipcRenderer } from "electron";
 
 /**
  * Wrap click or mousedown event to custom `select-item` event,
@@ -53,14 +55,6 @@ const focusPreview = () => {
   }
 };
 
-/**
- * Check if cursor in the end of input
- *
- * @param  {DOMElement} input
- */
-const cursorInEndOfInut = ({ selectionStart, selectionEnd, value }) =>
-  selectionStart === selectionEnd && selectionStart >= value.length;
-
 const electronWindow = getCurrentWindow();
 
 /**
@@ -77,8 +71,6 @@ const updateElectronWindow = (results: any[], visibleResults: number) => {
   if (length === 0) {
     win.setMinimumSize(WINDOW_WIDTH, INPUT_HEIGHT);
     win.setSize(width, INPUT_HEIGHT);
-    const [x, y] = config.get("winPosition");
-    win.setPosition(x, y);
     return;
   }
 
@@ -91,12 +83,10 @@ const updateElectronWindow = (results: any[], visibleResults: number) => {
     MIN_VISIBLE_RESULTS * RESULT_HEIGHT + INPUT_HEIGHT;
   win.setMinimumSize(WINDOW_WIDTH, minHeightWithResults);
   win.setSize(width, heightWithResults);
-  const [x, y] = config.get("winPosition");
-  win.setPosition(x, y);
 };
 
 const onDocumentKeydown = (event: KeyboardEvent) => {
-  if (event.key === "escape") {
+  if (event.key === "Escape") {
     event.preventDefault();
     (document.getElementById("main-input") as HTMLInputElement).focus();
   }
@@ -136,7 +126,7 @@ function Cerebro() {
     s.setVisibleResults,
     s.select,
   ]);
-  const mainInput = useRef<any>();
+  const mainInput = useRef<HTMLInputElement>(null);
   const [mainInputFocused, setMainInputFocused] = useState(false);
   const [prevResultsLenght, setPrevResultsLenght] = useState(
     () => results.length
@@ -163,6 +153,9 @@ function Cerebro() {
     electronWindow.on("show", () =>
       updateElectronWindow(results, visibleResults)
     );
+    ipcRenderer.on("clearInput", () => {
+      updateTerm("");
+    });
 
     // function to be called when unmounted
     return () => {
@@ -171,6 +164,9 @@ function Cerebro() {
   }, []);
 
   useEffect(() => {
+    updateElectronWindow(results, visibleResults);
+    if (term === "") return;
+
     const { allPlugins } = pluginsService;
     // TODO: order results by frequency?
     Object.keys(allPlugins).forEach((name) => {
@@ -202,10 +198,10 @@ function Cerebro() {
   /**
    * Change count of visible results depends on window size
    */
-  const handleResize = (setVisibleResults: any) => {
+  const handleResize = debounce(() => {
     const newMaxVisibleResults = calculateMaxVisibleResults(results);
     setVisibleResults(newMaxVisibleResults);
-  };
+  }, 200);
 
   /**
    * Handle keyboard shortcuts
@@ -223,8 +219,12 @@ function Cerebro() {
       select: () => selectCurrent(event),
 
       arrowRight: () => {
-        if (cursorInEndOfInut(event.target)) {
-          if (getAutocompleteValue(results[selected], term)) {
+        if (cursorInEndOfInput(event.target as HTMLInputElement)) {
+          const autocompleteValue = getAutocompleteValue(
+            highlightedResult(),
+            term
+          );
+          if (autocompleteValue) {
             // Autocomplete by arrow right only if autocomple value is shown
             autocomplete(event);
           } else {
@@ -252,7 +252,7 @@ function Cerebro() {
     // shortcuts for ctrl+...
     if ((event.metaKey || event.ctrlKey) && !event.altKey) {
       // Copy to clipboard on cmd+c
-      if (event.key === "c") {
+      if (event.code === "KeyC") {
         const text = highlightedResult()?.clipboard || term;
         if (text) {
           clipboard.writeText(text);
@@ -266,7 +266,7 @@ function Cerebro() {
       }
 
       // Select text on cmd+a
-      if (event.key === "a") {
+      if (event.code === "KeyA") {
         mainInput.current?.select();
         event.preventDefault();
       }
@@ -280,39 +280,39 @@ function Cerebro() {
       }
 
       // Lightweight vim-mode: cmd/ctrl + jklo
-      switch (event.keyCode) {
-        case 74:
+      switch (event.code) {
+        case "KeyJ":
           keyActions.arrowDown();
           break;
-        case 75:
+        case "KeyK":
           keyActions.arrowUp();
           break;
-        case 76:
+        case "KeyL":
           keyActions.arrowRight();
           break;
-        case 79:
+        case "KeyO":
           keyActions.select();
           break;
       }
     }
 
-    switch (event.keyCode) {
-      case 9:
+    switch (event.key) {
+      case "Tab":
         autocomplete(event);
         break;
-      case 39:
+      case "ArrowRight":
         keyActions.arrowRight();
         break;
-      case 40:
+      case "ArrowDown":
         keyActions.arrowDown();
         break;
-      case 38:
+      case "ArrowUp":
         keyActions.arrowUp();
         break;
-      case 13:
+      case "Enter":
         keyActions.select();
         break;
-      case 27:
+      case "Escape":
         reset();
         electronWindow.hide();
         break;
@@ -327,6 +327,7 @@ function Cerebro() {
     window.removeEventListener("keydown", onDocumentKeydown);
     window.removeEventListener("beforeunload", cleanup);
     electronWindow.removeAllListeners("show");
+    ipcRenderer.removeAllListeners("clearInput");
   };
 
   /**
@@ -351,7 +352,7 @@ function Cerebro() {
    * Autocomple search term from highlighted result
    */
   const autocomplete = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    const { term: highlightedTerm } = highlightedResult();
+    const highlightedTerm = getAutocompleteValue(highlightedResult(), term);
     if (highlightedTerm && highlightedTerm !== term) {
       updateTerm(highlightedTerm);
       event.preventDefault();

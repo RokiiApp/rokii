@@ -1,30 +1,61 @@
-import PropTypes from "prop-types";
-import { List } from "react-virtualized";
+import { ListChildComponentProps, VariableSizeList } from "react-window";
 import { RESULT_HEIGHT } from "common/constants/ui";
 
 import Row from "./Row";
 import styles from "./styles.module.scss";
 import { useRokiStore } from "@/state/rokiStore";
+import { pluginSchema, pluginSchemaWithPreview } from "@/plugins";
 
-function ResultsList({ onSelect, mainInputFocused, onItemHover }) {
+const PluginPreview = ({ plugin }: { plugin: pluginSchemaWithPreview }) => {
+  const preview = plugin.getPreview();
+  const previewIsString = typeof preview === "string";
+
+  return (
+    <div className={styles.preview} id="preview">
+      {previewIsString ? (
+        <div dangerouslySetInnerHTML={{ __html: preview }} />
+      ) : (
+        preview
+      )}
+    </div>
+  );
+};
+
+type ResultsListProps = {
+  onSelect: (
+    result: any,
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => void;
+  mainInputFocused: boolean;
+  onItemHover: (index: number) => void;
+};
+
+const ResultsList = ({
+  onSelect,
+  mainInputFocused,
+  onItemHover,
+}: ResultsListProps) => {
   const [results, selected, visibleResults] = useRokiStore((s) => [
     s.results,
     s.selected,
     s.visibleResults,
   ]);
-  const rowRenderer = ({ index, key, style }) => {
-    const result = results[index];
+
+  const rowRenderer = ({ index, style }: ListChildComponentProps) => {
+    const result = results[index] as pluginSchema;
+    const isSelected = index === selected;
     const attrs = {
       ...result,
       // TODO: think about events
       // In some cases action should be executed and window should be closed
       // In some cases we should autocomplete value
-      selected: index === selected,
-      onSelect: (event) => onSelect(result, event),
+      isSelected,
+      onSelect: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) =>
+        onSelect(result, event),
       // Move selection to item under cursor
-      onMouseMove: (event) => {
+      onMouseMove: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         const { movementX, movementY } = event.nativeEvent;
-        if (index === selected || !mainInputFocused) return false;
+        if (isSelected || !mainInputFocused) return false;
 
         if (movementX || movementY) {
           // Hover item only when we had real movement of mouse
@@ -32,23 +63,8 @@ function ResultsList({ onSelect, mainInputFocused, onItemHover }) {
           onItemHover(index);
         }
       },
-    };
-    return <Row key={key} style={style} {...attrs} />;
-  };
-
-  const renderPreview = () => {
-    const selectedResult = results[selected];
-
-    if (!selectedResult.getPreview) return null;
-
-    const preview = selectedResult.getPreview();
-
-    if (typeof preview === "string") {
-      // Fallback for html previews intead of react component
-      return <div dangerouslySetInnerHTML={{ __html: preview }} />;
-    }
-
-    return preview;
+    } as const;
+    return <Row style={style} {...attrs} />;
   };
 
   const classNames = [
@@ -58,35 +74,27 @@ function ResultsList({ onSelect, mainInputFocused, onItemHover }) {
 
   if (results.length === 0) return null;
 
+  const selectedResult = results[selected];
   return (
     <div className={styles.wrapper}>
-      <List
+      <VariableSizeList
         className={classNames}
         height={visibleResults * RESULT_HEIGHT}
-        overscanRowCount={2}
-        rowCount={results.length}
-        rowHeight={RESULT_HEIGHT}
-        rowRenderer={rowRenderer}
+        itemSize={() => RESULT_HEIGHT}
+        itemCount={results.length}
         width={
           results[selected] !== undefined && results[selected].getPreview
             ? 250
             : 10000
         }
-        scrollToIndex={selected}
-        // Disable accesebility of VirtualScroll by tab
-        tabIndex={null}
-      />
-      <div className={styles.preview} id="preview">
-        {renderPreview()}
-      </div>
+      >
+        {(a) => rowRenderer(a)}
+      </VariableSizeList>
+      {typeof selectedResult.getPreview === "function" && (
+        <PluginPreview plugin={selectedResult} />
+      )}
     </div>
   );
-}
-
-ResultsList.propTypes = {
-  onItemHover: PropTypes.func,
-  onSelect: PropTypes.func,
-  mainInputFocused: PropTypes.bool,
 };
 
 export default ResultsList;

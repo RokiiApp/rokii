@@ -37,6 +37,8 @@ const SETTING_HANDLERS: Record<string, HandlerFunction> = {
   proxy: (value: string, { win }) => {
     win.webContents.session.setProxy({ proxyRules: value });
   },
+
+  cleanOnHide: () => {},
 };
 
 const setupSettingsListener = (args: SettingsListenerOptions) => {
