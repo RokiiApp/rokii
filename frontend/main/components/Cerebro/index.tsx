@@ -58,7 +58,11 @@ const focusPreview = () => {
 /**
  * Set resizable and size for main electron window when results count is changed
  */
-const updateElectronWindow = (results: any[], visibleResults: number) => {
+const updateElectronWindow = (
+  results: any[],
+  visibleResults: number,
+  term: string
+) => {
   const { length } = results;
   const win = getCurrentWindow();
   const [width] = win.getSize();
@@ -66,7 +70,7 @@ const updateElectronWindow = (results: any[], visibleResults: number) => {
   // When results list is empty window is not resizable
   win.setResizable(length !== 0);
 
-  if (length === 0) {
+  if (length === 0 && term === "") {
     win.setMinimumSize(WINDOW_WIDTH, INPUT_HEIGHT);
     win.setSize(width, INPUT_HEIGHT);
     return;
@@ -138,7 +142,7 @@ function Cerebro() {
 
   // suscribe to events
   useEffect(() => {
-    updateElectronWindow(results, visibleResults);
+    updateElectronWindow(results, visibleResults, term);
     // Listen for window.resize and change default space for results to user's value
     window.addEventListener("resize", handleResize);
     // Add some global key handlers
@@ -188,7 +192,7 @@ function Cerebro() {
   if (results.length !== prevResultsLenght.current) {
     prevResultsLenght.current = results.length;
     // Resize electron window when results count changed
-    updateElectronWindow(results, visibleResults);
+    updateElectronWindow(results, visibleResults, term);
   }
 
   /**

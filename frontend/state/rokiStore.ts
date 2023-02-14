@@ -53,19 +53,18 @@ export const useRokiStore = create<RokiStore>((set) => ({
     return set((state) => {
       if (!Array.isArray(result)) result = [result];
 
-      const newResultsWithoutDuplicates = result.filter(
+      const normalizedNewResults = result.map((result) => ({
+        ...result,
+        id: result.id || result.title || result.subtitle || result.term,
+        term: result.term || result.title,
+      }));
+
+      const newResultsWithoutDuplicates = normalizedNewResults.filter(
         ({ id }: any) => !state.results.some((result) => result.id === id)
       );
 
-      const normalizedNewResults = newResultsWithoutDuplicates.map(
-        (result) => ({
-          ...result,
-          term: result.term || result.title,
-        })
-      );
-
       return {
-        results: [...state.results, ...normalizedNewResults],
+        results: [...state.results, ...newResultsWithoutDuplicates],
       };
     });
   },
@@ -75,7 +74,7 @@ export const useRokiStore = create<RokiStore>((set) => ({
       if (term === "") {
         return { term, prevTerm: state.term, selected: 0, results: [] };
       }
-      return { term, prevTerm: state.term, selected: 0 };
+      return { term, prevTerm: state.term, selected: 0, results: [] };
     });
   },
 

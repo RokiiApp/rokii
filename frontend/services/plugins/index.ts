@@ -20,14 +20,14 @@ const EMPTY_PACKAGE_JSON = JSON.stringify(
 
 export const rokiPath = path.join(app.getPath("appData"), "roki");
 export const pluginsPath = path.join(rokiPath, "plugins");
-export const modulesDirectory = path.join(pluginsPath, "node_modules");
-export const packageJsonPath = path.join(pluginsPath, "package.json");
+export const MODULES_DIRECTORY = path.join(pluginsPath, "node_modules");
+export const PACKAGE_JSON_PATH = path.join(pluginsPath, "package.json");
 
 export const ensureRokiNeededFiles = async () => {
   await ensureDir(rokiPath);
   await ensureDir(pluginsPath);
-  await ensureDir(modulesDirectory);
-  ensureFile(packageJsonPath, EMPTY_PACKAGE_JSON);
+  await ensureDir(MODULES_DIRECTORY);
+  ensureFile(PACKAGE_JSON_PATH, EMPTY_PACKAGE_JSON);
 };
 
 export const client = npm(pluginsPath);

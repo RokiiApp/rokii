@@ -3,7 +3,7 @@ import chokidar from "chokidar";
 import { parse } from "path";
 import { initPlugin } from "@/services/plugins/initializePlugins";
 import {
-  modulesDirectory,
+  MODULES_DIRECTORY,
   ensureRokiNeededFiles,
   pluginSettings,
 } from "@/services/plugins";
@@ -55,7 +55,7 @@ const setupPluginsWatcher = () => {
   // @ts-ignore
   if (window.isBackground) return;
 
-  const pluginsWatcher = chokidar.watch(modulesDirectory, { depth: 1 });
+  const pluginsWatcher = chokidar.watch(MODULES_DIRECTORY, { depth: 1 });
   pluginsWatcher.on("unlinkDir", (pluginPath) => {
     const { base, dir } = parse(pluginPath);
     if (base.match(/node_modules/) || base.match(/^@/)) return;

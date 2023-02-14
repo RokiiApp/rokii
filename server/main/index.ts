@@ -37,13 +37,13 @@ app.whenReady().then(async () => {
   require("@electron/remote/main").enable(backgroundWin.webContents);
 
   initAutoUpdater(win);
-  const tray = new AppTray({
-    src: "src/assets/icon.png",
-    isDev: process.env.NODE_ENV === "development",
-    mainWindow: win,
-  });
+  // const tray = new AppTray({
+  //   src: "src/assets/icon.png",
+  //   isDev: process.env.NODE_ENV === "development",
+  //   mainWindow: win,
+  // });
 
-  tray.show();
+  // tray.show();
 
   setupSettingsListener({ win, tray: null });
   setupRTRCommunication(win, backgroundWin);

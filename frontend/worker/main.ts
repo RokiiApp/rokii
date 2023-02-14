@@ -1,6 +1,6 @@
 import { pluginsService } from "@/plugins";
 import { on, send } from "@/services/rpc";
-import { pluginSettings, modulesDirectory } from "@/services/plugins";
+import { pluginSettings, MODULES_DIRECTORY } from "@/services/plugins";
 
 on("initializePluginAsync", ({ name }: { name: any }) => {
   const { corePlugins } = pluginsService;
@@ -8,7 +8,7 @@ on("initializePluginAsync", ({ name }: { name: any }) => {
 
   try {
     const plugin = // @ts-ignore
-      corePlugins[name] || window.require(`${modulesDirectory}/${name}`);
+      corePlugins[name] || window.require(`${MODULES_DIRECTORY}/${name}`);
     const { initializeAsync } = plugin;
 
     if (!initializeAsync) {

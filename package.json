@@ -48,7 +48,9 @@
     "fs-extra": "^11.1.0",
     "just-debounce": "^1.1.0",
     "normalize.css": "^8.0.1",
+    "react-markdown": "8.0.5",
     "react-window": "^1.8.8",
+    "semver": "7.3.8",
     "tar-fs": "^2.1.1",
     "zustand": "^4.3.2"
   },
