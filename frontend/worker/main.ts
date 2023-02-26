@@ -24,6 +24,7 @@ on("initializePluginAsync", ({ name }: { name: any }) => {
       // Send message back to main window with initialization result
       send("plugin.message", { name, data });
     }, pluginSettings.getUserSettings(plugin, name));
+
   } catch (err) {
     console.log("Failed", err);
   }

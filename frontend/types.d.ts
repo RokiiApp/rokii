@@ -54,7 +54,7 @@ export interface PluginResult {
      * 
      * To prevent default behavior, you should call `event.preventDefault()` in your action.
      */
-    onKeyDown?: (event: Event) => void;
+    onKeyDown?: (event: React.KeyboardEvent<HTMLInputElement>) => void;
     
     /**
      * The order in which the results will be displayed. The lower the number,
@@ -88,7 +88,10 @@ export interface PluginContext {
         reveal: (path: string) => void;
         copyToClipboard: (text: string) => void;
         hideWindow: () => void;
+        replaceTerm: (term: string) => void;
     }
+
+    settings: Record<string, any>;
 }
 
 
@@ -101,6 +104,7 @@ export interface PluginModule {
      * The function that is called every time the user enters a new term.
      */
     fn(context: PluginContext): void,
+    async fn(context: PluginContext): Promise<void>,
 
     /**
      * This field is used for autocomplete. You can prefix your plugin usage by this keyword
@@ -124,7 +128,7 @@ export interface PluginModule {
      * This function will be executed in another process and you can receive
      * results using `onMessage` function.
      */
-    initializeAsync?(callback: () => Object): Promise<void>;
+    initializeAsync?(callback: (data: any) => void, settings: Record<string, any>): Promise<void>;
 
     /**
      * Use this function to receive data back from your initializeAsync function.

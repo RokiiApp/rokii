@@ -1,7 +1,14 @@
-import version from "./version";
-import quit from "./quit";
-import settings from "./settings";
-import reload from "./reload";
-import plugins from "./plugins";
+import * as version from "./version";
+import * as quit from "./quit";
+import * as settings from "./settings";
+import * as reload from "./reload";
+import * as plugins from "./plugins";
+import { PluginModule } from "@/types";
 
-export { version, quit, settings, reload, plugins };
+export const corePlugins: Record<string, PluginModule> = {
+    version,
+    quit,
+    settings,
+    reload,
+    plugins,
+}

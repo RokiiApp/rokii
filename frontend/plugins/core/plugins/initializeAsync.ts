@@ -69,7 +69,7 @@ async function migratePlugins(sendMessage: Function) {
   });
 }
 
-export default (sendMessage: Function) => {
+export default async (sendMessage: Function) => {
   checkForUpdates();
   migratePlugins(sendMessage);
 };

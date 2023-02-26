@@ -1,3 +1,5 @@
+import type { PluginModule } from "@/types";
+
 import debounce from "just-debounce";
 import chokidar from "chokidar";
 import { parse } from "path";
@@ -7,9 +9,8 @@ import {
   ensureRokiNeededFiles,
   pluginSettings,
 } from "@/services/plugins";
-import { pluginSchema } from ".";
 
-const plugins: Record<string, pluginSchema> = {};
+const plugins: Record<string, PluginModule> = {};
 
 const requirePlugin = (pluginPath: string) => {
   try {
@@ -30,7 +31,7 @@ const requirePlugin = (pluginPath: string) => {
 /**
  * Validate plugin module signature
  */
-const isPluginValid = (plugin: pluginSchema) =>
+const isPluginValid = (plugin: PluginModule) =>
   plugin &&
   // Check existing of main plugin function
   typeof plugin.fn === "function" &&
@@ -100,11 +101,11 @@ const setupPluginsWatcher = () => {
         debounce(() => {
           console.log(`[${pluginName}] Update plugin`);
           delete window.require.cache[requirePath];
-          plugins[pluginName] = window.require(pluginPath);
+          plugins[pluginName] = window.require(pluginPath) as PluginModule;
           console.log(`[${pluginName}] Plugin updated`);
         }, 1000)
       );
-      plugins[pluginName] = plugin;
+      plugins[pluginName] = plugin as PluginModule;
       initPlugin(plugin, pluginName);
       console.groupEnd();
     }, 1000);
