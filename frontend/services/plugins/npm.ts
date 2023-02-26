@@ -5,18 +5,11 @@ import tar from "tar-fs";
 import zlib from "node:zlib";
 import https from "node:https";
 import { move, remove } from "fs-extra";
-
-/**
- * Base url of npm API
- */
-const API_BASE = "http://registry.npmjs.org/";
+import { NPM_API_BASE } from "@/constants";
 
 /**
  * Format name of file from package archive.
  * Just remove `./package`prefix from name
- *
- * @param  {Object} header
- * @return {Object}
  */
 const formatPackageFile = (header: tar.Headers) => ({
   ...header,
@@ -26,7 +19,7 @@ const formatPackageFile = (header: tar.Headers) => ({
 const installPackage = async (
   tarPath: string,
   destination: string,
-  middleware: () => Promise<any>
+  middleware?: () => Promise<any>
 ) => {
   console.log(`Extract ${tarPath} to ${destination}`);
 
@@ -45,7 +38,7 @@ const installPackage = async (
       );
       result.on("error", reject);
       result.on("finish", () => {
-        middleware().then(resolve);
+        middleware?.().then(resolve);
       });
     });
   });
@@ -68,35 +61,36 @@ export default (dir: string) => {
   const getConfig = () => JSON.parse(fs.readFileSync(packageJson, "utf-8"));
   return {
     /**
-     * Install npm package
-     * @param name Name of package in npm registry
-     *
-     * @param  options
-     *             version {String} Version of npm package. Default is latest version
-     *             middleware {Function<Promise>}
-     *               Function that returns promise. Called when package's archive is extracted
-     *               to temp folder, but before moving to real location
+     * Install npm package            
      */
     async install(
+      /**
+       * Name of npm package in the registry
+       */
       name: string,
-      options: {
+      options?: {
+        /**
+         * Version of npm package. Default is latest version
+         */
         version?: string;
+        /**
+         * Function that returns promise. Called when package's archive is extracted
+         * to temp folder, but before moving to real location
+         */
         middleware?: () => Promise<any>;
-      } = {}
+      }
     ) {
       let versionToInstall;
-      const version = options.version || null;
-      const middleware = options.middleware || (() => Promise.resolve());
+      const { version, middleware } = options || {};
 
       console.group("[npm] Install package", name);
 
       try {
-        const resJson = await fetch(`${API_BASE}${name}`).then((response) =>
-          response.json()
-        );
+        const resJson = await fetch(`${NPM_API_BASE}${name}`).then((res) => res.json());
 
         versionToInstall = version || resJson["dist-tags"].latest;
         console.log("Version:", versionToInstall);
+
         await installPackage(
           resJson.versions[versionToInstall].dist.tarball,
           path.join(dir, "node_modules", name),

@@ -1,54 +1,53 @@
 // @ts-ignore
-import { memoize } from "cerebro-tools";
+import memoize from "memoizee";
 import validVersion from "semver/functions/valid";
 import compareVersions from "semver/functions/gt";
-import availablePlugins from "./getAvailablePlugins";
-import getInstalledPlugins from "./getInstalledPlugins";
+import { getNPMPlugins } from "./getNPMPLugins";
+import { getInstalledPlugins } from "./getInstalledPlugins";
 import getDebuggingPlugins from "./getDebuggingPlugins";
 import blacklist from "./blacklist";
 
 const maxAge = 5 * 60 * 1000; // 5 minutes
 
-const getAvailablePlugins = memoize(availablePlugins, { maxAge });
+const getAvailableNPMPlugins = memoize(getNPMPlugins, { maxAge });
 
 const parseVersion = (version: string) =>
   validVersion((version || "").replace(/^\^/, "")) || "0.0.0";
 
 export default async () => {
   const [available, installed, debuggingPlugins] = await Promise.all([
-    getAvailablePlugins(),
+    getAvailableNPMPlugins(),
     getInstalledPlugins(),
     getDebuggingPlugins(),
   ]);
 
-  const listOfInstalledPlugins = Object.entries(installed).map(
-    ([name, { version }]) => ({
+  const normalizedIntalledPlugins = installed.map((plugin) => {
+    const { name, version, settings } = plugin;
+    return {
       name,
       version,
       installedVersion: parseVersion(version),
+      settings,
       isInstalled: true,
-      settings: installed[name].settings,
       isUpdateAvailable: false,
-    })
-  );
-
-  const listOfAvailablePlugins = available.map((plugin: any) => {
-    const installedVersion = installed[plugin.name]?.version;
-    if (!installedVersion) {
-      return plugin;
     }
+  });
 
-    const isUpdateAvailable = compareVersions(
-      plugin.version,
-      parseVersion(installedVersion)
-    );
-    const installedPluginInfo = listOfInstalledPlugins.find(
-      (p) => p.name === plugin.name
-    );
+  const pluginsList = available.map((plugin) => {
+    const installedPlugin = normalizedIntalledPlugins.find(p => p.name === plugin.name);
+
+    if (!installedPlugin) return {
+      ...plugin,
+      isInstalled: false,
+      isUpdateAvailable: false,
+    };
+
+    const { installedVersion } = installedPlugin;
+    const isUpdateAvailable = compareVersions(plugin.version, parseVersion(installedVersion));
+
     return {
       ...plugin,
-      ...installedPluginInfo,
-      installedVersion,
+      ...installedPlugin,
       isInstalled: true,
       isUpdateAvailable,
     };
@@ -61,11 +60,16 @@ export default async () => {
     description: "",
     version: "dev",
     isDebugging: true,
+    isInstalled: true,
+    isUpdateAvailable: false,
   }));
 
+  const pluginsListWithoutDebugging = pluginsList.filter(p =>
+    listOfDebuggingPlugins.find(d => d.name === p.name) === undefined
+  );
+
   const plugins = [
-    ...listOfInstalledPlugins,
-    ...listOfAvailablePlugins,
+    ...pluginsListWithoutDebugging,
     ...listOfDebuggingPlugins,
   ];
 

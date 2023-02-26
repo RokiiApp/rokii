@@ -1,4 +1,4 @@
-import { pluginSchema } from "@/plugins";
+import type { PluginModule } from "@/types";
 import * as config from "common/config";
 
 /**
@@ -16,8 +16,9 @@ const getExistingSettings = (pluginName: string) =>
  * but can't have the same package.json name
  * @returns An object with keys and values of the plugin settings
  */
-const getUserSettings = (plugin: pluginSchema, packageJsonName: string) => {
+const getUserSettings = (plugin: PluginModule, packageJsonName: string) => {
   const userSettings: Record<string, any> = {};
+
   const existingSettings: Record<string, any> =
     getExistingSettings(packageJsonName);
   const { settings: pluginSettings } = plugin;

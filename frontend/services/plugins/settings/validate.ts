@@ -1,10 +1,10 @@
-import type { pluginSchema } from "@/plugins";
+import type { PluginModule } from "@/types";
 
-const VALID_TYPES = new Set(["string", "number", "bool", "option"]);
+const VALID_TYPES = ["string", "number", "bool", "option"] as const;
 
 const validSetting = ({ type, options }: any) => {
   // General validation of settings
-  if (!type || !VALID_TYPES.has(type)) return false;
+  if (!type || !VALID_TYPES.includes(type)) return false;
 
   // Type-specific validations
   if (type === "option") return Array.isArray(options) && options.length;
@@ -12,7 +12,7 @@ const validSetting = ({ type, options }: any) => {
   return true;
 };
 
-export const validate = ({ settings }: pluginSchema) => {
+export const validate = ({ settings }: PluginModule) => {
   if (!settings) return true;
   return Object.values(settings).every(validSetting);
 };

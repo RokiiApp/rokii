@@ -6,6 +6,7 @@ import { RESULT_HEIGHT } from "common/constants/ui";
 import Row from "./Row";
 import styles from "./styles.module.scss";
 import { useRokiStore } from "@/state/rokiStore";
+import { useEffect, useRef, memo } from "react";
 
 const PluginPreview = ({
   plugin,
@@ -46,6 +47,14 @@ const ResultsList = ({
     s.visibleResults,
   ]);
 
+  const listRef = useRef<VariableSizeList>(null);
+
+  useEffect(() => {
+    if (listRef.current) {
+      listRef.current.scrollToItem(selected, "smart");
+    }
+  }, [selected]);
+
   const rowRenderer = ({ index, style }: ListChildComponentProps) => {
     const result = results[index];
     const isSelected = index === selected;
@@ -83,10 +92,12 @@ const ResultsList = ({
   return (
     <div className={styles.wrapper}>
       <VariableSizeList
+        ref={listRef}
         className={classNames}
         height={visibleResults * RESULT_HEIGHT}
         itemSize={() => RESULT_HEIGHT}
         itemCount={results.length}
+        overscanCount={5}
         width={
           results[selected] !== undefined && results[selected].getPreview
             ? 250
@@ -103,4 +114,4 @@ const ResultsList = ({
   );
 };
 
-export default ResultsList;
+export default memo(ResultsList);

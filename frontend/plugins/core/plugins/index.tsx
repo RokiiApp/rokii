@@ -36,11 +36,16 @@ const categories = [
 
 const updatePlugin = async (update: Function, name: string) => {
   const plugins = await loadPlugins();
-  const updatedPlugin = plugins.find((plugin) => plugin.name === name);
+
+  // TODO: This is a hack to get the updated plugin- need to find a better way
+  const updatedPlugin = plugins.find((plugin) => plugin.name === name)!;
+
+  const title = `${format.name(updatedPlugin.name)} (${format.version(
+    updatedPlugin
+  )})`;
+
   update(name, {
-    title: `${format.name(updatedPlugin.name)} (${format.version(
-      updatedPlugin
-    )})`,
+    title,
     getPreview: () => (
       <Preview
         plugin={updatedPlugin}
@@ -89,20 +94,23 @@ const categorize = (plugins: any[], callback: Function) => {
 
 const fn: PluginModule["fn"] = async ({ term, display, hide, update }) => {
   const match = term.match(/^plugins?\s*(.+)?$/i);
-  if (match) {
-    display({ icon, id: "plugins-loading", title: "Looking for plugins..." });
-    const plugins = await loadPlugins();
+  if (!match) return;
 
-    const matchingPlugins = plugins.filter((plugin) =>
-      search([plugin.name], match[1])
-    );
-    const orderedPlugins = categorize(matchingPlugins, () =>
-      hide("plugins-loading")
-    );
-    orderedPlugins
-      .map((plugin) => pluginToResult(update)(plugin))
-      .map((plugin) => display(plugin));
-  }
+  display({ icon, id: "plugins-loading", title: "Looking for plugins..." });
+
+  const plugins = await loadPlugins();
+
+  const matchingPlugins = plugins.filter(
+    ({ name }) => search([name], match[1]).length > 0
+  );
+
+  const orderedPlugins = categorize(matchingPlugins, () =>
+    hide("plugins-loading")
+  );
+
+  orderedPlugins
+    .map((plugin) => pluginToResult(update)(plugin))
+    .map((plugin) => display(plugin));
 };
 
 const name = "Manage plugins";

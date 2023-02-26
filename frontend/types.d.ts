@@ -103,8 +103,7 @@ export interface PluginModule {
     /**
      * The function that is called every time the user enters a new term.
      */
-    fn(context: PluginContext): void,
-    async fn(context: PluginContext): Promise<void>,
+    fn(context: PluginContext): void | Promise<void>;
 
     /**
      * This field is used for autocomplete. You can prefix your plugin usage by this keyword
@@ -120,7 +119,7 @@ export interface PluginModule {
      * Use this function, when you need to prepare some data for your plugin on start.
      * If you need to do some long-running processes, check `initializeAsync`
      */
-    initialize?(): void;
+    initialize?(settings: Record<string, any>): void;
 
     /**
      * Use this function when you need to execute some long-running initializer process.

@@ -1,7 +1,7 @@
+import { INITIAL_STATE } from "@/constants";
 import type { PluginResult } from "@/types";
 
 import { create } from "zustand";
-import { MIN_VISIBLE_RESULTS } from "common/constants/ui";
 import { isResultValid } from "./utils";
 
 interface RokiStore {
@@ -18,7 +18,7 @@ interface RokiStore {
   statusBarText: string;
   setStatusBarText: (text: string) => void;
   reset: () => void;
-  addResult: (result: PluginResult | PluginResult[]) => void;
+  addResult: (pluginName: string, result: PluginResult | PluginResult[]) => void;
   updateTerm: (term: string) => void;
   hide: (id: string) => void;
   updateResult: (id: string, newResult: PluginResult) => void;
@@ -26,32 +26,31 @@ interface RokiStore {
   setVisibleResults: (count: number) => void;
   select: (index: number) => void;
 }
-const defaultState = {
-  results: [],
-  term: "",
-  prevTerm: "",
-  selected: 0,
-  visibleResults: MIN_VISIBLE_RESULTS,
-  statusBarText: "",
-};
+
+
 
 export const useRokiStore = create<RokiStore>((set) => ({
-  ...structuredClone(defaultState),
-  reset: () => set(structuredClone(defaultState)),
-  addResult: (result) => {
+  ...INITIAL_STATE,
+
+  reset: () => set(INITIAL_STATE),
+
+  addResult: (pluginName, result) => {
     if (!isResultValid(result)) return;
+  
     return set((state) => {
       if (!Array.isArray(result)) result = [result];
 
       const normalizedNewResults = result.map((result) => ({
         ...result,
-        id: result.id || result.title || result.subtitle || result.term,
+        id: `${pluginName}-${result.id || result.title}`,
         term: result.term || result.title,
       }));
 
-      const newResultsWithoutDuplicates = normalizedNewResults.filter(
-        ({ id }: any) => !state.results.some((result) => result.id === id)
-      );
+      const deleteDuplicatesFilter = (element: PluginResult) => {
+        return !state.results.some((result) => result.id === element.id);
+      }
+
+      const newResultsWithoutDuplicates = normalizedNewResults.filter(deleteDuplicatesFilter);
 
       return {
         results: [...state.results, ...newResultsWithoutDuplicates],

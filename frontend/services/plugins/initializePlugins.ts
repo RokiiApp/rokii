@@ -1,5 +1,7 @@
+import type { PluginModule } from "@/types";
+
 import { on, send } from "@/services/rpc";
-import { pluginSchema, pluginsService } from "@/plugins";
+import { pluginsService } from "@/plugins";
 import { pluginSettings } from "@/services/plugins";
 
 /**
@@ -16,12 +18,13 @@ export const initializePlugins = () => {
   });
 };
 
-export const initPlugin = (plugin: pluginSchema, name: string) => {
+export const initPlugin = (plugin: PluginModule, name: string) => {
   const { initialize, initializeAsync } = plugin;
 
   // Foreground plugin initialization
   if (initialize) {
     console.log("Initialize sync plugin", name);
+
     try {
       initialize(pluginSettings.getUserSettings(plugin, name));
     } catch (e) {

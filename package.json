@@ -19,6 +19,7 @@
   "devDependencies": {
     "@playwright/test": "^1.29.2",
     "@types/auto-launch": "^5.0.2",
+    "@types/memoizee": "0.4.8",
     "@types/react": "^18.0.27",
     "@types/react-dom": "^18.0.10",
     "@types/react-window": "^1.8.5",
@@ -47,6 +48,7 @@
     "escape-string-regexp": "^5.0.0",
     "fs-extra": "^11.1.0",
     "just-debounce": "^1.1.0",
+    "memoizee": "0.4.15",
     "normalize.css": "^8.0.1",
     "react-markdown": "8.0.5",
     "react-window": "^1.8.8",

@@ -1,7 +1,7 @@
-/* eslint default-case: 0 */
+import type { PluginResult } from "@/types";
 
 import { useEffect, useRef, useState } from "react";
-import { clipboard } from "electron";
+import { clipboard, ipcRenderer } from "electron";
 // @ts-ignore
 import { focusableSelector } from "@cerebroapp/cerebro-ui";
 import { Autocomplete } from "./Autocomplete";
@@ -26,7 +26,6 @@ import { pluginSettings } from "@/services/plugins";
 import { getAutocompleteValue } from "@/main/utils/getAutocompleteValue";
 import { calculateMaxVisibleResults, cursorInEndOfInput } from "./utils";
 import debounce from "just-debounce";
-import { ipcRenderer } from "electron";
 
 /**
  * Wrap click or mousedown event to custom `select-item` event,
@@ -35,7 +34,7 @@ import { ipcRenderer } from "electron";
  * @param  {Event} realEvent
  * @return {CustomEvent}
  */
-const wrapEvent = (realEvent) => {
+const wrapEvent = (realEvent: any) => {
   const event = new CustomEvent("select-item", { cancelable: true });
   event.altKey = realEvent.altKey;
   event.shiftKey = realEvent.shiftKey;
@@ -176,10 +175,9 @@ function Cerebro() {
             replaceTerm: (newTerm: string) => updateTerm(newTerm),
           },
           term,
-          hide: (id: string) => hide(`${name}-${id}`),
-          update: (id: string, result: any) =>
-            updateResult(`${name}-${id}`, result),
-          display: (payload: any) => addResult(payload),
+          hide: (id) => hide(`${name}-${id}`),
+          update: (id, result) => updateResult(`${name}-${id}`, result),
+          display: (payload) => addResult(name, { ...payload }),
           settings: pluginSettings.getUserSettings(plugin, name),
         });
       } catch (error) {
@@ -334,13 +332,11 @@ function Cerebro() {
 
   /**
    * Select item from results list
-   * @param  {[type]} item [description]
-   * @return {[type]}      [description]
    */
-  const selectItem = (item: any, realEvent: any) => {
+  const selectItem = (item: PluginResult, realEvent: any) => {
     reset();
     const event = wrapEvent(realEvent);
-    item.onSelect(event);
+    item.onSelect?.(event);
 
     if (!event.defaultPrevented) electronWindow.hide();
   };
@@ -350,6 +346,7 @@ function Cerebro() {
    */
   const autocomplete = (event: React.KeyboardEvent<HTMLInputElement>) => {
     const { term: highlightedTerm } = highlightedResult();
+
     if (highlightedTerm && highlightedTerm !== term) {
       updateTerm(highlightedTerm);
       event.preventDefault();

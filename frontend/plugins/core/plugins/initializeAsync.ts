@@ -1,22 +1,16 @@
 import { client } from "@/services/plugins";
 import * as config from "common/config";
 import loadPlugins from "./loadPlugins";
-import getInstalledPlugins from "./getInstalledPlugins";
-
-const OS_APPS_PLUGIN = {
-  darwin: "@cerebroapp/cerebro-mac-apps",
-  DEFAULT: "@cerebroapp/cerebro-basic-apps",
-} as const;
+import { getInstalledPlugins } from "./getInstalledPlugins";
 
 const DEFAULT_PLUGINS = [
-  OS_APPS_PLUGIN[process.platform as keyof typeof OS_APPS_PLUGIN] ||
-    OS_APPS_PLUGIN.DEFAULT,
+  process.platform === "darwin" ? "@cerebroapp/cerebro-mac-apps" : "@cerebroapp/cerebro-basic-apps",
   "@cerebroapp/search",
   "cerebro-math",
   "cerebro-converter",
   "cerebro-open-web",
   "cerebro-files-nav",
-];
+] as const;
 
 /**
  * Check plugins for updates and start plugins autoupdater
@@ -26,7 +20,7 @@ async function checkForUpdates() {
   const plugins = await loadPlugins();
 
   const updatePromises = plugins
-    .filter((p) => p.isUpdateAvailable)
+    .filter((p) => p.isUpdateAvailable === true)
     .map((p) => () => client.update(p.name));
 
   await Promise.all(updatePromises);
@@ -52,10 +46,11 @@ async function migratePlugins(sendMessage: Function) {
   }
 
   console.log("Start installation of default plugins");
+
   const installedPlugins = await getInstalledPlugins();
 
   const promises = DEFAULT_PLUGINS.filter(
-    (plugin) => !installedPlugins[plugin]
+    (plugin) => !installedPlugins.find((p) => p.name === plugin)
   ).map((plugin) => () => client.install(plugin));
 
   if (promises.length > 0) {
