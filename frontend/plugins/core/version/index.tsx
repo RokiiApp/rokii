@@ -2,20 +2,16 @@ import icon from "../icon.png";
 import { app } from "@electron/remote";
 // @ts-ignore
 import { search } from "cerebro-tools";
-// Settings plugin name
-const NAME = "Cerebro Version";
+import { PluginModule } from "@/types";
 
-// Settings plugins in the end of list
+const NAME = "RoKI Version";
 const order = 9;
-
-// Phrases that used to find settings plugins
 const KEYWORDS = [NAME, "ver", "version"];
 
 /**
  * Plugin to show app settings in results list
- *
  */
-const plugin = ({ term, display }: { term: string; display: Function }) => {
+const plugin: PluginModule["fn"] = ({ term, display }) => {
   const result = search(KEYWORDS, term).map((title: string) => ({
     order,
     icon,
@@ -31,4 +27,4 @@ const plugin = ({ term, display }: { term: string; display: Function }) => {
   display(result);
 };
 
-export default { name: NAME, fn: plugin };
+export { NAME as name, plugin as fn };

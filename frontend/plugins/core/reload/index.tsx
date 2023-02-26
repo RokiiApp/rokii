@@ -1,9 +1,12 @@
+import type { PluginModule } from "@/types";
+
 import { app } from "@electron/remote";
 import icon from "../icon.png";
 
 const keyword = "reload";
 const title = "Reload";
-const subtitle = "Reload Cerebro App";
+const subtitle = "Reload RoKI App";
+
 const onSelect = () => {
   app.relaunch();
   app.exit();
@@ -11,9 +14,8 @@ const onSelect = () => {
 
 /**
  * Plugin to reload Cerebro
- *
  */
-const fn = ({ term, display }: { term: string; display: Function }) => {
+const fn: PluginModule["fn"] = ({ term, display }) => {
   const match = "reload".includes(term.toLowerCase());
 
   if (match) {
@@ -21,9 +23,4 @@ const fn = ({ term, display }: { term: string; display: Function }) => {
   }
 };
 
-export default {
-  keyword,
-  fn,
-  icon,
-  name: "Reload",
-};
+export { keyword, title as name, fn };

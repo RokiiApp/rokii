@@ -7,6 +7,7 @@ import * as format from "./format";
 import Preview from "./Preview";
 import initializeAsync from "./initializeAsync";
 import { useRokiStore } from "@/state/rokiStore";
+import { PluginModule } from "@/types";
 
 function partition(array: any[], predicate: Function) {
   return array.reduce(
@@ -51,9 +52,7 @@ const updatePlugin = async (update: Function, name: string) => {
 };
 
 const pluginToResult = (update: Function) => (plugin: any) => {
-  if (typeof plugin === "string") {
-    return { title: plugin };
-  }
+  if (typeof plugin === "string") return { title: plugin };
 
   return {
     icon,
@@ -88,46 +87,36 @@ const categorize = (plugins: any[], callback: Function) => {
   return plugins;
 };
 
-const fn = async ({
-  term,
-  display,
-  hide,
-  update,
-}: {
-  term: string;
-  display: Function;
-  hide: Function;
-  update: Function;
-}) => {
+const fn: PluginModule["fn"] = async ({ term, display, hide, update }) => {
   const match = term.match(/^plugins?\s*(.+)?$/i);
   if (match) {
-    display({ icon, id: "loading", title: "Looking for plugins..." });
+    display({ icon, id: "plugins-loading", title: "Looking for plugins..." });
     const plugins = await loadPlugins();
 
     const matchingPlugins = plugins.filter((plugin) =>
       search([plugin.name], match[1])
     );
-    const orderedPlugins = categorize(matchingPlugins, () => hide("loading"));
+    const orderedPlugins = categorize(matchingPlugins, () =>
+      hide("plugins-loading")
+    );
     orderedPlugins
       .map((plugin) => pluginToResult(update)(plugin))
       .map((plugin) => display(plugin));
   }
 };
 
-export default {
-  icon,
-  fn,
-  initializeAsync,
-  name: "Manage plugins",
-  keyword: "plugins",
-  onMessage: (type: any) => {
-    if (type === "plugins:start-installation") {
-      useRokiStore.setState({ statusBarText: "Installing default plugins..." });
-    }
-    if (type === "plugins:finish-installation") {
-      setTimeout(() => {
-        useRokiStore.setState({ statusBarText: undefined });
-      }, 2000);
-    }
-  },
+const name = "Manage plugins";
+const keyword = "plugins";
+
+const onMessage = (type: any) => {
+  if (type === "plugins:start-installation") {
+    useRokiStore.setState({ statusBarText: "Installing default plugins..." });
+  }
+  if (type === "plugins:finish-installation") {
+    setTimeout(() => {
+      useRokiStore.setState({ statusBarText: undefined });
+    }, 2000);
+  }
 };
+
+export { fn, initializeAsync, name, keyword, onMessage };

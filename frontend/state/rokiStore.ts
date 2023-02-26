@@ -1,18 +1,8 @@
+import type { PluginResult } from "@/types";
+
 import { create } from "zustand";
 import { MIN_VISIBLE_RESULTS } from "common/constants/ui";
 import { isResultValid } from "./utils";
-
-export type PluginResult = {
-  id: string;
-  title: string;
-  subtitle: string;
-  icon: string;
-  term: string;
-  onSelect: () => void;
-  getPreview?: () => JSX.Element;
-  onKeyDown?: (args: any) => void;
-  clipboard?: string;
-};
 
 interface RokiStore {
   // Search term in main input

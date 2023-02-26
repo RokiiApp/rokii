@@ -1,51 +1,29 @@
+import type { PluginModule } from "@/types";
+
 // @ts-ignore
 import { search } from "cerebro-tools";
 import Settings from "./Settings";
 import icon from "../icon.png";
 
-// Settings plugin name
-const NAME = "Cerebro Settings";
-
-// Settings plugins in the end of list
+const NAME = "RoKI Settings";
 const order = 9;
-
-// Phrases that used to find settings plugins
-const KEYWORDS = [NAME, "Cerebro Preferences", "cfg", "config", "params"];
+const KEYWORDS = [NAME, "RoKI Preferences", "cfg", "config", "params"];
 
 /**
  * Plugin to show app settings in results list
- *
  */
-const plugin = ({
-  term,
-  display,
-  config,
-}: {
-  term: string;
-  display: Function;
-  config: typeof import("common/config");
-}) => {
+const plugin: PluginModule["fn"] = ({ term, display, config }) => {
   const found = search(KEYWORDS, term).length > 0;
   if (found) {
-    const results = [
-      {
-        order,
-        icon,
-        title: NAME,
-        term: NAME,
-        getPreview: () => (
-          <Settings
-            set={(key, value) => config.set(key, value)}
-            get={(key) => config.get(key)}
-          />
-        ),
-      },
-    ];
-    display(results);
+    const getPreview = () => (
+      <Settings
+        set={(key, value) => config.set(key, value)}
+        get={(key) => config.get(key)}
+      />
+    );
+
+    display({ order, icon, title: NAME, term: NAME, getPreview });
   }
 };
 
-export default {
-  name: NAME,
-  fn: plugin,
-};
+export { NAME as name, plugin as fn };
