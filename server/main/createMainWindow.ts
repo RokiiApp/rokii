@@ -2,11 +2,8 @@ import { app, BrowserWindow, globalShortcut, shell } from "electron";
 import { join } from "node:path";
 import * as config from "../common/config";
 import { INPUT_HEIGHT, WINDOW_WIDTH } from "../common/constants/ui";
-import { toggleWindow } from "./services/togglewindow";
+import { toggleWindow } from "./services/toggleWindow";
 import { blurListener, hideListener, moveListener } from "./windowListeners";
-
-const url = process.env.VITE_DEV_SERVER_URL;
-const indexHtml = join(process.env.DIST, "index.html");
 
 export function createMainWindow() {
   const [x, y] = config.get("winPosition");
@@ -33,11 +30,14 @@ export function createMainWindow() {
   config.set("winPosition", win.getPosition() as [number, number]);
 
   if (process.env.VITE_DEV_SERVER_URL) {
+    const url = process.env.VITE_DEV_SERVER_URL;
+
     // electron-vite-vue#298
     win.loadURL(url);
     // Open devTool if the app is not packaged
     win.webContents.openDevTools({ mode: "detach" });
   } else {
+    const indexHtml = join(process.env.DIST, "index.html");
     win.loadFile(indexHtml);
   }
 

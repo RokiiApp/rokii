@@ -1,7 +1,7 @@
 import { BrowserWindow, globalShortcut, ipcMain } from "electron";
 import { AppTray } from "../AppTray";
 import { isAutoStartEnabled, setAutoStart } from "../autoStart";
-import { toggleWindow } from "./togglewindow";
+import { toggleWindow } from "./toggleWindow";
 
 type SettingsListenerOptions = {
   win: BrowserWindow;

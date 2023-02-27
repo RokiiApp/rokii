@@ -7,7 +7,7 @@
   directories: {
     output: "release/${version}",
   },
-  files: ["dist-server", "dist"],
+  files: ["dist-server", "frontend/dist"],
   mac: {
     artifactName: "${productName}_${version}.${ext}",
     target: ["dmg"],

@@ -1,6 +1,6 @@
 import { Menu, Tray, app } from "electron";
 import { showWindowWithTerm } from "./services/showWindowWithTerm";
-import { toggleWindow } from "./services/togglewindow";
+import { toggleWindow } from "./services/toggleWindow";
 import { checkForUpdates } from "./services/checkForUpdates";
 
 type TrayOptions = {

@@ -14,6 +14,14 @@ export default defineConfig(({ command }) => {
 
   return {
     root: "./frontend",
+    build: {
+      rollupOptions: {
+        input: {
+          index: path.resolve(__dirname, "frontend", "index.html"),
+          worker: path.resolve(__dirname, "frontend", "worker.html"),
+        },
+      },
+    },
     resolve: {
       alias: {
         common: path.join(__dirname, "server", "common"),
