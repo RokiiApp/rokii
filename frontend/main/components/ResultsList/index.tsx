@@ -1,12 +1,12 @@
 import type { PluginResult } from "@/types";
 
-import { ListChildComponentProps, VariableSizeList } from "react-window";
-import { RESULT_HEIGHT } from "common/constants/ui";
-
-import Row from "./Row";
-import styles from "./styles.module.css";
-import { useRokiStore } from "@/state/rokiStore";
 import { useEffect, useRef, memo } from "react";
+import { ListChildComponentProps, VariableSizeList } from "react-window";
+import styles from "./styles.module.css";
+
+import { RESULT_HEIGHT } from "common/constants/ui";
+import Row from "./Row";
+import { useRokiStore } from "@/state/rokiStore";
 
 const PluginPreview = ({
   plugin,

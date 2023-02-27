@@ -11,12 +11,18 @@ const subtitle = "Quit from RoKI";
 const onSelect = () => app.quit();
 
 export const fn: PluginModule["fn"] = ({ term, display }) => {
-  const result = search(KEYWORDS, term).map((title: string) => ({
+  const isMatch = search(KEYWORDS, term).length > 0;
+  if (!isMatch) return;
+
+  const title = KEYWORDS[0];
+
+  const result = {
     icon,
     title,
     subtitle,
     onSelect,
     term: title,
-  }));
+  };
+
   display(result);
 };
