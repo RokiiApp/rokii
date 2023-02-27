@@ -1,4 +1,6 @@
-const prefix = process.env.VITE_DEV_SERVER_URL;
+const prefix = process.env.NODE_ENV !== "production"
+  ? process.env.VITE_DEV_SERVER_URL
+  : `.`;
 
 export const themes = [
   {

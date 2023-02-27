@@ -29,7 +29,6 @@ app.whenReady().then(async () => {
   win = createMainWindow();
 
   require("@electron/remote/main").initialize();
-
   require("@electron/remote/main").enable(win.webContents);
 
   backgroundWin = createBackgroundWindow();
@@ -42,11 +41,12 @@ app.whenReady().then(async () => {
     src: process.env.PUBLIC + "/favicon.ico",
     isDev: process.env.NODE_ENV === "development",
     mainWindow: win,
+    backgroundWindow: backgroundWin,
   });
 
   tray.show();
 
-  setupSettingsListener({ win, tray: null });
+  setupSettingsListener({ win, tray });
   setupRTRCommunication(win, backgroundWin);
 });
 

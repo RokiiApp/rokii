@@ -1,6 +1,6 @@
 // @ts-ignore
 import { SmartIcon } from "@cerebroapp/cerebro-ui";
-import styles from "./styles.module.scss";
+import styles from "./styles.module.css";
 
 type Props = {
   isSelected: boolean;

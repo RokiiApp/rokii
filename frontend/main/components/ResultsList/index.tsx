@@ -4,7 +4,7 @@ import { ListChildComponentProps, VariableSizeList } from "react-window";
 import { RESULT_HEIGHT } from "common/constants/ui";
 
 import Row from "./Row";
-import styles from "./styles.module.scss";
+import styles from "./styles.module.css";
 import { useRokiStore } from "@/state/rokiStore";
 import { useEffect, useRef, memo } from "react";
 

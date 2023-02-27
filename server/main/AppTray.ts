@@ -4,10 +4,10 @@ import { toggleWindow } from "./services/toggleWindow";
 import { checkForUpdates } from "./services/checkForUpdates";
 
 type TrayOptions = {
-  src?: string | Electron.NativeImage;
+  src: string | Electron.NativeImage;
   isDev: boolean;
   mainWindow: Electron.BrowserWindow;
-  // backgroundWindow: Electron.BrowserWindow;
+  backgroundWindow: Electron.BrowserWindow;
 };
 
 /**
@@ -40,12 +40,13 @@ export class AppTray {
   }
 
   buildMenu() {
-    const { mainWindow, isDev } = this.options;
+    const { mainWindow, backgroundWindow, isDev } = this.options;
+
     const separator = { type: "separator" } as const;
 
     const template: any = [
       {
-        label: "Toggle Cerebro",
+        label: "Toggle Roki",
         click: () => toggleWindow(mainWindow),
       },
       separator,
@@ -55,7 +56,7 @@ export class AppTray {
       },
       {
         label: "Preferences...",
-        click: () => showWindowWithTerm(mainWindow, "Cerebro Settings"),
+        click: () => showWindowWithTerm(mainWindow, "Roki Settings"),
       },
       separator,
       {
@@ -76,12 +77,12 @@ export class AppTray {
             click: () =>
               mainWindow.webContents.openDevTools({ mode: "detach" }),
           },
-          // {
-          //   label: "DevTools (background)",
-          //   accelerator: "CmdOrCtrl+Shift+B",
-          //   click: () =>
-          //     backgroundWindow.webContents.openDevTools({ mode: "detach" }),
-          // },
+          {
+            label: "DevTools (background)",
+            accelerator: "CmdOrCtrl+Shift+B",
+            click: () =>
+              backgroundWindow.webContents.openDevTools({ mode: "detach" }),
+          },
           {
             label: "Reload",
             click: () => {
