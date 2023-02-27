@@ -33,18 +33,14 @@ type ResultsListProps = {
     event: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => void;
   mainInputFocused: boolean;
-  onItemHover: (index: number) => void;
 };
 
-const ResultsList = ({
-  onSelect,
-  mainInputFocused,
-  onItemHover,
-}: ResultsListProps) => {
-  const [results, selected, visibleResults] = useRokiStore((s) => [
+const ResultsList = ({ onSelect, mainInputFocused }: ResultsListProps) => {
+  const [results, selected, visibleResults, setSelected] = useRokiStore((s) => [
     s.results,
     s.selected,
     s.visibleResults,
+    s.select,
   ]);
 
   const listRef = useRef<VariableSizeList>(null);
@@ -74,7 +70,7 @@ const ResultsList = ({
         if (movementX || movementY) {
           // Hover item only when we had real movement of mouse
           // We should prevent changing of selection when user uses keyboard
-          onItemHover(index);
+          setSelected(index);
         }
       },
     } as const;

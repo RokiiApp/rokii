@@ -377,11 +377,7 @@ function Cerebro() {
           onBlur={onMainInputBlur}
         />
       </div>
-      <ResultsList
-        onItemHover={setSelected}
-        onSelect={selectItem}
-        mainInputFocused={mainInputFocused}
-      />
+      <ResultsList onSelect={selectItem} mainInputFocused={mainInputFocused} />
       {statusBarText && <StatusBar value={statusBarText} />}
     </div>
   );
