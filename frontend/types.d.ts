@@ -136,4 +136,9 @@ export interface PluginModule {
 
     settings?: Record<string, any>;
 
+    /**
+     * A default icon that will be used when you plugin appears in the autocomplete list.
+     */
+    icon?: string;
+
 }

@@ -117,7 +117,6 @@ function Cerebro() {
     addResult,
     moveCursor,
     setVisibleResults,
-    setSelected,
   ] = useRokiStore((s) => [
     s.updateTerm,
     s.reset,
@@ -126,7 +125,6 @@ function Cerebro() {
     s.addResult,
     s.moveCursor,
     s.setVisibleResults,
-    s.select,
   ]);
   const mainInput = useRef<HTMLInputElement>(null);
   const [mainInputFocused, setMainInputFocused] = useState(false);
@@ -177,7 +175,7 @@ function Cerebro() {
           term,
           hide: (id) => hide(`${name}-${id}`),
           update: (id, result) => updateResult(`${name}-${id}`, result),
-          display: (payload) => addResult(name, { ...payload }),
+          display: (payload) => addResult(name, payload),
           settings: pluginSettings.getUserSettings(plugin, name),
         });
       } catch (error) {
