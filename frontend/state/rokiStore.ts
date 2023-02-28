@@ -1,8 +1,19 @@
 import { INITIAL_STATE } from "@/constants";
 import type { PluginResult } from "@/types";
+import { MIN_VISIBLE_RESULTS } from "common/constants/ui";
 
 import { create } from "zustand";
 import { isResultValid } from "./utils";
+
+interface UIStateStore {
+  maxVisibleResults: number;
+  setMaxVisibleResults: (count: number) => void;
+}
+
+export const useUIStateStore = create<UIStateStore>((set) => ({
+  maxVisibleResults: MIN_VISIBLE_RESULTS,
+  setMaxVisibleResults: (count) => set({ maxVisibleResults: count }),
+}));
 
 interface RokiStore {
   // Search term in main input
@@ -13,8 +24,6 @@ interface RokiStore {
   results: PluginResult[];
   // Index of selected result
   selected: number;
-  // Count of visible results
-  visibleResults: number;
   statusBarText: string;
   setStatusBarText: (text: string) => void;
   reset: () => void;
@@ -23,7 +32,6 @@ interface RokiStore {
   hide: (id: string) => void;
   updateResult: (id: string, newResult: PluginResult) => void;
   moveCursor: (direction: number) => void;
-  setVisibleResults: (count: number) => void;
   select: (index: number) => void;
 }
 
@@ -90,6 +98,5 @@ export const useRokiStore = create<RokiStore>((set) => ({
       }
       return { selected: newSelected };
     }),
-  setVisibleResults: (count) => set({ visibleResults: count }),
   select: (index: number) => set({ selected: index }),
 }));

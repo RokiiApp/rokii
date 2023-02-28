@@ -18,7 +18,7 @@ import { StatusBar } from "../StatusBar";
 import styles from "./styles.module.css";
 
 import { getCurrentWindow } from "@electron/remote";
-import { useRokiStore } from "@/state/rokiStore";
+import { useRokiStore, useUIStateStore } from "@/state/rokiStore";
 import { getAutocompleteValue } from "@/main/utils/getAutocompleteValue";
 import { cursorInEndOfInput } from "./utils";
 import { useEventsSubscription } from "@/main/hooks/useEventsSubscription";
@@ -55,8 +55,8 @@ const focusPreview = () => {
  * Set resizable and size for main electron window when results count is changed
  */
 const updateElectronWindow = (
-  results: any[],
-  visibleResults: number,
+  results: PluginResult[],
+  maxVisibleResults: number,
   term: string
 ) => {
   const { length } = results;
@@ -73,7 +73,7 @@ const updateElectronWindow = (
   }
 
   const resultHeight = Math.max(
-    Math.min(visibleResults, length),
+    Math.min(maxVisibleResults, length),
     MIN_VISIBLE_RESULTS
   );
   const heightWithResults = resultHeight * RESULT_HEIGHT + INPUT_HEIGHT;
@@ -88,15 +88,11 @@ const updateElectronWindow = (
  */
 export const Roki = () => {
   const electronWindow = getCurrentWindow();
-  const [results, selected, visibleResults, term, prevTerm, statusBarText] =
-    useRokiStore((s) => [
-      s.results,
-      s.selected,
-      s.visibleResults,
-      s.term,
-      s.prevTerm,
-      s.statusBarText,
-    ]);
+  const maxVisibleResults = useUIStateStore((s) => s.maxVisibleResults);
+
+  const [results, selected, term, prevTerm, statusBarText] = useRokiStore(
+    (s) => [s.results, s.selected, s.term, s.prevTerm, s.statusBarText]
+  );
 
   const [updateTerm, reset, moveCursor] = useRokiStore((s) => [
     s.updateTerm,
@@ -114,7 +110,7 @@ export const Roki = () => {
   if (results.length !== prevResultsLenght.current) {
     prevResultsLenght.current = results.length;
     // Resize electron window when results count changed
-    updateElectronWindow(results, visibleResults, term);
+    updateElectronWindow(results, maxVisibleResults, term);
   }
 
   /**

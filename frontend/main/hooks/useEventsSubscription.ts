@@ -1,4 +1,4 @@
-import { useRokiStore } from "@/state/rokiStore";
+import { useRokiStore, useUIStateStore } from "@/state/rokiStore";
 import * as config from "common/config";
 import { BrowserWindow, ipcRenderer } from "electron";
 
@@ -7,8 +7,10 @@ import { useEffect } from "react"
 import { calculateMaxVisibleResults } from "../components/Roki/utils";
 
 export const useEventsSubscription = (electronWindow: BrowserWindow, mainInput: any) => {
-    const setVisibleResults = useRokiStore(s => s.setVisibleResults)
+    const setMaxVisibleResults = useUIStateStore(s => s.setMaxVisibleResults)
+
     const results = useRokiStore(s => s.results)
+
     const updateTerm = useRokiStore(s => s.updateTerm)
 
     /**
@@ -16,7 +18,7 @@ export const useEventsSubscription = (electronWindow: BrowserWindow, mainInput: 
    */
     const handleResize = debounce(() => {
         const newMaxVisibleResults = calculateMaxVisibleResults(results);
-        setVisibleResults(newMaxVisibleResults);
+        setMaxVisibleResults(newMaxVisibleResults);
     }, 200);
 
     const onDocumentKeydown = (event: KeyboardEvent) => {
@@ -45,7 +47,7 @@ export const useEventsSubscription = (electronWindow: BrowserWindow, mainInput: 
 
     useEffect(() => {
         if(!mainInput) return
-        
+
         // Listen for window.resize and change default space for results to user's value
         window.addEventListener("resize", handleResize);
         // Add some global key handlers

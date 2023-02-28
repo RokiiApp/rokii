@@ -6,7 +6,7 @@ import styles from "./styles.module.css";
 
 import { RESULT_HEIGHT } from "common/constants/ui";
 import Row from "./Row";
-import { useRokiStore } from "@/state/rokiStore";
+import { useRokiStore, useUIStateStore } from "@/state/rokiStore";
 
 const PluginPreview = ({
   plugin,
@@ -36,10 +36,11 @@ type ResultsListProps = {
 };
 
 const ResultsList = ({ onSelect, mainInputFocused }: ResultsListProps) => {
-  const [results, selected, visibleResults, setSelected] = useRokiStore((s) => [
+  const maxVisibleResults = useUIStateStore((s) => s.maxVisibleResults);
+
+  const [results, selected, setSelected] = useRokiStore((s) => [
     s.results,
     s.selected,
-    s.visibleResults,
     s.select,
   ]);
 
@@ -90,7 +91,7 @@ const ResultsList = ({ onSelect, mainInputFocused }: ResultsListProps) => {
       <VariableSizeList
         ref={listRef}
         className={classNames}
-        height={visibleResults * RESULT_HEIGHT}
+        height={maxVisibleResults * RESULT_HEIGHT}
         itemSize={() => RESULT_HEIGHT}
         itemCount={results.length}
         overscanCount={5}

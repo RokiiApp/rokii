@@ -1,5 +1,3 @@
-import { MIN_VISIBLE_RESULTS } from "common/constants/ui";
-
 /**
  * Base url of npm API
  */
@@ -10,6 +8,5 @@ export const INITIAL_STATE = {
     term: "",
     prevTerm: "",
     selected: 0,
-    visibleResults: MIN_VISIBLE_RESULTS,
     statusBarText: "",
   };
