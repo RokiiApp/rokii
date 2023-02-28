@@ -33,7 +33,7 @@ function Settings({ get, set }: typeof import("common/config")) {
     <div className={styles.settings}>
       <Wrapper
         label="Hotkey"
-        description="Type your global shortcut for Cerebro in this input"
+        description="Type your global shortcut for Roki in this input"
       >
         <Hotkey
           hotkey={state.hotkey}
@@ -42,7 +42,7 @@ function Settings({ get, set }: typeof import("common/config")) {
       </Wrapper>
       <Select
         label="Country"
-        description="Choose your country so Cerebro can better choose currency, language, etc."
+        description="Choose your country so Roki can better choose currency, language, etc."
         value={countries.find((c) => c.value === state.country)}
         options={countries}
         onChange={(value: any) => changeConfig("country", value)}

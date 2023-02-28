@@ -96,7 +96,7 @@ export class AppTray {
 
     template.push(separator);
     template.push({
-      label: "Quit Cerebro",
+      label: "Quit Roki",
       click: () => app.quit(),
     });
 

@@ -1,5 +1,6 @@
 import icon from "../icon.png";
 import { app } from "@electron/remote";
+
 // @ts-ignore
 import { search } from "cerebro-tools";
 import { PluginModule } from "@/types";

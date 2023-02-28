@@ -1,10 +1,10 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import * as config from "common/config";
-import Cerebro from "./components/Cerebro";
-import "./globals.css";
-import { initializePlugins } from "@/services/plugins/initializePlugins";
 import { ipcRenderer } from "electron";
+
+import * as config from "common/config";
+import { Roki } from "./components/Roki";
+import "./globals.css";
 
 window.React = React;
 
@@ -14,7 +14,7 @@ window.React = React;
  * @param src Absolute path to new theme css file
  */
 const changeTheme = (src: string) => {
-  (document.getElementById("cerebro-theme") as HTMLLinkElement).href = src;
+  (document.getElementById("roki-theme") as HTMLLinkElement).href = src;
 };
 
 // Set theme from config
@@ -22,17 +22,19 @@ changeTheme(config.get("theme"));
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
-    <Cerebro />
+    <Roki />
   </React.StrictMode>
 );
 
-initializePlugins();
+import("@/services/plugins/initializePlugins").then((module) =>
+  module.initializePlugins()
+);
 
 // Handle `showTerm` rpc event and replace search term with payload
 // on("showTerm", );
 
 ipcRenderer.on("update-downloaded", () => {
-  new Notification("Cerebro: update is ready to install", {
+  new Notification("Roki: update is ready to install", {
     body: "New version is downloaded and will be automatically installed on quit",
   });
 });

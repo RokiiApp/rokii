@@ -95,10 +95,8 @@ const onDocumentKeydown = (event: KeyboardEvent) => {
 
 /**
  * Main search container
- *
- * TODO: Split to more components
  */
-function Cerebro() {
+export const Roki = () => {
   const electronWindow = getCurrentWindow();
   const [results, selected, visibleResults, term, prevTerm, statusBarText] =
     useRokiStore((s) => [
@@ -379,6 +377,4 @@ function Cerebro() {
       {statusBarText && <StatusBar value={statusBarText} />}
     </div>
   );
-}
-
-export default Cerebro;
+};

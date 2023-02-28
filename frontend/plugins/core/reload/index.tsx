@@ -13,7 +13,7 @@ const onSelect = () => {
 };
 
 /**
- * Plugin to reload Cerebro
+ * Plugin to reload Roki
  */
 const fn: PluginModule["fn"] = ({ term, display }) => {
   const match = "reload".includes(term.toLowerCase());
