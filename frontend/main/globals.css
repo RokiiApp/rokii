@@ -1,14 +1,6 @@
 @import "system-font.css";
 @import url("normalize.css/normalize.css");
 
-html,
-body {
-    margin: 0;
-    padding: 0;
-    background-color: var(--main-background-color);
-    color: var(--main-font-color);
-}
-
 body {
     position: relative;
     height: 100vh;
@@ -17,5 +9,8 @@ body {
 }
 
 #root {
+    border-radius: 5px;
     height: 100%;
+    color: var(--main-font-color);
+    background-color: var(--main-background-color);
 }

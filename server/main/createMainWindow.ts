@@ -15,7 +15,7 @@ export function createMainWindow() {
     minWidth: WINDOW_WIDTH,
     height: INPUT_HEIGHT,
     frame: false,
-    transparent: false,
+    transparent: true,
     resizable: false,
     title: "RoKI",
     icon: join(process.env.PUBLIC, "favicon.ico"),

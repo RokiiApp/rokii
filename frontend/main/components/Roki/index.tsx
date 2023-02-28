@@ -149,6 +149,9 @@ export const Roki = () => {
     ipcRenderer.on("clearInput", () => {
       updateTerm("");
     });
+    ipcRenderer.on("showTerm", (_, term) => {
+      updateTerm(term);
+    });
 
     // function to be called when unmounted
     return () => {
@@ -319,6 +322,7 @@ export const Roki = () => {
     window.removeEventListener("beforeunload", cleanup);
     electronWindow.removeAllListeners("show");
     ipcRenderer.removeAllListeners("clearInput");
+    ipcRenderer.removeAllListeners("showTerm");
   };
 
   /**
