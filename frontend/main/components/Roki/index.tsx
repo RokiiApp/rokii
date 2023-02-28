@@ -1,7 +1,7 @@
 import type { PluginResult } from "@/types";
 
 import { useEffect, useRef, useState } from "react";
-import { clipboard, ipcRenderer } from "electron";
+import { clipboard } from "electron";
 // @ts-ignore
 import { focusableSelector } from "@cerebroapp/cerebro-ui";
 import { Autocomplete } from "./Autocomplete";
@@ -13,7 +13,6 @@ import {
   MIN_VISIBLE_RESULTS,
 } from "common/constants/ui";
 
-import * as config from "common/config";
 import ResultsList from "../ResultsList";
 import { StatusBar } from "../StatusBar";
 import styles from "./styles.module.css";
@@ -24,8 +23,8 @@ import { pluginsService } from "@/plugins";
 import { DEFAULT_SCOPE } from "@/main/utils/pluginDefaultScope";
 import { pluginSettings } from "@/services/plugins";
 import { getAutocompleteValue } from "@/main/utils/getAutocompleteValue";
-import { calculateMaxVisibleResults, cursorInEndOfInput } from "./utils";
-import debounce from "just-debounce";
+import { cursorInEndOfInput } from "./utils";
+import { useEventsSubscription } from "@/main/hooks/useEventsSubscription";
 
 /**
  * Wrap click or mousedown event to custom `select-item` event,
@@ -86,13 +85,6 @@ const updateElectronWindow = (
   win.setSize(width, heightWithResults);
 };
 
-const onDocumentKeydown = (event: KeyboardEvent) => {
-  if (event.key === "Escape") {
-    event.preventDefault();
-    (document.getElementById("main-input") as HTMLInputElement).focus();
-  }
-};
-
 /**
  * Main search container
  */
@@ -107,57 +99,20 @@ export const Roki = () => {
       s.prevTerm,
       s.statusBarText,
     ]);
-  const [
-    updateTerm,
-    reset,
-    hide,
-    updateResult,
-    addResult,
-    moveCursor,
-    setVisibleResults,
-  ] = useRokiStore((s) => [
-    s.updateTerm,
-    s.reset,
-    s.hide,
-    s.updateResult,
-    s.addResult,
-    s.moveCursor,
-    s.setVisibleResults,
-  ]);
+  const [updateTerm, reset, hide, updateResult, addResult, moveCursor] =
+    useRokiStore((s) => [
+      s.updateTerm,
+      s.reset,
+      s.hide,
+      s.updateResult,
+      s.addResult,
+      s.moveCursor,
+    ]);
   const mainInput = useRef<HTMLInputElement>(null);
+  useEventsSubscription(electronWindow, mainInput);
+
   const [mainInputFocused, setMainInputFocused] = useState(false);
   const prevResultsLenght = useRef(results.length);
-
-  const handleShowEvent = () => {
-    mainInput.current?.focus();
-    if (config.get("selectOnShow")) {
-      mainInput.current?.select();
-    }
-  };
-
-  // suscribe to events
-  useEffect(() => {
-    updateElectronWindow(results, visibleResults, term);
-    // Listen for window.resize and change default space for results to user's value
-    window.addEventListener("resize", handleResize);
-    // Add some global key handlers
-    window.addEventListener("keydown", onDocumentKeydown);
-    // Cleanup event listeners on unload
-    // NOTE: when page refreshed (location.reload) componentWillUnmount is not called
-    window.addEventListener("beforeunload", cleanup);
-    electronWindow.on("show", handleShowEvent);
-    ipcRenderer.on("clearInput", () => {
-      updateTerm("");
-    });
-    ipcRenderer.on("showTerm", (_, term) => {
-      updateTerm(term);
-    });
-
-    // function to be called when unmounted
-    return () => {
-      cleanup();
-    };
-  }, []);
 
   useEffect(() => {
     if (term === "") return;
@@ -191,14 +146,6 @@ export const Roki = () => {
     // Resize electron window when results count changed
     updateElectronWindow(results, visibleResults, term);
   }
-
-  /**
-   * Change count of visible results depends on window size
-   */
-  const handleResize = debounce(() => {
-    const newMaxVisibleResults = calculateMaxVisibleResults(results);
-    setVisibleResults(newMaxVisibleResults);
-  }, 200);
 
   /**
    * Handle keyboard shortcuts
@@ -315,15 +262,6 @@ export const Roki = () => {
 
   const onMainInputFocus = () => setMainInputFocused(true);
   const onMainInputBlur = () => setMainInputFocused(false);
-
-  const cleanup = () => {
-    window.removeEventListener("resize", handleResize);
-    window.removeEventListener("keydown", onDocumentKeydown);
-    window.removeEventListener("beforeunload", cleanup);
-    electronWindow.removeAllListeners("show");
-    ipcRenderer.removeAllListeners("clearInput");
-    ipcRenderer.removeAllListeners("showTerm");
-  };
 
   /**
    * Get highlighted result
