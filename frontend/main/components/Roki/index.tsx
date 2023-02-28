@@ -1,6 +1,6 @@
 import type { PluginResult } from "@/types";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { clipboard } from "electron";
 // @ts-ignore
 import { focusableSelector } from "@cerebroapp/cerebro-ui";
@@ -19,12 +19,10 @@ import styles from "./styles.module.css";
 
 import { getCurrentWindow } from "@electron/remote";
 import { useRokiStore } from "@/state/rokiStore";
-import { pluginsService } from "@/plugins";
-import { DEFAULT_SCOPE } from "@/main/utils/pluginDefaultScope";
-import { pluginSettings } from "@/services/plugins";
 import { getAutocompleteValue } from "@/main/utils/getAutocompleteValue";
 import { cursorInEndOfInput } from "./utils";
 import { useEventsSubscription } from "@/main/hooks/useEventsSubscription";
+import { useGetPluginResults } from "@/main/hooks/useGetPluginResults";
 
 /**
  * Wrap click or mousedown event to custom `select-item` event,
@@ -99,47 +97,19 @@ export const Roki = () => {
       s.prevTerm,
       s.statusBarText,
     ]);
-  const [updateTerm, reset, hide, updateResult, addResult, moveCursor] =
-    useRokiStore((s) => [
-      s.updateTerm,
-      s.reset,
-      s.hide,
-      s.updateResult,
-      s.addResult,
-      s.moveCursor,
-    ]);
+
+  const [updateTerm, reset, moveCursor] = useRokiStore((s) => [
+    s.updateTerm,
+    s.reset,
+    s.moveCursor,
+  ]);
+
   const mainInput = useRef<HTMLInputElement>(null);
   useEventsSubscription(electronWindow, mainInput);
+  useGetPluginResults(term);
 
   const [mainInputFocused, setMainInputFocused] = useState(false);
   const prevResultsLenght = useRef(results.length);
-
-  useEffect(() => {
-    if (term === "") return;
-
-    const { allPlugins } = pluginsService;
-    // TODO: order results by frequency?
-    Object.keys(allPlugins).forEach((name) => {
-      const plugin = allPlugins[name];
-      try {
-        plugin.fn?.({
-          ...DEFAULT_SCOPE,
-          actions: {
-            ...DEFAULT_SCOPE.actions,
-            replaceTerm: (newTerm: string) => updateTerm(newTerm),
-          },
-          term,
-          hide: (id) => hide(`${name}-${id}`),
-          update: (id, result) => updateResult(`${name}-${id}`, result),
-          display: (payload) => addResult(name, payload),
-          settings: pluginSettings.getUserSettings(plugin, name),
-        });
-      } catch (error) {
-        // Do not fail on plugin errors, just log them to console
-        console.log("Error running plugin", name, error);
-      }
-    });
-  }, [term]);
 
   if (results.length !== prevResultsLenght.current) {
     prevResultsLenght.current = results.length;
