@@ -68,9 +68,6 @@ export const useRokiStore = create<RokiStore>((set) => ({
 
   updateTerm: (term) => {
     set((state) => {
-      if (term === "") {
-        return { term, prevTerm: state.term, selected: 0, results: [] };
-      }
       return { term, prevTerm: state.term, selected: 0, results: [] };
     });
   },
