@@ -39,6 +39,8 @@ const SETTING_HANDLERS: Record<string, HandlerFunction> = {
   },
 
   cleanOnHide: () => {},
+
+  plugins: () => {},
 };
 
 const setupSettingsListener = (args: SettingsListenerOptions) => {
