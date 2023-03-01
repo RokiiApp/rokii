@@ -8,16 +8,13 @@ import { calculateMaxVisibleResults } from "../components/Roki/utils";
 
 export const useEventsSubscription = (electronWindow: BrowserWindow, mainInput: any) => {
     const setMaxVisibleResults = useUIStateStore(s => s.setMaxVisibleResults)
-
-    const results = useRokiStore(s => s.results)
-
-    const updateTerm = useRokiStore(s => s.updateTerm)
+    const [results, updateTerm] = useRokiStore(s => [s.results, s.updateTerm])
 
     /**
    * Change count of visible results depends on window size
    */
     const handleResize = debounce(() => {
-        const newMaxVisibleResults = calculateMaxVisibleResults(results);
+        const newMaxVisibleResults = calculateMaxVisibleResults(results.length);
         setMaxVisibleResults(newMaxVisibleResults);
     }, 200);
 

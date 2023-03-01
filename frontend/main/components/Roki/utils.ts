@@ -4,8 +4,8 @@ import {
   RESULT_HEIGHT,
 } from "common/constants/ui";
 
-export const calculateMaxVisibleResults = (results: any[]) => {
-  if (results.length <= MIN_VISIBLE_RESULTS) return MIN_VISIBLE_RESULTS;
+export const calculateMaxVisibleResults = (resultsCount: number) => {
+  if (resultsCount <= MIN_VISIBLE_RESULTS) return MIN_VISIBLE_RESULTS;
 
   let maxVisibleResults = Math.floor(
     (window.outerHeight - INPUT_HEIGHT) / RESULT_HEIGHT
