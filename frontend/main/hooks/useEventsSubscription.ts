@@ -21,8 +21,7 @@ export const useEventsSubscription = (electronWindow: BrowserWindow, mainInput: 
     const onDocumentKeydown = (event: KeyboardEvent) => {
         if (event.key === "Escape") {
           event.preventDefault();
-          // TODO - Use references instead of getElementById
-          (document.getElementById("main-input") as HTMLInputElement).focus();
+          mainInput.current?.focus();
         }
       };
 
