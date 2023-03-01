@@ -10,3 +10,9 @@ export const INITIAL_STATE = {
     selected: 0,
     statusBarText: "",
   };
+
+export enum RPCEvents {
+  PluginMessage = "plugin.message",
+  InitializePluginAsync = "initializePluginAsync",
+}
+

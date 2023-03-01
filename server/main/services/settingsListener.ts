@@ -1,4 +1,5 @@
 import { BrowserWindow, globalShortcut, ipcMain } from "electron";
+import { Events } from "../../common/constants/events";
 import { AppTray } from "../AppTray";
 import { isAutoStartEnabled, setAutoStart } from "../autoStart";
 import { toggleWindow } from "./toggleWindow";
@@ -31,7 +32,7 @@ const SETTING_HANDLERS: Record<string, HandlerFunction> = {
   },
 
   theme: (value: string, { win }) => {
-    win.webContents.send("updateTheme", value);
+    win.webContents.send(Events.UpdateTheme, value);
   },
 
   proxy: (value: string, { win }) => {
@@ -40,7 +41,7 @@ const SETTING_HANDLERS: Record<string, HandlerFunction> = {
 };
 
 const setupSettingsListener = (args: SettingsListenerOptions) => {
-  ipcMain.on("updateSettings", (_, settingName, value) => {
+  ipcMain.on(Events.UpdateSettings, (_, settingName, value) => {
     if (settingName in SETTING_HANDLERS) {
       SETTING_HANDLERS[settingName](value, args);
     }

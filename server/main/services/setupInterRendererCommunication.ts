@@ -1,5 +1,5 @@
 import { BrowserWindow, ipcMain } from "electron";
-import { RTR_CHANNEL } from "../../common/constants/ui";
+import { Events } from "../../common/constants/events";
 
 /**
  * As electron does not support communication between renderer processes,
@@ -10,8 +10,8 @@ export const setupRTRCommunication = (
   win: BrowserWindow,
   backgroundWin: BrowserWindow
 ) => {
-  ipcMain.on(RTR_CHANNEL, (event, payload) => {
+  ipcMain.on(Events.RendererToRenderer, (event, payload) => {
     const toWindow = event.sender === win.webContents ? backgroundWin : win;
-    toWindow.webContents.send(RTR_CHANNEL, payload);
+    toWindow.webContents.send(Events.RendererToRenderer, payload);
   });
 };

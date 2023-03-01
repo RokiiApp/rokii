@@ -1,7 +1,6 @@
 import type { BrowserWindow } from "electron";
 import { autoUpdater } from "electron-updater";
-
-const event = "update-downloaded";
+import { Events } from "../common/constants/events";
 
 const TEN_SECONDS_IN_MS = 10 * 1000;
 const ONE_HOUR_IN_MS = 60 * 60 * 1000;
@@ -11,11 +10,8 @@ export function initAutoUpdater(w: BrowserWindow) {
     return;
   }
 
-  autoUpdater.on(event, (payload) => {
-    w.webContents.send("message", {
-      message: event,
-      payload,
-    });
+  autoUpdater.on(Events.UpdateDownloaded, () => {
+    w.webContents.send(Events.UpdateDownloaded);
   });
 
   setTimeout(() => {

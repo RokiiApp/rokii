@@ -1,5 +1,6 @@
 import { useRokiStore, useUIStateStore } from "@/state/rokiStore";
 import * as config from "common/config";
+import { Events } from "common/constants/events";
 import { BrowserWindow, ipcRenderer } from "electron";
 
 import debounce from "just-debounce";
@@ -37,8 +38,8 @@ export const useEventsSubscription = (electronWindow: BrowserWindow, mainInput: 
         window.removeEventListener("keydown", onDocumentKeydown);
         window.removeEventListener("beforeunload", cleanup);
         electronWindow.removeAllListeners("show");
-        ipcRenderer.removeAllListeners("clearInput");
-        ipcRenderer.removeAllListeners("showTerm");
+        ipcRenderer.removeAllListeners(Events.ClearInput);
+        ipcRenderer.removeAllListeners(Events.ShowTerm);
       };
 
     useEffect(() => {
@@ -52,10 +53,10 @@ export const useEventsSubscription = (electronWindow: BrowserWindow, mainInput: 
         // NOTE: when page refreshed (location.reload) componentWillUnmount is not called
         window.addEventListener("beforeunload", cleanup);
         electronWindow.on("show", handleShowEvent);
-        ipcRenderer.on("clearInput", () => {
+        ipcRenderer.on(Events.ClearInput, () => {
             updateTerm("");
         });
-        ipcRenderer.on("showTerm", (_, term) => {
+        ipcRenderer.on(Events.ShowTerm, (_, term) => {
             updateTerm(term);
         });
 

@@ -1,8 +1,9 @@
 import { pluginsService } from "@/plugins";
 import { on, send } from "@/services/rpc";
 import { pluginSettings, MODULES_DIRECTORY } from "@/services/plugins";
+import { RPCEvents } from "@/constants";
 
-on("initializePluginAsync", ({ name }: { name: any }) => {
+on(RPCEvents.InitializePluginAsync, ({ name }: { name: any }) => {
   const { corePlugins } = pluginsService;
   console.group(`Initialize async plugin ${name}`);
 
@@ -22,7 +23,7 @@ on("initializePluginAsync", ({ name }: { name: any }) => {
     initializeAsync((data: any) => {
       console.log("Done! Sending data back to main window");
       // Send message back to main window with initialization result
-      send("plugin.message", { name, data });
+      send(RPCEvents.PluginMessage, { name, data });
     }, pluginSettings.getUserSettings(plugin, name));
 
   } catch (err) {

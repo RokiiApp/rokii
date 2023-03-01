@@ -3,6 +3,7 @@ import type { PluginModule } from "@/types";
 import { on, send } from "@/services/rpc";
 import { pluginsService } from "@/plugins";
 import { pluginSettings } from "@/services/plugins";
+import { RPCEvents } from "@/constants";
 
 /**
  * Initialize all plugins and start listening for replies from plugin async initializers
@@ -12,7 +13,7 @@ export const initializePlugins = () => {
   Object.keys(allPlugins).forEach((name) => initPlugin(allPlugins[name], name));
 
   // Start listening for replies from plugin async initializers
-  on("plugin.message", ({ name, data }) => {
+  on(RPCEvents.PluginMessage, ({ name, data }) => {
     const plugin = allPlugins[name];
     plugin?.onMessage?.(data);
   });
@@ -35,6 +36,6 @@ export const initPlugin = (plugin: PluginModule, name: string) => {
   // Background plugin initialization
   if (initializeAsync) {
     console.log("Initialize async plugin", name);
-    send("initializePluginAsync", { name });
+    send(RPCEvents.InitializePluginAsync, { name });
   }
 };

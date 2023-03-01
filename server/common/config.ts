@@ -1,5 +1,6 @@
 import { ipcRenderer } from "electron";
 import Store, { Schema } from "electron-store";
+import { Events } from "./constants/events";
 import { themes } from "./themes";
 
 type settingsSchema = {
@@ -62,7 +63,7 @@ function set<T extends keyof settingsSchema>(key: T, value: settingsSchema[T]) {
   if (ipcRenderer) {
     console.log("notify main process", key, value);
     // Notify main process about settings changes
-    ipcRenderer.send("updateSettings", key, value);
+    ipcRenderer.send(Events.UpdateSettings, key, value);
   }
 }
 

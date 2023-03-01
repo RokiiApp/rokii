@@ -12,8 +12,3 @@ export const MAX_RESULTS = 25;
 
 // Results view shows this count of resutls without scrollbar
 export const MIN_VISIBLE_RESULTS = 10;
-
-/**
- * The name of the channel that is used to communicate between renderer processes.
- */
-export const RTR_CHANNEL = "renderer-to-renderer";

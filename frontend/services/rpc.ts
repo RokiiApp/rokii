@@ -3,12 +3,12 @@
  */
 import { ipcRenderer } from "electron";
 import EventEmitter from "events";
-import { RTR_CHANNEL } from "common/constants/ui";
+import { Events } from "common/constants/events";
 
 const emitter = new EventEmitter();
 
 // Start listening for rpc channel
-ipcRenderer.on(RTR_CHANNEL, (_, { message, payload }) => {
+ipcRenderer.on(Events.RendererToRenderer, (_, { message, payload }) => {
   console.log(`[rtr] emit ${message}`);
   emitter.emit(message, payload);
 });
@@ -18,7 +18,7 @@ ipcRenderer.on(RTR_CHANNEL, (_, { message, payload }) => {
  */
 export const send = (message: string, payload: any) => {
   console.log(`[rtr] send ${message}`);
-  ipcRenderer.send(RTR_CHANNEL, { message, payload });
+  ipcRenderer.send(Events.RendererToRenderer, { message, payload });
 };
 
 /**

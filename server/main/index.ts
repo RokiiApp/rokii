@@ -7,6 +7,7 @@ import { AppTray } from "./AppTray";
 import { createBackgroundWindow } from "./createBackgroundWindow";
 import { setupRTRCommunication } from "./services/setupInterRendererCommunication";
 import { setupSettingsListener } from "./services/settingsListener";
+import * as config from "../common/config";
 
 // Disable GPU Acceleration for Windows 7
 if (release().startsWith("6.1")) app.disableHardwareAcceleration();
@@ -39,7 +40,7 @@ app.whenReady().then(async () => {
 
   const tray = new AppTray({
     src: process.env.PUBLIC + "/favicon.ico",
-    isDev: process.env.NODE_ENV === "development",
+    isDev: process.env.NODE_ENV === "development" || config.get("developerMode"),
     mainWindow: win,
     backgroundWindow: backgroundWin,
   });
