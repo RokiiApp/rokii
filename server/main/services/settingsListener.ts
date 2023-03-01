@@ -36,16 +36,14 @@ const SETTING_HANDLERS: Record<string, HandlerFunction> = {
 
   proxy: (value: string, { win }) => {
     win.webContents.session.setProxy({ proxyRules: value });
-  },
-
-  cleanOnHide: () => {},
-
-  plugins: () => {},
+  }
 };
 
 const setupSettingsListener = (args: SettingsListenerOptions) => {
   ipcMain.on("updateSettings", (_, settingName, value) => {
-    SETTING_HANDLERS[settingName](value, args);
+    if (settingName in SETTING_HANDLERS) {
+      SETTING_HANDLERS[settingName](value, args);
+    }
   });
 };
 

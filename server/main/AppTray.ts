@@ -1,4 +1,4 @@
-import { Menu, Tray, app } from "electron";
+import { Menu, Tray, app, MenuItemConstructorOptions } from "electron";
 import { showWindowWithTerm } from "./services/showWindowWithTerm";
 import { toggleWindow } from "./services/toggleWindow";
 import { checkForUpdates } from "./services/checkForUpdates";
@@ -44,7 +44,7 @@ export class AppTray {
 
     const separator = { type: "separator" } as const;
 
-    const template: any = [
+    const template: MenuItemConstructorOptions[] = [
       {
         label: "Toggle Roki",
         click: () => toggleWindow(mainWindow),
