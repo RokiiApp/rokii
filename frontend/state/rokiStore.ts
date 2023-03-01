@@ -51,7 +51,7 @@ export const useRokiStore = create<RokiStore>((set) => ({
       const normalizedNewResults = result.map((result) => ({
         ...result,
         id: `${pluginName}-${result.id || result.title}`,
-        term: result.term || result.title,
+        term: result.term || "",
       }));
 
       const deleteDuplicatesFilter = (element: PluginResult) => {
