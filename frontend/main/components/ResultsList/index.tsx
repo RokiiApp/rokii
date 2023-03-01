@@ -29,7 +29,7 @@ const PluginPreview = ({
 
 type ResultsListProps = {
   onSelect: (
-    result: any,
+    result: PluginResult,
     event: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => void;
   mainInputFocused: boolean;
@@ -41,7 +41,7 @@ const ResultsList = ({ onSelect, mainInputFocused }: ResultsListProps) => {
   const [results, selected, setSelected] = useRokiStore((s) => [
     s.results,
     s.selected,
-    s.select,
+    s.setSelected,
   ]);
 
   const listRef = useRef<VariableSizeList>(null);

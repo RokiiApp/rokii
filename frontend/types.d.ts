@@ -1,3 +1,5 @@
+import type { SelectEvent } from "./main/utils/CustomEvent";
+
 export interface PluginResult {
     /**
      * Title of your result
@@ -47,7 +49,7 @@ export interface PluginResult {
      * If you don't want to close main window after your action,
      * you should call `event.preventDefault()` in your action.
      */
-    onSelect?: (event: Event) => void;
+    onSelect?: (event: SelectEvent) => void;
 
     /**
      * Handle keyboard events when your result is focused, so you can do custom actions.

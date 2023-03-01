@@ -4,15 +4,8 @@ import { useRef, useState } from "react";
 import { clipboard } from "electron";
 // @ts-ignore
 import { focusableSelector } from "@cerebroapp/cerebro-ui";
+
 import { Autocomplete } from "./Autocomplete";
-
-import {
-  WINDOW_WIDTH,
-  INPUT_HEIGHT,
-  RESULT_HEIGHT,
-  MIN_VISIBLE_RESULTS,
-} from "common/constants/ui";
-
 import ResultsList from "../ResultsList";
 import { StatusBar } from "../StatusBar";
 import styles from "./styles.module.css";
@@ -20,25 +13,10 @@ import styles from "./styles.module.css";
 import { getCurrentWindow } from "@electron/remote";
 import { useRokiStore, useUIStateStore } from "@/state/rokiStore";
 import { getAutocompleteValue } from "@/main/utils/getAutocompleteValue";
-import { cursorInEndOfInput } from "./utils";
+import { cursorInEndOfInput, updateElectronWindow } from "./utils";
 import { useEventsSubscription } from "@/main/hooks/useEventsSubscription";
 import { useGetPluginResults } from "@/main/hooks/useGetPluginResults";
-
-/**
- * Wrap click or mousedown event to custom `select-item` event,
- * that includes only information about clicked keys (alt, shift, ctrl and meta)
- *
- * @param  {Event} realEvent
- * @return {CustomEvent}
- */
-const wrapEvent = (realEvent: any) => {
-  const event = new CustomEvent("select-item", { cancelable: true });
-  event.altKey = realEvent.altKey;
-  event.shiftKey = realEvent.shiftKey;
-  event.ctrlKey = realEvent.ctrlKey;
-  event.metaKey = realEvent.metaKey;
-  return event;
-};
+import { wrapEvent } from "@/main/utils/events";
 
 /**
  * Set focus to first focusable element in preview
@@ -52,38 +30,6 @@ const focusPreview = () => {
 };
 
 /**
- * Set resizable and size for main electron window when results count is changed
- */
-const updateElectronWindow = (
-  results: PluginResult[],
-  maxVisibleResults: number,
-  term: string
-) => {
-  const { length } = results;
-  const win = getCurrentWindow();
-  const [width] = win.getSize();
-
-  // When results list is empty window is not resizable
-  win.setResizable(length !== 0);
-
-  if (length === 0 && term === "") {
-    win.setMinimumSize(WINDOW_WIDTH, INPUT_HEIGHT);
-    win.setSize(width, INPUT_HEIGHT);
-    return;
-  }
-
-  const resultHeight = Math.max(
-    Math.min(maxVisibleResults, length),
-    MIN_VISIBLE_RESULTS
-  );
-  const heightWithResults = resultHeight * RESULT_HEIGHT + INPUT_HEIGHT;
-  const minHeightWithResults =
-    MIN_VISIBLE_RESULTS * RESULT_HEIGHT + INPUT_HEIGHT;
-  win.setMinimumSize(WINDOW_WIDTH, minHeightWithResults);
-  win.setSize(width, heightWithResults);
-};
-
-/**
  * Main search container
  */
 export const Roki = () => {
@@ -94,11 +40,9 @@ export const Roki = () => {
     (s) => [s.results, s.selected, s.term, s.prevTerm, s.statusBarText]
   );
 
-  const [updateTerm, reset, moveCursor] = useRokiStore((s) => [
-    s.updateTerm,
-    s.reset,
-    s.moveCursor,
-  ]);
+  const updateTerm = useRokiStore((s) => s.updateTerm);
+  const reset = useRokiStore((s) => s.reset);
+  const moveCursor = useRokiStore((s) => s.moveCursor);
 
   const mainInput = useRef<HTMLInputElement>(null);
   useEventsSubscription(electronWindow, mainInput);
@@ -119,11 +63,10 @@ export const Roki = () => {
   const onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     const highlighted = highlightedResult();
     // TODO: go to first result on cmd+up and last result on cmd+down
-    if (highlighted && highlighted.onKeyDown) highlighted.onKeyDown(event);
 
-    if (event.defaultPrevented) {
-      return;
-    }
+    if (highlighted.onKeyDown) highlighted.onKeyDown(event);
+
+    if (event.defaultPrevented) return;
 
     const keyActions = {
       select: () => selectCurrent(event),
@@ -234,10 +177,17 @@ export const Roki = () => {
    */
   const highlightedResult = () => results[selected];
 
+  type SelectItemFn = (
+    item: PluginResult,
+    realEvent:
+      | React.KeyboardEvent<HTMLDivElement>
+      | React.MouseEvent<HTMLDivElement>
+  ) => void;
+
   /**
    * Select item from results list
    */
-  const selectItem = (item: PluginResult, realEvent: any) => {
+  const selectItem: SelectItemFn = (item, realEvent) => {
     reset();
     const event = wrapEvent(realEvent);
     item.onSelect?.(event);
