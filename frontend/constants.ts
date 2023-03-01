@@ -12,7 +12,7 @@ export const INITIAL_STATE = {
   };
 
 export enum RPCEvents {
-  PluginMessage = "plugin.message",
-  InitializePluginAsync = "initializePluginAsync",
+  PluginMessage = "plugin-message",
+  InitializePluginAsync = "initialize-plugin-async",
 }
 

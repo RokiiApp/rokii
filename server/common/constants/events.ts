@@ -1,8 +1,8 @@
 export enum Events {
     UpdateDownloaded = 'update-downloaded',
-    UpdateTheme = 'updateTheme',
-    ClearInput = 'clearInput',
-    UpdateSettings = 'updateSettings',
-    ShowTerm = 'showTerm',
+    UpdateTheme = 'update-theme',
+    ClearInput = 'clear-input',
+    UpdateSettings = 'update-settings',
+    ShowTerm = 'show-term',
     RendererToRenderer = 'renderer-to-renderer',
 }
