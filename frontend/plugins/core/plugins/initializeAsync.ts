@@ -1,21 +1,14 @@
+import type { PluginModule } from "@/types";
 import { client } from "@/services/plugins";
 import * as config from "common/config";
-import loadPlugins from "./loadPlugins";
-import { getInstalledPlugins } from "./getInstalledPlugins";
-
-const DEFAULT_PLUGINS = [
-  process.platform === "darwin" ? "@cerebroapp/cerebro-mac-apps" : "@cerebroapp/cerebro-basic-apps",
-  "@cerebroapp/search",
-  "cerebro-math",
-  "cerebro-converter",
-  "cerebro-open-web",
-  "cerebro-files-nav",
-] as const;
+import { loadPlugins } from "./utils/loadPlugins";
+import { getInstalledPlugins } from "./utils/getInstalledPlugins";
+import { DEFAULT_PLUGINS } from "./constants";
 
 /**
  * Check plugins for updates and start plugins autoupdater
  */
-async function checkForUpdates() {
+async function checkForPluginUpdates() {
   console.log("Run plugins autoupdate");
   const plugins = await loadPlugins();
 
@@ -32,7 +25,7 @@ async function checkForUpdates() {
   );
 
   // Run autoupdate every 12 hours
-  setTimeout(checkForUpdates, 12 * 60 * 60 * 1000);
+  setTimeout(checkForPluginUpdates, 12 * 60 * 60 * 1000);
 }
 
 /**
@@ -64,7 +57,9 @@ async function migratePlugins(sendMessage: Function) {
   });
 }
 
-export default async (sendMessage: Function) => {
-  checkForUpdates();
+const initializeAsync: PluginModule["initializeAsync"] = async (sendMessage) => {
+  checkForPluginUpdates();
   migratePlugins(sendMessage);
 };
+
+export default initializeAsync;

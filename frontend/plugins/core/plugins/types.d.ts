@@ -1,3 +1,16 @@
+export type PluginInfo = {
+    name: string;
+    description: string;
+    version: string;
+    installedVersion?: string;
+    settings?: any;
+    isInstalled: boolean;
+    isUpdateAvailable: boolean;
+    isDebugging?: boolean;
+    repo?: string;
+  };
+
+
 export type NPM_Package = {
     name: string;
     version: string;

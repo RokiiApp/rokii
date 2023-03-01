@@ -14,7 +14,6 @@ const readPackageJson = async () => {
 
 /**
  * Get list of all installed plugins with versions
- *
  */
 export const getInstalledPlugins = async () => {
   const { externalPlugins } = pluginsService;
@@ -22,8 +21,8 @@ export const getInstalledPlugins = async () => {
 
   const result = Object.keys(externalPlugins).map((pluginName) => {
     return {
-      name: pluginName,
       ...externalPlugins[pluginName],
+      name: pluginName,
       version: packageJson.dependencies[pluginName] as string || "0.0.0",
     };
   });

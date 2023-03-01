@@ -1,9 +1,14 @@
 import { useState, useEffect } from "react";
 import * as config from "common/config";
-import FormItem from "./FormItem";
+import { FormItem } from "./FormItem";
 import styles from "./styles.module.css";
 
-function Settings({ settings, name }: { settings: any; name: string }) {
+type SettingsProps = {
+  settings: Record<string, any>;
+  name: string;
+};
+
+export const Settings = ({ settings, name }: SettingsProps) => {
   const [values, setValues] = useState<Record<string, any>>(
     () => config.get("plugins")[name] || {}
   );
@@ -40,6 +45,4 @@ function Settings({ settings, name }: { settings: any; name: string }) {
       {Object.keys(settings).map(renderSetting)}
     </div>
   );
-}
-
-export default Settings;
+};

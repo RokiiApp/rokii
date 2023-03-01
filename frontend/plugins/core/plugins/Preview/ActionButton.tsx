@@ -1,17 +1,11 @@
 // @ts-ignore
 import { KeyboardNavItem } from "@cerebroapp/cerebro-ui";
 
-type Props = {
-  action: () => Promise<any>[];
+type ActionButtonProps = {
+  onSelect: Function;
   text: string;
-  onComplete: () => void;
 };
 
-function ActionButton({ action, onComplete, text }: Props) {
-  const onSelect = () => {
-    Promise.all(action()).then(onComplete);
-  };
+export const ActionButton = ({ onSelect, text }: ActionButtonProps) => {
   return <KeyboardNavItem onSelect={onSelect}>{text}</KeyboardNavItem>;
-}
-
-export default ActionButton;
+};

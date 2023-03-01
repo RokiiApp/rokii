@@ -1,20 +1,19 @@
+import type { PluginInfo } from "../types";
 // @ts-ignore
 import memoize from "memoizee";
 import validVersion from "semver/functions/valid";
 import compareVersions from "semver/functions/gt";
-import { getNPMPlugins } from "./getNPMPLugins";
+import { getNPMPlugins } from "./dataFetching";
 import { getInstalledPlugins } from "./getInstalledPlugins";
 import getDebuggingPlugins from "./getDebuggingPlugins";
-import blacklist from "./blacklist";
+import { CACHE_PLUGINS_MAX_AGE, PLUGINS_BLACKLIST } from "../constants";
 
-const maxAge = 5 * 60 * 1000; // 5 minutes
-
-const getAvailableNPMPlugins = memoize(getNPMPlugins, { maxAge });
+const getAvailableNPMPlugins = memoize(getNPMPlugins, { maxAge: CACHE_PLUGINS_MAX_AGE });
 
 const parseVersion = (version: string) =>
   validVersion((version || "").replace(/^\^/, "")) || "0.0.0";
 
-export default async () => {
+export const loadPlugins = async (): Promise<PluginInfo[]> => {
   const [available, installed, debuggingPlugins] = await Promise.all([
     getAvailableNPMPlugins(),
     getInstalledPlugins(),
@@ -33,13 +32,14 @@ export default async () => {
     }
   });
 
-  const pluginsList = available.map((plugin) => {
+  const pluginsList: PluginInfo[] = available.map((plugin) => {
     const installedPlugin = normalizedIntalledPlugins.find(p => p.name === plugin.name);
 
     if (!installedPlugin) return {
       ...plugin,
       isInstalled: false,
       isUpdateAvailable: false,
+      isDebugging: false,
     };
 
     const { installedVersion } = installedPlugin;
@@ -71,9 +71,7 @@ export default async () => {
   const plugins = [
     ...pluginsListWithoutDebugging,
     ...listOfDebuggingPlugins,
-  ];
-
-  // .filter((plugin) => !blacklist.includes(plugin.name));
+  ].filter((plugin) => !PLUGINS_BLACKLIST.includes(plugin.name));
 
   return plugins;
 };

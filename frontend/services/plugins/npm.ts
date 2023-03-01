@@ -37,8 +37,9 @@ const installPackage = async (
         })
       );
       result.on("error", reject);
-      result.on("finish", () => {
-        middleware?.().then(resolve);
+      result.on("finish", async () => {
+        await middleware?.();
+        resolve(true);
       });
     });
   });

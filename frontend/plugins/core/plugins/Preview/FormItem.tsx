@@ -14,7 +14,7 @@ type Props = {
   options: any[];
 };
 
-function FormItem({ type, value, options, ...props }: Props) {
+export const FormItem = ({ type, value, options, ...props }: Props) => {
   const Component = components[type] || Text;
 
   let actualValue = value;
@@ -28,6 +28,4 @@ function FormItem({ type, value, options, ...props }: Props) {
   return (
     <Component type={type} value={actualValue} options={options} {...props} />
   );
-}
-
-export default FormItem;
+};

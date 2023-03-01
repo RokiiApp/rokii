@@ -1,53 +1,29 @@
-import { useState, useEffect } from "react";
-import PropTypes from "prop-types";
+import type { PluginInfo } from "../types";
+
+import { useState } from "react";
 // @ts-ignore
 import { KeyboardNav, KeyboardNavItem } from "@cerebroapp/cerebro-ui";
-import ReactMarkdown from "react-markdown";
+import { ActionButton } from "./ActionButton";
+import { Description } from "./Description";
+import { Settings } from "./Settings";
 
-import ActionButton from "./ActionButton.js";
-import Settings from "./Settings";
-import getReadme from "../getReadme";
+import { client } from "@/services/plugins/index";
 import styles from "./styles.module.css";
-import * as format from "../format";
-import { client } from "@/services/plugins/index.js";
+import * as format from "../utils/format";
 
-function Description({ repoName }: { repoName: string }) {
-  const isRelative = (src: string) => !src.match(/^(https?:|data:)/);
-
-  const urlTransform = (src: string) => {
-    if (isRelative(src))
-      return `http://raw.githubusercontent.com/${repoName}/master/${src}`;
-    return src;
-  };
-
-  const [readme, setReadme] = useState<string>("");
-
-  useEffect(() => {
-    getReadme(repoName).then(setReadme);
-  }, []);
-
-  if (!readme) return null;
-
-  return (
-    <ReactMarkdown
-      className={styles.markdown}
-      transformImageUri={(src) => urlTransform(src)}
-    >
-      {readme}
-    </ReactMarkdown>
-  );
+enum PluginAction {
+  install = "install",
+  uninstall = "uninstall",
+  update = "update",
 }
 
-type PluginAction = "install" | "uninstall" | "update" | null;
+type PreviewProps = {
+  onComplete: Function;
+  plugin: PluginInfo;
+};
 
-function Preview({
-  onComplete,
-  plugin,
-}: {
-  onComplete: () => void;
-  plugin: any;
-}) {
-  const [runningAction, setRunningAction] = useState<PluginAction>(null);
+export const Preview = ({ onComplete, plugin }: PreviewProps) => {
+  const [runningAction, setRunningAction] = useState<PluginAction | null>(null);
   const [showDescription, setShowDescription] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
 
@@ -56,22 +32,22 @@ function Preview({
     onComplete();
   };
 
-  const pluginAction =
-    (pluginName: string, runningActionName: PluginAction) => (): any =>
-      [
-        setRunningAction(runningActionName),
-        runningActionName && client[runningActionName](pluginName),
-      ];
+  const getPluginAction =
+    (pluginName: string, runningActionName: PluginAction) => async () => {
+      setRunningAction(runningActionName);
+      await client[runningActionName](pluginName);
+      onCompleteAction();
+    };
 
   const {
     name,
     version,
     description,
     repo,
-    isInstalled = false,
-    isDebugging = false,
+    isInstalled,
+    isDebugging,
     installedVersion,
-    isUpdateAvailable = false,
+    isUpdateAvailable,
   } = plugin;
 
   const githubRepo = repo && repo.match(/^.+github.com\/([^\/]+\/[^\/]+).*?/);
@@ -93,31 +69,34 @@ function Preview({
 
           {!isInstalled && !isDebugging && (
             <ActionButton
-              action={pluginAction(name, "install")}
-              text={runningAction === "install" ? "Installing..." : "Install"}
-              onComplete={onCompleteAction}
+              onSelect={getPluginAction(name, PluginAction.install)}
+              text={
+                runningAction === PluginAction.install
+                  ? "Installing..."
+                  : "Install"
+              }
             />
           )}
 
           {isInstalled && (
             <ActionButton
-              action={pluginAction(name, "uninstall")}
+              onSelect={getPluginAction(name, PluginAction.uninstall)}
               text={
-                runningAction === "uninstall" ? "Uninstalling..." : "Uninstall"
+                runningAction === PluginAction.uninstall
+                  ? "Uninstalling..."
+                  : "Uninstall"
               }
-              onComplete={onCompleteAction}
             />
           )}
 
           {isUpdateAvailable && (
             <ActionButton
-              action={pluginAction(name, "update")}
+              onSelect={getPluginAction(name, PluginAction.update)}
               text={
-                runningAction === "update"
+                runningAction === PluginAction.update
                   ? "Updating..."
                   : `Update (${installedVersion} → ${version})`
               }
-              onComplete={onCompleteAction}
             />
           )}
 
@@ -130,14 +109,10 @@ function Preview({
           )}
         </div>
       </KeyboardNav>
-      {showDescription && <Description repoName={githubRepo[1]} />}
+
+      {showDescription && githubRepo && (
+        <Description repoName={githubRepo[1]} />
+      )}
     </div>
   );
-}
-
-Preview.propTypes = {
-  plugin: PropTypes.object.isRequired,
-  onComplete: PropTypes.func.isRequired,
 };
-
-export default Preview;

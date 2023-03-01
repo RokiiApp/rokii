@@ -1,37 +1,33 @@
+import type { PluginInfo } from "./types";
 // @ts-ignore
 import { search } from "cerebro-tools";
 import { shell } from "electron";
-import loadPlugins from "./loadPlugins";
+import { loadPlugins } from "./utils/loadPlugins";
+import * as format from "./utils/format";
 import icon from "../icon.png";
-import * as format from "./format";
-import Preview from "./Preview";
-import initializeAsync from "./initializeAsync";
+import { Preview } from "./Preview";
 import { useRokiStore } from "@/state/rokiStore";
 import { PluginModule } from "@/types";
 
-function partition(array: any[], predicate: Function) {
+function divideByFilter<T>(array: T[], filter: (any: T) => boolean) {
   return array.reduce(
     (acc, element) => {
-      acc[predicate(element) ? 0 : 1].push(element);
+      const satisfiesFilter = filter(element);
+      const index = Number(!satisfiesFilter);
+      acc[index].push(element);
       return acc;
     },
-    [[], []]
+    [[] as T[], [] as T[]] as const
   );
 }
 
-const toString = ({
-  name,
-  description,
-}: {
-  name: string;
-  description: string;
-}) => [name, description].join(" ");
+type Category = readonly [string, (plugin: PluginInfo) => boolean];
 
-const categories = [
-  ["Development", (plugin: any) => plugin.isDebugging],
-  ["Updates", (plugin: any) => plugin.isUpdateAvailable],
-  ["Installed", (plugin: any) => plugin.isInstalled],
-  ["Available", (plugin: any) => plugin.name],
+const categories: readonly Category[] = [
+  ["Development", (plugin) => Boolean(plugin.isDebugging)],
+  ["Updates", (plugin) => Boolean(plugin.isUpdateAvailable)],
+  ["Installed", (plugin) => Boolean(plugin.isInstalled)],
+  ["Available", (plugin) => Boolean(plugin.name)],
 ] as const;
 
 const updatePlugin = async (update: Function, name: string) => {
@@ -56,15 +52,22 @@ const updatePlugin = async (update: Function, name: string) => {
   });
 };
 
-const pluginToResult = (update: Function) => (plugin: any) => {
+const pluginToResult = (plugin: PluginInfo | string, update: Function) => {
   if (typeof plugin === "string") return { title: plugin };
+
+  const title = `${format.name(plugin.name)} (${format.version(plugin)})`;
+  const subtitle = format.description(plugin.description || "");
+
+  const onSelect = plugin.repo
+    ? () => shell.openExternal(plugin.repo!)
+    : undefined;
 
   return {
     icon,
     id: plugin.name,
-    title: `${format.name(plugin.name)} (${format.version(plugin)})`,
-    subtitle: format.description(plugin.description || ""),
-    onSelect: () => shell.openExternal(plugin.repo),
+    title,
+    subtitle,
+    onSelect,
     getPreview: () => (
       <Preview
         plugin={plugin}
@@ -75,21 +78,20 @@ const pluginToResult = (update: Function) => (plugin: any) => {
   };
 };
 
-const categorize = (plugins: any[], callback: Function) => {
-  const result: any[] = [];
+const categorizePlugins = (plugins: PluginInfo[]) => {
+  const result: (PluginInfo | string)[] = [];
   let remainder = plugins;
 
   categories.forEach((category) => {
     const [title, filter] = category;
-    const [matched, others] = partition(remainder, filter);
+    const [matched, others] = divideByFilter(remainder, filter);
+
     if (matched.length) result.push(title, ...matched);
+
     remainder = others;
   });
 
-  plugins.splice(0, plugins.length);
-  plugins.push(...result);
-  callback();
-  return plugins;
+  return result;
 };
 
 const fn: PluginModule["fn"] = async ({ term, display, hide, update }) => {
@@ -104,13 +106,14 @@ const fn: PluginModule["fn"] = async ({ term, display, hide, update }) => {
     ({ name }) => search([name], match[1]).length > 0
   );
 
-  const orderedPlugins = categorize(matchingPlugins, () =>
-    hide("plugins-loading")
-  );
+  const categorizeResult = categorizePlugins(matchingPlugins);
 
-  orderedPlugins
-    .map((plugin) => pluginToResult(update)(plugin))
-    .map((plugin) => display(plugin));
+  const orderedPlugins = categorizeResult.map((plugin) =>
+    pluginToResult(plugin, update)
+  );
+  hide("plugins-loading");
+
+  display(orderedPlugins);
 };
 
 const name = "Manage plugins";
@@ -127,4 +130,5 @@ const onMessage = (type: any) => {
   }
 };
 
-export { fn, initializeAsync, name, keyword, onMessage };
+export { fn, name, keyword, onMessage };
+export { default as initializeAsync } from "./initializeAsync";
