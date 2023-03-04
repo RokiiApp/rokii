@@ -1,3 +1,4 @@
+import type { PluginModule } from "@rokii/api";
 import type { PluginInfo } from "./types";
 // @ts-ignore
 import { search } from "cerebro-tools";
@@ -7,7 +8,6 @@ import * as format from "./utils/format";
 import icon from "../icon.png";
 import { Preview } from "./Preview";
 import { useRokiStore } from "@/state/rokiStore";
-import { PluginModule } from "@/types";
 
 function divideByFilter<T>(array: T[], filter: (any: T) => boolean) {
   return array.reduce(
@@ -119,7 +119,7 @@ const fn: PluginModule["fn"] = async ({ term, display, hide, update }) => {
 const name = "Manage plugins";
 const keyword = "plugins";
 
-const onMessage = (type: any) => {
+const onMessage: PluginModule["onMessage"] = (type) => {
   if (type === "plugins:start-installation") {
     useRokiStore.setState({ statusBarText: "Installing default plugins..." });
   }

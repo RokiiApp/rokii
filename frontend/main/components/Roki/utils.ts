@@ -1,4 +1,5 @@
-import { PluginResult } from "@/types";
+import type { PluginResult } from "@rokii/api";
+
 import { getCurrentWindow } from "@electron/remote";
 import {
   INPUT_HEIGHT,

@@ -1,4 +1,4 @@
-import type { PluginModule } from "@/types";
+import type { PluginModule } from "@rokii/api";
 
 const VALID_TYPES = ["string", "number", "bool", "option"] as const;
 

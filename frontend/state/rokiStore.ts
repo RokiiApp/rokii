@@ -1,5 +1,6 @@
+import type { PluginResult } from "@rokii/api";
+
 import { INITIAL_STATE } from "@/constants";
-import type { PluginResult } from "@/types";
 import { MIN_VISIBLE_RESULTS } from "common/constants/ui";
 
 import { create } from "zustand";

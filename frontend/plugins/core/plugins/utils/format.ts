@@ -1,3 +1,5 @@
+import type { PluginInfo } from "../types";
+
 /**
  * Remove unnecessary information from plugin description
  * like `Cerebro plugin for`
@@ -36,7 +38,7 @@ export const description = (text = "") => {
   return capitalize(cleanestDescription);
 };
 
-export const version = (plugin: any) =>
+export const version = (plugin: PluginInfo) =>
   plugin.isUpdateAvailable
     ? `${plugin.installedVersion} → ${plugin.version}`
     : plugin.version;

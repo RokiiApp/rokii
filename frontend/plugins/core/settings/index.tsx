@@ -1,4 +1,4 @@
-import type { PluginModule } from "@/types";
+import type { PluginModule } from "@rokii/api";
 
 // @ts-ignore
 import { search } from "cerebro-tools";

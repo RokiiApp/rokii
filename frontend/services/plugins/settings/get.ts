@@ -1,4 +1,4 @@
-import type { PluginModule } from "@/types";
+import type { PluginModule } from "@rokii/api";
 import * as config from "common/config";
 
 /**

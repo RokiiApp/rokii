@@ -1,7 +1,8 @@
+import type { PluginResult } from "@rokii/api";
 import escapeStringRegexp from "escape-string-regexp";
 
 export const getAutocompleteValue = (
-  selectedResult: any,
+  selectedResult: PluginResult,
   term: string
 ): string => {
   if (term === "") return "";

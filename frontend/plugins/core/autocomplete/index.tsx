@@ -1,4 +1,4 @@
-import type { PluginModule, PluginResult } from "@/types";
+import type { PluginResult, PluginModule, PluginContext } from "@rokii/api";
 
 // @ts-ignore
 import { search } from "cerebro-tools";
@@ -13,7 +13,7 @@ import icon from "../icon.png";
 const notMatchExactMatch = (term: string, plugin: PluginModule) =>
   plugin.keyword !== term && `${plugin.keyword} ` !== term;
 
-type PluginToResult = (res: PluginModule, actions: any) => PluginResult;
+type PluginToResult = (res: PluginModule, actions: PluginContext["actions"]) => PluginResult;
 const pluginToResult: PluginToResult = ({ name, keyword, icon }, actions) => {
   return {
     title: name || keyword!,

@@ -1,4 +1,4 @@
-import type { PluginResult } from "@/types";
+import type { PluginResult } from "@rokii/api";
 
 import { useEffect, useRef, memo } from "react";
 import { ListChildComponentProps, VariableSizeList } from "react-window";

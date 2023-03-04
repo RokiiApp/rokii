@@ -1,4 +1,4 @@
-import type { PluginModule } from "@/types";
+import type { PluginModule } from "@rokii/api";
 
 import debounce from "just-debounce";
 import chokidar from "chokidar";

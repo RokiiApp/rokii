@@ -57,9 +57,12 @@ const installPackage = async (
  */
 export default (dir: string) => {
   const packageJson = path.join(dir, "package.json");
-  const setConfig = (config: any) =>
+
+  const setConfig = (config: Record<string, any>) =>
     fs.writeFileSync(packageJson, JSON.stringify(config, null, 2));
-  const getConfig = () => JSON.parse(fs.readFileSync(packageJson, "utf-8"));
+
+  const getConfig = () => JSON.parse(fs.readFileSync(packageJson, "utf-8")) as Record<string, any>;
+
   return {
     /**
      * Install npm package            

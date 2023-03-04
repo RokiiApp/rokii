@@ -1,10 +1,11 @@
+import type { PluginModule } from "@rokii/api";
 import { useState, useEffect } from "react";
 import * as config from "common/config";
 import { FormItem } from "./FormItem";
 import styles from "./styles.module.css";
 
 type SettingsProps = {
-  settings: Record<string, any>;
+  settings: PluginModule["settings"];
   name: string;
 };
 
@@ -25,7 +26,7 @@ export const Settings = ({ settings, name }: SettingsProps) => {
   };
 
   const renderSetting = (key: string) => {
-    const setting = settings[key];
+    const setting = settings?.[key];
     const { defaultValue, label, ...restProps } = setting;
     const value = values[key] || defaultValue;
 
@@ -42,7 +43,7 @@ export const Settings = ({ settings, name }: SettingsProps) => {
 
   return (
     <div className={styles.settingsWrapper}>
-      {Object.keys(settings).map(renderSetting)}
+      {settings && Object.keys(settings).map(renderSetting)}
     </div>
   );
 };

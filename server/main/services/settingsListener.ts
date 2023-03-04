@@ -9,41 +9,41 @@ type SettingsListenerOptions = {
   tray: AppTray;
 };
 
-type HandlerFunction = (value: any, args: SettingsListenerOptions) => any;
+type HandlerFunction = (newValue: any, args: SettingsListenerOptions) => any;
 
 const SETTING_HANDLERS: Record<string, HandlerFunction> = {
-  showInTray: (value: boolean, { tray }) => {
-    value ? tray.show() : tray.hide();
+  showInTray: (newValue: boolean, { tray }) => {
+    newValue ? tray.show() : tray.hide();
   },
 
-  developerMode: (value: boolean, { tray }) => {
-    tray.setIsDev(value);
+  developerMode: (newValue: boolean, { tray }) => {
+    tray.setIsDev(newValue);
   },
 
-  openAtLogin: (value: boolean) => {
+  openAtLogin: (newValue: boolean) => {
     isAutoStartEnabled().then(
-      (enabled) => value !== enabled && setAutoStart(value)
+      (enabled) => newValue !== enabled && setAutoStart(newValue)
     );
   },
 
-  hotkey: (value: string, { win }) => {
+  hotkey: (newValue: string, { win }) => {
     globalShortcut.unregisterAll();
-    globalShortcut.register(value, () => toggleWindow(win));
+    globalShortcut.register(newValue, () => toggleWindow(win));
   },
 
-  theme: (value: string, { win }) => {
-    win.webContents.send(Events.UpdateTheme, value);
+  theme: (newValue: string, { win }) => {
+    win.webContents.send(Events.UpdateTheme, newValue);
   },
 
-  proxy: (value: string, { win }) => {
-    win.webContents.session.setProxy({ proxyRules: value });
+  proxy: (newValue: string, { win }) => {
+    win.webContents.session.setProxy({ proxyRules: newValue });
   }
 };
 
 const setupSettingsListener = (args: SettingsListenerOptions) => {
-  ipcMain.on(Events.UpdateSettings, (_, settingName, value) => {
+  ipcMain.on(Events.UpdateSettings, (_, settingName, newValue) => {
     if (settingName in SETTING_HANDLERS) {
-      SETTING_HANDLERS[settingName](value, args);
+      SETTING_HANDLERS[settingName](newValue, args);
     }
   });
 };
