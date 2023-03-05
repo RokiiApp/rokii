@@ -1,28 +1,10 @@
 import Store, { Schema } from "electron-store";
+import { SettingsSchema } from "@rokii/api";
 import { CHANNELS } from "./constants/events";
 import { themes } from "./themes";
 import { send } from "./ipc";
 
-type settingsSchema = {
-  locale: string;
-  lang: string;
-  country: string;
-  theme: string;
-  hotkey: string;
-  showInTray: boolean;
-  firstStart: boolean;
-  developerMode: boolean;
-  cleanOnHide: boolean;
-  selectOnShow: boolean;
-  hideOnBlur: boolean;
-  plugins: Record<string, unknown>;
-  isMigratedPlugins: boolean;
-  openAtLogin: boolean;
-  winPosition: [x: number, y: number];
-  proxy?: string;
-};
-
-const schema: Schema<settingsSchema> = {
+const schema: Schema<SettingsSchema> = {
   locale: { default: "en-US" },
   lang: { default: "en" },
   country: { default: "US" },
@@ -49,7 +31,7 @@ const store = new Store({
 /**
  * Get a value from global configuration
  */
-function get<T extends keyof settingsSchema>(key: T): settingsSchema[T] {
+function get<T extends keyof SettingsSchema>(key: T): SettingsSchema[T] {
   return store.get(key);
 }
 
@@ -61,8 +43,8 @@ function get<T extends keyof settingsSchema>(key: T): settingsSchema[T] {
 function set<T extends keyof settingsSchema>(settingName: T, newValue: settingsSchema[T]) {
   store.set(settingName, newValue);
 
-  // Notify main process about settings changes
-  console.log("notify main process", settingName, newValue);
+  // Notify all processes about settings changes
+  console.log("notify settings change", { settingName, newValue });
   send(CHANNELS.UpdateSettings, { settingName, newValue });
 }
 
