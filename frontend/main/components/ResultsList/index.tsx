@@ -7,6 +7,9 @@ import styles from "./styles.module.css";
 import { RESULT_HEIGHT } from "common/constants/ui";
 import Row from "./Row";
 import { useRokiStore, useUIStateStore } from "@/state/rokiStore";
+import { useGetPluginResults } from "@/main/hooks/useGetPluginResults";
+import { wrapEvent } from "@/main/utils/events";
+import { getCurrentWindow } from "@electron/remote";
 
 const PluginPreview = ({
   plugin,
@@ -28,23 +31,32 @@ const PluginPreview = ({
 };
 
 type ResultsListProps = {
-  onSelect: (
-    result: PluginResult,
-    event: React.MouseEvent<HTMLDivElement, MouseEvent>
-  ) => void;
   mainInputFocused: boolean;
+  term: string;
 };
 
-const ResultsList = ({ onSelect, mainInputFocused }: ResultsListProps) => {
+const ResultsList = ({ mainInputFocused, term }: ResultsListProps) => {
+  const electronWindow = useRef(getCurrentWindow());
+  useGetPluginResults(term);
   const maxVisibleResults = useUIStateStore((s) => s.maxVisibleResults);
 
-  const [results, selected, setSelected] = useRokiStore((s) => [
+  const [results, selected, setSelected, reset] = useRokiStore((s) => [
     s.results,
     s.selected,
     s.setSelected,
+    s.reset
   ]);
-
   const listRef = useRef<VariableSizeList>(null);
+
+  /**
+   * Select item from results list
+   */
+  const selectItem: SelectItemFn = (item, realEvent) => {
+    reset();
+    const event = wrapEvent(realEvent);
+    item.onSelect?.(event);
+    if (!event.defaultPrevented) electronWindow.current.hide();
+  };
 
   useEffect(() => {
     if (listRef.current) {
@@ -62,7 +74,7 @@ const ResultsList = ({ onSelect, mainInputFocused }: ResultsListProps) => {
       // In some cases we should autocomplete value
       isSelected,
       onSelect: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) =>
-        onSelect(result, event),
+        selectItem(result, event),
       // Move selection to item under cursor
       onMouseMove: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         const { movementX, movementY } = event.nativeEvent;
@@ -110,5 +122,12 @@ const ResultsList = ({ onSelect, mainInputFocused }: ResultsListProps) => {
     </div>
   );
 };
+
+type SelectItemFn = (
+  item: PluginResult,
+  realEvent:
+    | React.KeyboardEvent<HTMLDivElement>
+    | React.MouseEvent<HTMLDivElement>
+) => void;
 
 export default memo(ResultsList);

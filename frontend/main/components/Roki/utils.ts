@@ -1,5 +1,3 @@
-import type { PluginResult } from "@rokii/api";
-
 import { getCurrentWindow } from "@electron/remote";
 import {
   INPUT_HEIGHT,
@@ -31,30 +29,29 @@ export const cursorInEndOfInput = (input: HTMLInputElement) => {
 * Update size and set resizable for main electron window
 */
 export const updateElectronWindow = (
- results: PluginResult[],
- maxVisibleResults: number,
- term: string
+  resultsCount: number,
+  maxVisibleResults: number,
+  term: string
 ) => {
- const { length } = results;
- const win = getCurrentWindow();
- const [width] = win.getSize();
+  const win = getCurrentWindow();
+  const [width] = win.getSize();
 
- // When results list is empty window is not resizable
- win.setResizable(length !== 0);
+  // When results list is empty window is not resizable
+  win.setResizable(resultsCount !== 0);
 
- if (length === 0 && term === "") {
-   win.setMinimumSize(WINDOW_WIDTH, INPUT_HEIGHT);
-   win.setSize(width, INPUT_HEIGHT);
-   return;
- }
+  if (resultsCount === 0 && term === "") {
+    win.setMinimumSize(WINDOW_WIDTH, INPUT_HEIGHT);
+    win.setSize(width, INPUT_HEIGHT);
+    return;
+  }
 
- const resultHeight = Math.max(
-   Math.min(maxVisibleResults, length),
-   MIN_VISIBLE_RESULTS
- );
- const heightWithResults = resultHeight * RESULT_HEIGHT + INPUT_HEIGHT;
- const minHeightWithResults =
-   MIN_VISIBLE_RESULTS * RESULT_HEIGHT + INPUT_HEIGHT;
- win.setMinimumSize(WINDOW_WIDTH, minHeightWithResults);
- win.setSize(width, heightWithResults);
+  const resultHeight = Math.max(
+    Math.min(maxVisibleResults, resultsCount),
+    MIN_VISIBLE_RESULTS
+  );
+  const heightWithResults = resultHeight * RESULT_HEIGHT + INPUT_HEIGHT;
+  const minHeightWithResults =
+    MIN_VISIBLE_RESULTS * RESULT_HEIGHT + INPUT_HEIGHT;
+  win.setMinimumSize(WINDOW_WIDTH, minHeightWithResults);
+  win.setSize(width, heightWithResults);
 };
