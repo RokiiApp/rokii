@@ -64,7 +64,7 @@ export const Roki = () => {
     const highlighted = highlightedResult();
     // TODO: go to first result on cmd+up and last result on cmd+down
 
-    if (highlighted.onKeyDown) highlighted.onKeyDown(event);
+    if (highlighted?.onKeyDown) highlighted.onKeyDown(event);
 
     if (event.defaultPrevented) return;
 
@@ -73,6 +73,7 @@ export const Roki = () => {
 
       arrowRight: () => {
         if (cursorInEndOfInput(event.target as HTMLInputElement)) {
+          if (!highlighted) return;
           const autocompleteValue = getAutocompleteValue(highlighted, term);
           if (autocompleteValue) {
             // Autocomplete by arrow right only if autocomple value is shown
@@ -175,7 +176,7 @@ export const Roki = () => {
   /**
    * Get highlighted result
    */
-  const highlightedResult = () => results[selected];
+  const highlightedResult: () => PluginResult | undefined = () => results[selected];
 
   type SelectItemFn = (
     item: PluginResult,
@@ -199,7 +200,7 @@ export const Roki = () => {
    * Autocomple search term from highlighted result
    */
   const autocomplete = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    const { term: highlightedTerm } = highlightedResult();
+    const { term: highlightedTerm } = highlightedResult() || {};
 
     if (highlightedTerm && highlightedTerm !== term) {
       updateTerm(highlightedTerm);
@@ -210,8 +211,13 @@ export const Roki = () => {
   /**
    * Select highlighted element
    */
-  const selectCurrent = (event: React.KeyboardEvent<HTMLInputElement>) =>
-    selectItem(highlightedResult(), event);
+  const selectCurrent = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    const current = highlightedResult();
+
+    if (current) {
+      selectItem(current, event);
+    }
+  }
 
   return (
     <div className={styles.search}>
