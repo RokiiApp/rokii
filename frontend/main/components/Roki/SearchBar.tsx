@@ -12,6 +12,7 @@ import { useRokiStore } from "@/state/rokiStore";
 import { cursorInEndOfInput } from "./utils";
 import { wrapEvent } from "@/main/utils/events";
 import { useEventsSubscription } from "@/main/hooks/useEventsSubscription";
+import { useInputStore } from "@/state/inputStore";
 
 /**
  * Set focus to first focusable element in preview
@@ -29,11 +30,10 @@ export const SearchBar = ({ setMainInputFocused }: { setMainInputFocused: (value
   const { current: electronWindow } = useRef(getCurrentWindow())
 
   const moveCursor = useRokiStore((s) => s.moveCursor);
-  const reset = useRokiStore((s) => s.reset);
-  const [results, selected, term, prevTerm] = useRokiStore(
-    (s) => [s.results, s.selected, s.term, s.prevTerm]
-  );
-  const updateTerm = useRokiStore((s) => s.updateTerm);
+
+  const [term, prevTerm, updateTerm] = useInputStore(s => [s.term, s.prevTerm, s.updateTerm]);
+  const [results, selected] = useRokiStore((s) => [s.results, s.selected]);
+
   const mainInput = useRef<HTMLInputElement>(null);
   useEventsSubscription(electronWindow, mainInput);
 
@@ -41,11 +41,13 @@ export const SearchBar = ({ setMainInputFocused }: { setMainInputFocused: (value
    * Select item from results list
    */
   const selectItem: SelectItemFn = (item, realEvent) => {
-    reset();
     const event = wrapEvent(realEvent);
     item.onSelect?.(event);
 
-    if (!event.defaultPrevented) electronWindow.hide();
+    if (!event.defaultPrevented) {
+      updateTerm("");
+      electronWindow.hide();
+    }
   };
 
   const getHighlightedResult: () => PluginResult | undefined = () => results[selected];
@@ -119,7 +121,6 @@ export const SearchBar = ({ setMainInputFocused }: { setMainInputFocused: (value
 
         if (text) {
           clipboard.writeText(text);
-          reset();
           if (!event.defaultPrevented) {
             electronWindow.hide();
           }
@@ -176,7 +177,6 @@ export const SearchBar = ({ setMainInputFocused }: { setMainInputFocused: (value
         keyActions.select();
         break;
       case "Escape":
-        reset();
         electronWindow.hide();
         break;
     }

@@ -1,3 +1,4 @@
+import { useInputStore } from "@/state/inputStore";
 import { useRokiStore, useUIStateStore } from "@/state/rokiStore";
 import * as config from "common/config";
 import { CHANNELS } from "common/constants/events";
@@ -10,7 +11,8 @@ import { calculateMaxVisibleResults } from "../components/Roki/utils";
 
 export const useEventsSubscription = (electronWindow: BrowserWindow, mainInput: any) => {
   const setMaxVisibleResults = useUIStateStore(s => s.setMaxVisibleResults)
-  const [results, updateTerm] = useRokiStore(s => [s.results, s.updateTerm])
+  const results = useRokiStore(s => s.results)
+  const updateTerm = useInputStore(s => s.updateTerm)
 
   /**
  * Change count of visible results depends on window size

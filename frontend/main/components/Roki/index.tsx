@@ -8,15 +8,17 @@ import styles from "./styles.module.css";
 
 import { useRokiStore, useUIStateStore } from "@/state/rokiStore";
 import { updateElectronWindow } from "./utils";
+import { useInputStore } from "@/state/inputStore";
 
 /**
  * Main search container
  */
 export const Roki = () => {
   const maxVisibleResults = useUIStateStore((s) => s.maxVisibleResults);
+  const term = useInputStore((s) => s.term);
 
-  const [results, term, statusBarText] = useRokiStore(
-    (s) => [s.results, s.term, s.statusBarText]
+  const [results, statusBarText] = useRokiStore(
+    (s) => [s.results, s.statusBarText]
   );
 
   const [mainInputFocused, setMainInputFocused] = useState(false);

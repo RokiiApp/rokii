@@ -17,12 +17,6 @@ export const useUIStateStore = create<UIStateStore>((set) => ({
 }));
 
 interface RokiStore {
-  /**
-   * Search term in main input
-  */
-  term: string;
-  // Store last used term in separate field
-  prevTerm: string;
   results: PluginResult[];
   /**
    * Index of selected result
@@ -35,14 +29,11 @@ interface RokiStore {
    */
   reset: () => void;
   addResult: (pluginName: string, result: PluginResult | PluginResult[]) => void;
-  updateTerm: (term: string) => void;
   hide: (id: string) => void;
   updateResult: (id: string, newResult: PluginResult) => void;
   moveCursor: (direction: number) => void;
   setSelected: (index: number) => void;
 }
-
-
 
 export const useRokiStore = create<RokiStore>((set) => ({
   ...INITIAL_STATE,
@@ -51,7 +42,7 @@ export const useRokiStore = create<RokiStore>((set) => ({
 
   addResult: (pluginName, result) => {
     if (!isResultValid(result)) return;
-  
+
     return set((state) => {
       if (!Array.isArray(result)) result = [result];
 
@@ -70,12 +61,6 @@ export const useRokiStore = create<RokiStore>((set) => ({
       return {
         results: [...state.results, ...newResultsWithoutDuplicates],
       };
-    });
-  },
-
-  updateTerm: (term) => {
-    set((state) => {
-      return { term, prevTerm: state.term, selected: 0, results: [] };
     });
   },
 
