@@ -39,7 +39,7 @@ export const updateElectronWindow = (
   // When results list is empty window is not resizable
   win.setResizable(resultsCount !== 0);
 
-  if (resultsCount === 0 && term === "") {
+  if (term === "" || resultsCount === 0) {
     win.setMinimumSize(WINDOW_WIDTH, INPUT_HEIGHT);
     win.setSize(width, INPUT_HEIGHT);
     return;

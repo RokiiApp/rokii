@@ -10,6 +10,7 @@ import { useRokiStore, useUIStateStore } from "@/state/rokiStore";
 import { useGetPluginResults } from "@/main/hooks/useGetPluginResults";
 import { wrapEvent } from "@/main/utils/events";
 import { getCurrentWindow } from "@electron/remote";
+import { updateElectronWindow } from "../Roki/utils";
 
 const PluginPreview = ({
   plugin,
@@ -95,6 +96,7 @@ const ResultsList = ({ mainInputFocused, term }: ResultsListProps) => {
     mainInputFocused ? styles.focused : styles.unfocused,
   ].join(" ");
 
+  updateElectronWindow(results.length, maxVisibleResults, term);
   if (results.length === 0) return null;
 
   const selectedResult = results[selected];

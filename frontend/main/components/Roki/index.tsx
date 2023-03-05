@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 
 import { Autocomplete } from "./Autocomplete";
 import { SearchBar } from "./SearchBar";
@@ -6,29 +6,17 @@ import ResultsList from "../ResultsList";
 import { StatusBar } from "../StatusBar";
 import styles from "./styles.module.css";
 
-import { useRokiStore, useUIStateStore } from "@/state/rokiStore";
-import { updateElectronWindow } from "./utils";
+import { useRokiStore } from "@/state/rokiStore";
 import { useInputStore } from "@/state/inputStore";
 
 /**
  * Main search container
  */
 export const Roki = () => {
-  const maxVisibleResults = useUIStateStore((s) => s.maxVisibleResults);
   const term = useInputStore((s) => s.term);
 
-  const [results, statusBarText] = useRokiStore(
-    (s) => [s.results, s.statusBarText]
-  );
-
+  const statusBarText = useRokiStore((s) => s.statusBarText);
   const [mainInputFocused, setMainInputFocused] = useState(false);
-  const prevResultsLenght = useRef(results.length);
-
-  if (results.length !== prevResultsLenght.current) {
-    prevResultsLenght.current = results.length;
-    // Resize electron window when results count changed
-    updateElectronWindow(results.length, maxVisibleResults, term);
-  }
 
   return (
     <div className={styles.search}>
