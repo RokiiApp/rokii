@@ -5,7 +5,7 @@ import icon from "../icon.png";
 
 const keyword = "reload";
 const title = "Reload";
-const subtitle = "Reload RoKI App";
+const subtitle = "Reload RoKii App";
 
 const onSelect = () => {
   app.relaunch();
@@ -13,7 +13,7 @@ const onSelect = () => {
 };
 
 /**
- * Plugin to reload Roki
+ * Plugin to reload Rokii
  */
 const fn: PluginModule["fn"] = ({ term, display }) => {
   const match = "reload".includes(term.toLowerCase());

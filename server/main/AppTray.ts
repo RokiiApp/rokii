@@ -27,7 +27,7 @@ export class AppTray {
    */
   show() {
     const tray = new Tray(this.options.src);
-    tray.setToolTip("RoKI");
+    tray.setToolTip("RoKii");
     tray.setContextMenu(this.buildMenu());
     this.tray = tray;
   }
@@ -46,7 +46,7 @@ export class AppTray {
 
     const template: MenuItemConstructorOptions[] = [
       {
-        label: "Toggle Roki",
+        label: "Toggle RoKii",
         click: () => toggleWindow(mainWindow),
       },
       separator,
@@ -56,7 +56,7 @@ export class AppTray {
       },
       {
         label: "Preferences...",
-        click: () => showWindowWithTerm(mainWindow, "Roki Settings"),
+        click: () => showWindowWithTerm(mainWindow, "RoKii Settings"),
       },
       separator,
       {
@@ -96,7 +96,7 @@ export class AppTray {
 
     template.push(separator);
     template.push({
-      label: "Quit Roki",
+      label: "Quit RoKii",
       click: () => app.quit(),
     });
 

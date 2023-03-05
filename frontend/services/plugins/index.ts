@@ -11,14 +11,14 @@ const ensureFile = (src: string, content = "") => {
 
 const EMPTY_PACKAGE_JSON = JSON.stringify(
   {
-    name: "roki-plugins",
+    name: "rokii-plugins",
     dependencies: {},
   },
   null,
   2
 );
 
-export const rokiPath = path.join(app.getPath("appData"), "roki");
+export const rokiPath = path.join(app.getPath("appData"), "rokii");
 export const pluginsPath = path.join(rokiPath, "plugins");
 export const MODULES_DIRECTORY = path.join(pluginsPath, "node_modules");
 export const PACKAGE_JSON_PATH = path.join(pluginsPath, "package.json");

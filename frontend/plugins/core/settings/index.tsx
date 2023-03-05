@@ -5,9 +5,9 @@ import { search } from "cerebro-tools";
 import Settings from "./Settings";
 import icon from "../icon.png";
 
-const NAME = "RoKI Settings";
+const NAME = "RoKii Settings";
 const order = 9;
-const KEYWORDS = [NAME, "RoKI Preferences", "cfg", "config", "params"];
+const KEYWORDS = [NAME, "RoKii Preferences", "cfg", "config", "params"];
 
 /**
  * Plugin to show app settings in results list

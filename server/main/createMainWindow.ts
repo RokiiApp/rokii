@@ -17,7 +17,7 @@ export function createMainWindow() {
     frame: false,
     transparent: true,
     resizable: false,
-    title: "RoKI",
+    title: "RoKii",
     icon: join(process.env.PUBLIC, "favicon.ico"),
     show: config.get("firstStart"),
     webPreferences: {

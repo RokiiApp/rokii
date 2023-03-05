@@ -6,7 +6,7 @@ import { app } from "@electron/remote";
 // @ts-ignore
 import { search } from "cerebro-tools";
 
-const NAME = "RoKI Version";
+const NAME = "RoKii Version";
 const order = 9;
 const KEYWORDS = [NAME, "ver", "version"];
 

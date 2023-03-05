@@ -2,9 +2,9 @@ import { dialog, app, shell } from "electron";
 import { autoUpdater, UpdateFileInfo } from "electron-updater";
 
 const currentVersion = app.getVersion();
-const DEFAULT_DOWNLOAD_URL = "https://github.com/dubisdev/roki/releases";
+const DEFAULT_DOWNLOAD_URL = "https://github.com/dubisdev/rokii/releases";
 
-const TITLE = "RoKI Updates";
+const TITLE = "RoKii Updates";
 
 const PLATFORM_EXTENSIONS = {
   darwin: "dmg",
@@ -47,7 +47,7 @@ export const checkForUpdates = async () => {
     } else {
       dialog.showMessageBox({
         title: TITLE,
-        message: `You are using latest version of RoKi (${currentVersion})`,
+        message: `You are using latest version of RoKii (${currentVersion})`,
         buttons: [],
       });
     }

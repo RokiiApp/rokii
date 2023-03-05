@@ -225,7 +225,7 @@ export const Roki = () => {
       <div className={styles.inputWrapper}>
         <input
           autoFocus
-          placeholder="RoKI Search"
+          placeholder="RoKii Search"
           type="text"
           id="main-input"
           ref={mainInput}

@@ -16,7 +16,7 @@ window.React = React;
  * @param src Absolute path to new theme css file
  */
 const changeTheme = (src: string) => {
-  (document.getElementById("roki-theme") as HTMLLinkElement).href = src;
+  (document.getElementById("rokii-theme") as HTMLLinkElement).href = src;
 };
 
 // Set theme from config
@@ -33,7 +33,7 @@ import("@/services/plugins/initializePlugins").then((module) =>
 );
 
 on(CHANNELS.UpdateDownloaded, () => {
-  new Notification("Roki: update is ready to install", {
+  new Notification("RoKii: update is ready to install", {
     body: "New version is downloaded and will be automatically installed on quit",
   });
 });

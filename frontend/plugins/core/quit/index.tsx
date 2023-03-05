@@ -7,7 +7,7 @@ import icon from "../icon.png";
 
 const KEYWORDS = ["Quit", "Exit"];
 
-const subtitle = "Quit from RoKI";
+const subtitle = "Quit from RoKii";
 const onSelect = () => app.quit();
 
 export const fn: PluginModule["fn"] = ({ term, display }) => {
