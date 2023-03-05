@@ -1,11 +1,12 @@
 import type { BrowserWindow } from "electron";
 import * as config from "../../common/config";
-import { Events } from "../../common/constants/events";
+import { CHANNELS } from "../../common/constants/events";
+import { send } from "../../common/ipc";
 
 export const toggleWindow = (appWindow: BrowserWindow) => {
   if (appWindow.isVisible()) {
     if (config.get("cleanOnHide")) {
-      appWindow.webContents.send(Events.ClearInput);
+      send(CHANNELS.ClearInput);
     }
 
     appWindow.blur();

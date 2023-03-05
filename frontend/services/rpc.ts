@@ -1,14 +1,14 @@
 /**
  * This module is used to communicate between renderer processes.
  */
-import { ipcRenderer } from "electron";
 import EventEmitter from "events";
-import { Events } from "common/constants/events";
+import { CHANNELS } from "common/constants/events";
+import * as ipc from "common/ipc";
 
 const emitter = new EventEmitter();
 
 // Start listening for rpc channel
-ipcRenderer.on(Events.RendererToRenderer, (_, { message, payload }) => {
+ipc.on(CHANNELS.RendererToRenderer, (_, { message, payload }) => {
   console.log(`[rtr] emit ${message}`);
   emitter.emit(message, payload);
 });
@@ -18,7 +18,7 @@ ipcRenderer.on(Events.RendererToRenderer, (_, { message, payload }) => {
  */
 export const send = (message: string, payload: any) => {
   console.log(`[rtr] send ${message}`);
-  ipcRenderer.send(Events.RendererToRenderer, { message, payload });
+  ipc.send(CHANNELS.RendererToRenderer, { message, payload });
 };
 
 /**

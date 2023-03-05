@@ -53,7 +53,7 @@ const configureListeners = (mainWindow: BrowserWindow) => {
   // Setup event listeners for main window
   globalShortcut.register(shortcut, () => toggleWindow(mainWindow));
 
-  mainWindow.on("hide", () => hideListener(mainWindow));
+  mainWindow.on("hide", () => hideListener());
   mainWindow.on("blur", () => blurListener(mainWindow));
 
   // Save window position when it is being moved

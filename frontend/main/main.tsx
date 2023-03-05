@@ -1,9 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { ipcRenderer } from "electron";
 
 import * as config from "common/config";
-import { Events } from "common/constants/events";
+import { CHANNELS } from "common/constants/events";
+import { on } from "common/ipc";
 
 import { Roki } from "./components/Roki";
 import "./globals.css";
@@ -32,11 +32,11 @@ import("@/services/plugins/initializePlugins").then((module) =>
   module.initializePlugins()
 );
 
-ipcRenderer.on(Events.UpdateDownloaded, () => {
+on(CHANNELS.UpdateDownloaded, () => {
   new Notification("Roki: update is ready to install", {
     body: "New version is downloaded and will be automatically installed on quit",
   });
 });
 
 // Handle `updateTheme` event from main process
-ipcRenderer.on(Events.UpdateTheme, (_, theme) => changeTheme(theme));
+on(CHANNELS.UpdateTheme, (_, theme) => changeTheme(theme))

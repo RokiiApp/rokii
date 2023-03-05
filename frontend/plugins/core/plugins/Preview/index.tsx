@@ -48,10 +48,10 @@ export const Preview = ({ onComplete, plugin }: PreviewProps) => {
     isDebugging,
     installedVersion,
     isUpdateAvailable,
+    settings
   } = plugin;
 
   const githubRepo = repo && repo.match(/^.+github.com\/([^\/]+\/[^\/]+).*?/);
-  const settings = plugin?.settings || null;
   return (
     <div className={styles.preview} key={name}>
       <h2>{`${format.name(name)} (${version})`}</h2>

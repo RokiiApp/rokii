@@ -1,5 +1,6 @@
-import { BrowserWindow, ipcMain } from "electron";
-import { Events } from "../../common/constants/events";
+import { BrowserWindow } from "electron";
+import { CHANNELS } from "../../common/constants/events";
+import { on } from "../../common/ipc";
 
 /**
  * As electron does not support communication between renderer processes,
@@ -10,8 +11,10 @@ export const setupRTRCommunication = (
   win: BrowserWindow,
   backgroundWin: BrowserWindow
 ) => {
-  ipcMain.on(Events.RendererToRenderer, (event, payload) => {
+  on(CHANNELS.RendererToRenderer, (event, payload) => {
+    // in this case we dont use ipc because we want to send the message
+    // to a concrete window, not to all windows
     const toWindow = event.sender === win.webContents ? backgroundWin : win;
-    toWindow.webContents.send(Events.RendererToRenderer, payload);
+    toWindow.webContents.send(CHANNELS.RendererToRenderer, payload);
   });
 };

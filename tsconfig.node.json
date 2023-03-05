@@ -6,7 +6,8 @@
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
-    "outDir": "dist-server"
+    "outDir": "dist-server",
+    "strict": true
   },
   "include": [
     "vite.config.ts",

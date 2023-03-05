@@ -1,9 +1,9 @@
-import type { BrowserWindow } from "electron";
 import * as config from "../../common/config";
-import { Events } from "../../common/constants/events";
+import { CHANNELS } from "../../common/constants/events";
+import { send } from "../../common/ipc";
 
-export const hideListener = (mainWindow: BrowserWindow) => {
+export const hideListener = () => {
   if (config.get("cleanOnHide")) {
-    mainWindow.webContents.send(Events.ClearInput);
+    send(CHANNELS.ClearInput);
   }
 };

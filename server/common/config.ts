@@ -1,7 +1,7 @@
-import { ipcRenderer } from "electron";
 import Store, { Schema } from "electron-store";
-import { Events } from "./constants/events";
+import { CHANNELS } from "./constants/events";
 import { themes } from "./themes";
+import { send } from "./ipc";
 
 type settingsSchema = {
   locale: string;
@@ -58,13 +58,12 @@ function get<T extends keyof settingsSchema>(key: T): settingsSchema[T] {
  * and notifies all listeners about changes
  *
  */
-function set<T extends keyof settingsSchema>(key: T, value: settingsSchema[T]) {
-  store.set(key, value);
-  if (ipcRenderer) {
-    console.log("notify main process", key, value);
-    // Notify main process about settings changes
-    ipcRenderer.send(Events.UpdateSettings, key, value);
-  }
+function set<T extends keyof settingsSchema>(settingName: T, newValue: settingsSchema[T]) {
+  store.set(settingName, newValue);
+
+  // Notify main process about settings changes
+  console.log("notify main process", settingName, newValue);
+  send(CHANNELS.UpdateSettings, { settingName, newValue });
 }
 
 export { get, set };

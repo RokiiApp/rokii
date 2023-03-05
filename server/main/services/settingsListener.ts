@@ -1,5 +1,6 @@
-import { BrowserWindow, globalShortcut, ipcMain } from "electron";
-import { Events } from "../../common/constants/events";
+import { BrowserWindow, globalShortcut } from "electron";
+import { CHANNELS } from "../../common/constants/events";
+import * as ipc from "../../common/ipc";
 import { AppTray } from "../AppTray";
 import { isAutoStartEnabled, setAutoStart } from "../autoStart";
 import { toggleWindow } from "./toggleWindow";
@@ -22,7 +23,7 @@ const SETTING_HANDLERS: Record<string, HandlerFunction> = {
 
   openAtLogin: (newValue: boolean) => {
     isAutoStartEnabled().then(
-      (enabled) => newValue !== enabled && setAutoStart(newValue)
+      (enabled) => newValue !== enabled ? setAutoStart(newValue) : undefined
     );
   },
 
@@ -31,8 +32,8 @@ const SETTING_HANDLERS: Record<string, HandlerFunction> = {
     globalShortcut.register(newValue, () => toggleWindow(win));
   },
 
-  theme: (newValue: string, { win }) => {
-    win.webContents.send(Events.UpdateTheme, newValue);
+  theme: (newValue: string) => {
+    ipc.send(CHANNELS.UpdateTheme, newValue);
   },
 
   proxy: (newValue: string, { win }) => {
@@ -41,7 +42,7 @@ const SETTING_HANDLERS: Record<string, HandlerFunction> = {
 };
 
 const setupSettingsListener = (args: SettingsListenerOptions) => {
-  ipcMain.on(Events.UpdateSettings, (_, settingName, newValue) => {
+  ipc.on(CHANNELS.UpdateSettings, (_, { settingName, newValue }) => {
     if (settingName in SETTING_HANDLERS) {
       SETTING_HANDLERS[settingName](newValue, args);
     }

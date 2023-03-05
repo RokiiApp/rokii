@@ -1,17 +1,17 @@
-import type { BrowserWindow } from "electron";
 import { autoUpdater } from "electron-updater";
-import { Events } from "../common/constants/events";
+import { CHANNELS } from "../common/constants/events";
+import { send } from "../common/ipc";
 
 const TEN_SECONDS_IN_MS = 10 * 1000;
 const ONE_HOUR_IN_MS = 60 * 60 * 1000;
 
-export function initAutoUpdater(w: BrowserWindow) {
+export function initAutoUpdater() {
   if (process.env.NODE_ENV === "development" || process.platform === "linux") {
     return;
   }
 
-  autoUpdater.on(Events.UpdateDownloaded, () => {
-    w.webContents.send(Events.UpdateDownloaded);
+  autoUpdater.on(CHANNELS.UpdateDownloaded, () => {
+    send(CHANNELS.UpdateDownloaded);
   });
 
   setTimeout(() => {

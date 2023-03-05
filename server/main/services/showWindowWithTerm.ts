@@ -1,8 +1,9 @@
 import type { BrowserWindow } from "electron";
-import { Events } from "../../common/constants/events";
+import { CHANNELS } from "../../common/constants/events";
+import { send } from "../../common/ipc";
 
 export const showWindowWithTerm = (appWindow: BrowserWindow, term: string) => {
   appWindow.show();
   appWindow.focus();
-  appWindow.webContents.send(Events.ShowTerm, term);
+  send(CHANNELS.ShowTerm, term);
 };

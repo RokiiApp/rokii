@@ -36,7 +36,7 @@ app.whenReady().then(async () => {
 
   require("@electron/remote/main").enable(backgroundWin.webContents);
 
-  initAutoUpdater(win);
+  initAutoUpdater();
 
   const tray = new AppTray({
     src: process.env.PUBLIC + "/favicon.ico",
