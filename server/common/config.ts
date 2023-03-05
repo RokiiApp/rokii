@@ -40,7 +40,7 @@ function get<T extends keyof SettingsSchema>(key: T): SettingsSchema[T] {
  * and notifies all listeners about changes
  *
  */
-function set<T extends keyof settingsSchema>(settingName: T, newValue: settingsSchema[T]) {
+function set<T extends keyof SettingsSchema>(settingName: T, newValue: SettingsSchema[T]) {
   store.set(settingName, newValue);
 
   // Notify all processes about settings changes
