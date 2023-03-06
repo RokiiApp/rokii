@@ -5,6 +5,7 @@
   border-top: var(--main-border);
   height: 100%;
   position: relative;
+  overflow-y: hidden;
 }
 
 .resultsList {

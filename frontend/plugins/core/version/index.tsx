@@ -14,17 +14,20 @@ const KEYWORDS = [NAME, "ver", "version"];
  * Plugin to show app settings in results list
  */
 const plugin: PluginModule["fn"] = ({ term, display }) => {
-  const result = search(KEYWORDS, term).map((title: string) => ({
+  const match = search(KEYWORDS, term).length > 0
+  if (!match) return;
+
+  const result = {
     order,
     icon,
-    title,
+    title: NAME,
     getPreview: () => (
       <div>
         <strong>{app.getVersion()}</strong>
       </div>
     ),
-    term: title,
-  }));
+    term: NAME,
+  };
 
   display(result);
 };

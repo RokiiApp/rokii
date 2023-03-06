@@ -117,7 +117,7 @@ const fn: PluginModule["fn"] = async ({ term, display, hide, update }) => {
 };
 
 const name = "Manage plugins";
-const keyword = "plugins";
+const keyword = ["plugins"];
 
 const onMessage: PluginModule["onMessage"] = (type) => {
   if (type === "plugins:start-installation") {

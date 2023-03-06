@@ -3,7 +3,7 @@ import type { PluginModule } from "@rokii/api";
 import { app } from "@electron/remote";
 import icon from "../icon.png";
 
-const keyword = "reload";
+const keyword = ["reload"];
 const title = "Reload";
 const subtitle = "Reload RoKii App";
 

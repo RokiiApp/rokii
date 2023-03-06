@@ -15,6 +15,7 @@ export function createMainWindow() {
     minWidth: WINDOW_WIDTH,
     height: WINDOW_HEIGHT,
     minHeight: WINDOW_HEIGHT,
+    resizable: false,
     frame: false,
     transparent: true,
     title: "RoKii",

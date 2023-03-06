@@ -1,11 +1,11 @@
 :root {
   /* Main fonts and colors */
-  --main-background-color: rgba(62, 65, 67, 1);
+  --main-background-color: rgba(21, 22, 23, 0.925);
   --main-font: system, sans-serif;
   --main-font-color: white;
 
   /* border styles */
-  --main-border: 1px solid #686869;
+  --main-border: 1px solid #5900ff;
 
   /* Secondary fonts and colors */
   --secondary-font-color: #9B9D9F;
@@ -18,14 +18,14 @@
   /* selected result */
   --selected-result-title-color: white;
   --selected-result-subtitle-color: var(--result-subtitle-color);
-  --selected-result-background: #1972D6;
+  --selected-result-background: #5c46eb;
 
   /* scrollbar */
   --scroll-background: var(--main-background-color);
-  --scroll-track: #2E2E2C;
+  --scroll-track: #1e1e1e;
   --scroll-track-active: var(--scroll-track);
   --scroll-track-hover: var(--scroll-track);
-  --scroll-thumb: var(--secondary-font-color);
+  --scroll-thumb: var(--selected-result-background);
   --scroll-thumb-hover: var(--scroll-thumb);
   --scroll-thumb-active: var(--main-font-color);
   --scroll-width: 5px;

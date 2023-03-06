@@ -2,6 +2,7 @@
 import { SmartIcon } from "@cerebroapp/cerebro-ui";
 import { useRokiStore } from "@/state/rokiStore";
 import styles from "./styles.module.css";
+import { useInputStore } from "@/state/inputStore";
 
 type Props = {
   isSelected: boolean;
@@ -23,13 +24,14 @@ function Row({
   index
 }: Props) {
   const setSelected = useRokiStore(s => s.setSelected);
+  const inputFocused = useInputStore(s => s.inputFocused)
 
   const onMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
     if (isSelected) return;
     const { movementX, movementY } = event
 
     const isNotMoving = movementX === 0 && movementY === 0;
-    if (isNotMoving) return;
+    if (isNotMoving || !inputFocused) return;
 
     setSelected(index);
   }

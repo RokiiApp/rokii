@@ -3,12 +3,13 @@
 
 body {
     position: relative;
-    height: 100vh;
+    height: 98.5vh;
     font-family: var(--main-font);
     overflow-y: hidden;
 }
 
 #root {
+    border: 3px solid black;
     border-radius: 5px;
     height: 100%;
     color: var(--main-font-color);
