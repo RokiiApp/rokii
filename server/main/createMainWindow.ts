@@ -1,7 +1,7 @@
 import { app, BrowserWindow, globalShortcut, shell } from "electron";
 import { join } from "node:path";
 import * as config from "../common/config";
-import { INPUT_HEIGHT, WINDOW_WIDTH } from "../common/constants/ui";
+import { WINDOW_HEIGHT, WINDOW_WIDTH } from "../common/constants/ui";
 import { toggleWindow } from "./services/toggleWindow";
 import { blurListener, hideListener, moveListener } from "./windowListeners";
 
@@ -13,10 +13,10 @@ export function createMainWindow() {
     y,
     width: WINDOW_WIDTH,
     minWidth: WINDOW_WIDTH,
-    height: INPUT_HEIGHT,
+    height: WINDOW_HEIGHT,
+    minHeight: WINDOW_HEIGHT,
     frame: false,
     transparent: true,
-    resizable: false,
     title: "RoKii",
     icon: join(process.env.PUBLIC, "favicon.ico"),
     show: config.get("firstStart"),

@@ -1,20 +1,9 @@
 import type { PluginResult } from "@rokii/api";
 
 import { INITIAL_STATE } from "@/constants";
-import { MIN_VISIBLE_RESULTS } from "common/constants/ui";
 
 import { create } from "zustand";
 import { isResultValid } from "./utils";
-
-interface UIStateStore {
-  maxVisibleResults: number;
-  setMaxVisibleResults: (count: number) => void;
-}
-
-export const useUIStateStore = create<UIStateStore>((set) => ({
-  maxVisibleResults: MIN_VISIBLE_RESULTS,
-  setMaxVisibleResults: (count) => set({ maxVisibleResults: count }),
-}));
 
 interface RokiStore {
   results: PluginResult[];

@@ -24,19 +24,22 @@ function Row({
 }: Props) {
   const setSelected = useRokiStore(s => s.setSelected);
 
-  const onMouseMove = () => {
+  const onMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
     if (isSelected) return;
+    const { movementX, movementY } = event
+
+    const isNotMoving = movementX === 0 && movementY === 0;
+    if (isNotMoving) return;
+
     setSelected(index);
   }
 
-  const classNames = [styles.row, isSelected ? styles.selected : null].join(
-    " "
-  );
+  const className = isSelected ? `${styles.row} ${styles.selected}` : styles.row;
 
   return (
     <div
       style={style}
-      className={classNames}
+      className={className}
       onClick={onSelect}
       onMouseMove={onMouseMove}
       onKeyDown={() => { }}

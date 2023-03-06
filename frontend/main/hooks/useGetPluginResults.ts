@@ -15,7 +15,6 @@ export const useGetPluginResults = (term: string) => {
 
   useEffect(() => {
     resetResultsState();
-    if (term === "") return;
 
     const { allPlugins } = pluginsService;
     // TODO: order results by frequency?

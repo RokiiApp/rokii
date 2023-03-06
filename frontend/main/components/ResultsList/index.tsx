@@ -4,20 +4,17 @@ import { useEffect, useRef, memo } from "react";
 import { ListChildComponentProps, VariableSizeList } from "react-window";
 import styles from "./styles.module.css";
 
-import { RESULT_HEIGHT } from "common/constants/ui";
+import { RESULT_HEIGHT, VISIBLE_RESULTS } from "common/constants/ui";
 import Row from "./Row";
-import { useRokiStore, useUIStateStore } from "@/state/rokiStore";
+import { useRokiStore } from "@/state/rokiStore";
 import { useGetPluginResults } from "@/main/hooks/useGetPluginResults";
 import { wrapEvent } from "@/main/utils/events";
 import { getCurrentWindow } from "@electron/remote";
-import { updateElectronWindow } from "../Roki/utils";
 import { PluginPreview } from "./PluginPreview";
 
 const ResultsList = ({ term }: { term: string }) => {
   const electronWindow = useRef(getCurrentWindow());
-  const prevResultsCount = useRef(0);
   useGetPluginResults(term);
-  const maxVisibleResults = useUIStateStore((s) => s.maxVisibleResults);
 
   const [results, selected, reset] = useRokiStore((s) => [
     s.results,
@@ -59,11 +56,6 @@ const ResultsList = ({ term }: { term: string }) => {
     return <Row style={style} {...attrs} />;
   };
 
-  if (prevResultsCount.current !== results.length) {
-    prevResultsCount.current = results.length;
-    updateElectronWindow(results.length, maxVisibleResults);
-  }
-
   if (results.length === 0) return null;
 
   const selectedResult = results[selected];
@@ -72,7 +64,7 @@ const ResultsList = ({ term }: { term: string }) => {
       <VariableSizeList
         ref={listRef}
         className={styles.resultsList}
-        height={maxVisibleResults * RESULT_HEIGHT}
+        height={VISIBLE_RESULTS * RESULT_HEIGHT}
         itemSize={() => RESULT_HEIGHT}
         itemCount={results.length}
         overscanCount={5}

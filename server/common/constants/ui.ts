@@ -7,8 +7,7 @@ export const RESULT_HEIGHT = 45;
 // Width of main window
 export const WINDOW_WIDTH = 650;
 
-// Maximum results that would be rendered
-export const MAX_RESULTS = 25;
+export const WINDOW_HEIGHT = INPUT_HEIGHT + RESULT_HEIGHT * 10;
 
-// Results view shows this count of resutls without scrollbar
-export const MIN_VISIBLE_RESULTS = 10;
+// Results view shows this count of results without scrollbar
+export const VISIBLE_RESULTS = 10;
