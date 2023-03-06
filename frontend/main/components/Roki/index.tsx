@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 import { Autocomplete } from "./Autocomplete";
 import { SearchBar } from "./SearchBar";
 import ResultsList from "../ResultsList";
@@ -16,15 +14,14 @@ export const Roki = () => {
   const term = useInputStore((s) => s.term);
 
   const statusBarText = useRokiStore((s) => s.statusBarText);
-  const [mainInputFocused, setMainInputFocused] = useState(false);
 
   return (
     <div className={styles.search}>
       <Autocomplete />
       <div className={styles.inputWrapper}>
-        <SearchBar setMainInputFocused={setMainInputFocused} />
+        <SearchBar />
       </div>
-      <ResultsList term={term} mainInputFocused={mainInputFocused} />
+      <ResultsList term={term} />
       {statusBarText && <StatusBar value={statusBarText} />}
     </div>
   );

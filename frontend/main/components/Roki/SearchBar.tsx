@@ -25,8 +25,7 @@ const focusPreview = () => {
   }
 };
 
-
-export const SearchBar = ({ setMainInputFocused }: { setMainInputFocused: (value: boolean) => any }) => {
+export const SearchBar = () => {
   const { current: electronWindow } = useRef(getCurrentWindow())
 
   const moveCursor = useRokiStore((s) => s.moveCursor);
@@ -182,9 +181,6 @@ export const SearchBar = ({ setMainInputFocused }: { setMainInputFocused: (value
     }
   };
 
-  const onMainInputFocus = () => setMainInputFocused(true);
-  const onMainInputBlur = () => setMainInputFocused(false);
-
   return <input
     autoFocus
     placeholder="RoKii Search"
@@ -194,8 +190,6 @@ export const SearchBar = ({ setMainInputFocused }: { setMainInputFocused: (value
     className={styles.input}
     onChange={(e) => updateTerm(e.target.value)}
     onKeyDown={onKeyDown}
-    onFocus={onMainInputFocus}
-    onBlur={onMainInputBlur}
   />
 }
 

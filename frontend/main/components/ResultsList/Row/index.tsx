@@ -1,5 +1,6 @@
 // @ts-ignore
 import { SmartIcon } from "@cerebroapp/cerebro-ui";
+import { useRokiStore } from "@/state/rokiStore";
 import styles from "./styles.module.css";
 
 type Props = {
@@ -7,9 +8,9 @@ type Props = {
   icon?: string;
   title?: string;
   onSelect: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
-  onMouseMove: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
   subtitle?: string;
   style: Object;
+  index: number;
 };
 
 function Row({
@@ -17,10 +18,17 @@ function Row({
   icon,
   title,
   onSelect,
-  onMouseMove,
   subtitle,
   style,
+  index
 }: Props) {
+  const setSelected = useRokiStore(s => s.setSelected);
+
+  const onMouseMove = () => {
+    if (isSelected) return;
+    setSelected(index);
+  }
+
   const classNames = [styles.row, isSelected ? styles.selected : null].join(
     " "
   );
@@ -31,7 +39,7 @@ function Row({
       className={classNames}
       onClick={onSelect}
       onMouseMove={onMouseMove}
-      onKeyDown={() => {}}
+      onKeyDown={() => { }}
     >
       {icon && <SmartIcon path={icon} className={styles.icon} />}
 

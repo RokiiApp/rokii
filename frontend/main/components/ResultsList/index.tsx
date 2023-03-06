@@ -13,20 +13,15 @@ import { getCurrentWindow } from "@electron/remote";
 import { updateElectronWindow } from "../Roki/utils";
 import { PluginPreview } from "./PluginPreview";
 
-type ResultsListProps = {
-  mainInputFocused: boolean;
-  term: string;
-};
-
-const ResultsList = ({ mainInputFocused, term }: ResultsListProps) => {
+const ResultsList = ({ term }: { term: string }) => {
   const electronWindow = useRef(getCurrentWindow());
+  const prevResultsCount = useRef(0);
   useGetPluginResults(term);
   const maxVisibleResults = useUIStateStore((s) => s.maxVisibleResults);
 
-  const [results, selected, setSelected, reset] = useRokiStore((s) => [
+  const [results, selected, reset] = useRokiStore((s) => [
     s.results,
     s.selected,
-    s.setSelected,
     s.reset
   ]);
   const listRef = useRef<VariableSizeList>(null);
@@ -51,6 +46,7 @@ const ResultsList = ({ mainInputFocused, term }: ResultsListProps) => {
     const result = results[index];
     const isSelected = index === selected;
     const attrs = {
+      index,
       ...result,
       // TODO: think about events
       // In some cases action should be executed and window should be closed
@@ -58,27 +54,16 @@ const ResultsList = ({ mainInputFocused, term }: ResultsListProps) => {
       isSelected,
       onSelect: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) =>
         selectItem(result, event),
-      // Move selection to item under cursor
-      onMouseMove: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-        const { movementX, movementY } = event.nativeEvent;
-        if (isSelected || !mainInputFocused) return false;
 
-        if (movementX || movementY) {
-          // Hover item only when we had real movement of mouse
-          // We should prevent changing of selection when user uses keyboard
-          setSelected(index);
-        }
-      },
     } as const;
     return <Row style={style} {...attrs} />;
   };
 
-  const classNames = [
-    styles.resultsList,
-    mainInputFocused ? styles.focused : styles.unfocused,
-  ].join(" ");
+  if (prevResultsCount.current !== results.length) {
+    prevResultsCount.current = results.length;
+    updateElectronWindow(results.length, maxVisibleResults);
+  }
 
-  updateElectronWindow(results.length, maxVisibleResults, term);
   if (results.length === 0) return null;
 
   const selectedResult = results[selected];
@@ -86,7 +71,7 @@ const ResultsList = ({ mainInputFocused, term }: ResultsListProps) => {
     <div className={styles.wrapper}>
       <VariableSizeList
         ref={listRef}
-        className={classNames}
+        className={styles.resultsList}
         height={maxVisibleResults * RESULT_HEIGHT}
         itemSize={() => RESULT_HEIGHT}
         itemCount={results.length}

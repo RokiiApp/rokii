@@ -7,14 +7,12 @@
   position: relative;
 }
 
-.unfocused {
-  opacity: 0.5;
-}
 .resultsList {
   overflow-y: auto;
   width: 100%;
   min-width: 250px;
 }
+
 .preview {
   flex-grow: 2;
   padding: 10px 10px 20px 10px;
@@ -28,15 +26,19 @@
   bottom: 0;
   right: 0;
   overflow: auto;
- /* Instead of using `justify-content: center` we have to use this hack. In this case child element that is bigger than `.preview ` will be placed on left border instead of moving outside of container */
+  /* Instead of using `justify-content: center` we have to use this hack. In this case child element that is bigger than `.preview ` will be placed on left border instead of moving outside of container */
 }
-.preview::before, .preview::after {
+
+.preview::before,
+.preview::after {
   content: '';
   margin: auto;
 }
+
 .preview:empty {
   display: none;
 }
+
 .preview input {
   border: var(--preview-input-border);
   background: var(--preview-input-background);
@@ -48,24 +50,30 @@
   background: var(--preview-input-background);
   color: var(--preview-input-color);
 }
+
 .preview :global .Select .Select-menu-outer {
   border: var(--preview-input-border);
   background: var(--preview-input-background);
 }
+
 .preview :global .Select .Select-input input {
   border: 0;
 }
+
 .preview :global .Select .Select-value-label {
   color: var(--preview-input-color) !important;
 }
+
 .preview :global .Select .Select-option {
   background: var(--preview-input-background);
   color: var(--preview-input-color);
 }
+
 .preview :global .Select .Select-option.is-selected {
   color: var(--selected-result-title-color);
   background: var(--selected-result-background);
 }
+
 .preview :global .Select .Select-option.is-focused {
   color: var(--selected-result-title-color);
   background: var(--selected-result-background);

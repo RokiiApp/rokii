@@ -4,12 +4,10 @@
 export const NPM_API_BASE = "https://registry.npmjs.org/";
 
 export const INITIAL_STATE = {
-    results: [],
-    term: "",
-    prevTerm: "",
-    selected: 0,
-    statusBarText: "",
-  };
+  results: [],
+  selected: 0,
+  statusBarText: "",
+};
 
 export enum RPCEvents {
   PluginMessage = "plugin-message",

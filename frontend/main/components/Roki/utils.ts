@@ -5,6 +5,7 @@ import {
   RESULT_HEIGHT,
   WINDOW_WIDTH,
 } from "common/constants/ui";
+import * as config from "common/config";
 
 export const calculateMaxVisibleResults = (resultsCount: number) => {
   if (resultsCount <= MIN_VISIBLE_RESULTS) return MIN_VISIBLE_RESULTS;
@@ -30,28 +31,30 @@ export const cursorInEndOfInput = (input: HTMLInputElement) => {
 */
 export const updateElectronWindow = (
   resultsCount: number,
-  maxVisibleResults: number,
-  term: string
+  maxVisibleResults: number
 ) => {
-  const win = getCurrentWindow();
-  const [width] = win.getSize();
+  const win = getCurrentWindow()
+  const [x, y] = config.get('winPosition')
+  const [width] = win.getSize()
 
   // When results list is empty window is not resizable
-  win.setResizable(resultsCount !== 0);
+  win.setResizable(resultsCount !== 0)
 
-  if (term === "" || resultsCount === 0) {
-    win.setMinimumSize(WINDOW_WIDTH, INPUT_HEIGHT);
-    win.setSize(width, INPUT_HEIGHT);
-    return;
+  if (resultsCount === 0) {
+    win.setMinimumSize(WINDOW_WIDTH, INPUT_HEIGHT)
+    win.setSize(width, INPUT_HEIGHT)
+    // Set window position to the last saved position as it is changed when window is resized
+
+    win.setPosition(x, y)
+    return
   }
 
-  const resultHeight = Math.max(
-    Math.min(maxVisibleResults, resultsCount),
-    MIN_VISIBLE_RESULTS
-  );
-  const heightWithResults = resultHeight * RESULT_HEIGHT + INPUT_HEIGHT;
-  const minHeightWithResults =
-    MIN_VISIBLE_RESULTS * RESULT_HEIGHT + INPUT_HEIGHT;
-  win.setMinimumSize(WINDOW_WIDTH, minHeightWithResults);
-  win.setSize(width, heightWithResults);
+  const resultHeight = Math.max(Math.min(maxVisibleResults, resultsCount), MIN_VISIBLE_RESULTS)
+  const heightWithResults = resultHeight * RESULT_HEIGHT + INPUT_HEIGHT
+  const minHeightWithResults = MIN_VISIBLE_RESULTS * RESULT_HEIGHT + INPUT_HEIGHT
+
+  win.setMinimumSize(WINDOW_WIDTH, minHeightWithResults)
+  win.setSize(width, heightWithResults)
+
+  win.setPosition(x, y)
 };
