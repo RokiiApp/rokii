@@ -11,25 +11,7 @@ import { useGetPluginResults } from "@/main/hooks/useGetPluginResults";
 import { wrapEvent } from "@/main/utils/events";
 import { getCurrentWindow } from "@electron/remote";
 import { updateElectronWindow } from "../Roki/utils";
-
-const PluginPreview = ({
-  plugin,
-}: {
-  plugin: PluginResult & { getPreview: () => JSX.Element };
-}) => {
-  const preview = plugin.getPreview();
-  const previewIsString = typeof preview === "string";
-
-  return (
-    <div className={styles.preview} id="preview">
-      {previewIsString ? (
-        <div dangerouslySetInnerHTML={{ __html: preview }} />
-      ) : (
-        preview
-      )}
-    </div>
-  );
-};
+import { PluginPreview } from "./PluginPreview";
 
 type ResultsListProps = {
   mainInputFocused: boolean;
@@ -117,6 +99,7 @@ const ResultsList = ({ mainInputFocused, term }: ResultsListProps) => {
       >
         {(a) => rowRenderer(a)}
       </VariableSizeList>
+
       {typeof selectedResult.getPreview === "function" && (
         // @ts-ignore
         <PluginPreview plugin={selectedResult} />
