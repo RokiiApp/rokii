@@ -25,6 +25,7 @@ export const PluginPreview = ({
                 <ErrorBoundary
                     FallbackComponent={ErrorPluginPreview}
                     onError={(error) => console.error(error)}
+                    resetKeys={[plugin.title]}
                     children={preview}
                 />
             )}
