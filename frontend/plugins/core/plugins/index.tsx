@@ -8,7 +8,7 @@ import icon from "../icon.png";
 import { Preview } from "./Preview";
 import { useRokiStore } from "@/state/rokiStore";
 
-function divideByFilter<T>(array: T[], filter: (any: T) => boolean) {
+function divideByFilter<T>(array: T[], filter: (element: T) => boolean) {
   return array.reduce(
     (acc, element) => {
       const satisfiesFilter = filter(element);
