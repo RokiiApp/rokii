@@ -1,4 +1,4 @@
-import { SelectEvent as ISelectEvent } from "@rokii/api"
+import { SelectEvent as ISelectEvent } from "@rokii/types"
 
 export class SelectEvent extends Event implements ISelectEvent {
     altKey = false

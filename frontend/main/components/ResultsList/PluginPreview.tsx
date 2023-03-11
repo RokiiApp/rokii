@@ -1,4 +1,4 @@
-import type { PluginResult } from "@rokii/api";
+import type { PluginResult } from "@rokii/types";
 import { ErrorBoundary, FallbackProps } from "react-error-boundary";
 import styles from "./styles.module.css";
 

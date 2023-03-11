@@ -1,4 +1,4 @@
-import type { PluginModule } from "@rokii/api";
+import type { PluginModule } from "@rokii/types";
 
 import * as version from "./version";
 import * as quit from "./quit";

@@ -1,4 +1,4 @@
-import type { PluginModule } from "@rokii/api";
+import type { PluginModule } from "@rokii/types";
 
 import { app } from "@electron/remote";
 import icon from "../icon.png";

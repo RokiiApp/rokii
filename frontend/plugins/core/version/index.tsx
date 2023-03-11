@@ -1,10 +1,9 @@
-import type { PluginModule } from "@rokii/api";
+import type { PluginModule } from "@rokii/types";
+
+import { app } from "@electron/remote";
+import { search } from "@rokii/utils";
 
 import icon from "../icon.png";
-import { app } from "@electron/remote";
-
-// @ts-ignore
-import { search } from "cerebro-tools";
 
 const NAME = "RoKii Version";
 const order = 9;

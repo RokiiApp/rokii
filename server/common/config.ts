@@ -1,5 +1,5 @@
+import type { SettingsSchema } from "@rokii/types";
 import Store, { Schema } from "electron-store";
-import { SettingsSchema } from "@rokii/api";
 import { CHANNELS } from "./constants/events";
 import { themes } from "./themes";
 import { send } from "./ipc";

@@ -1,4 +1,4 @@
-import type { PluginResult } from "@rokii/api";
+import type { PluginResult } from "@rokii/types";
 import escapeStringRegexp from "escape-string-regexp";
 
 export const getAutocompleteValue = (

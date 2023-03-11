@@ -1,4 +1,4 @@
-import type { SettingsHandler, SettingsSchema } from "@rokii/api";
+import type { SettingsHandler, SettingsSchema } from "@rokii/types";
 
 import { useState } from "react";
 // @ts-ignore

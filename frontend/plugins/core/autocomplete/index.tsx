@@ -1,7 +1,5 @@
-import type { PluginResult, PluginModule, PluginContext } from "@rokii/api";
-
-// @ts-ignore
-import { search } from "cerebro-tools";
+import type { PluginResult, PluginModule, PluginContext } from "@rokii/types";
+import { search } from "@rokii/utils";
 
 import { pluginsService } from "@/plugins";
 import icon from "../icon.png";

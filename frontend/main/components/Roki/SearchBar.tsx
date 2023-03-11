@@ -1,4 +1,4 @@
-import type { PluginResult } from "@rokii/api";
+import type { PluginResult } from "@rokii/types";
 import styles from "./styles.module.css";
 import { useRef } from "react";
 import { clipboard } from "electron";

@@ -1,4 +1,4 @@
-import type { PluginResult } from "@rokii/api";
+import type { PluginResult } from "@rokii/types";
 
 import { INITIAL_STATE } from "@/constants";
 

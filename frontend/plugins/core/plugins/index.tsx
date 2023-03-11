@@ -1,7 +1,6 @@
-import type { PluginModule } from "@rokii/api";
+import type { PluginModule } from "@rokii/types";
 import type { PluginInfo } from "./types";
-// @ts-ignore
-import { search } from "cerebro-tools";
+import { search } from "@rokii/utils";
 import { shell } from "electron";
 import { loadPlugins } from "./utils/loadPlugins";
 import * as format from "./utils/format";

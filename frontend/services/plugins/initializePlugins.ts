@@ -1,4 +1,4 @@
-import type { PluginModule } from "@rokii/api";
+import type { PluginModule } from "@rokii/types";
 
 import { on, send } from "@/services/rpc";
 import { pluginsService } from "@/plugins";
