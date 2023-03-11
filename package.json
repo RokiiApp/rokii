@@ -39,6 +39,7 @@
     "node": "^14.18.0 || >=16.0.0"
   },
   "dependencies": {
+    "@rokii/utils": "1.0.0",
     "@cerebroapp/cerebro-ui": "2.0.0-alpha.3",
     "@electron/remote": "2.0.9",
     "auto-launch": "5.0.5",

@@ -40,7 +40,7 @@ const fn: PluginModule["fn"] = ({ term, display, actions }) => {
     search(
       pluginsWithKeywords,
       term,
-      (p: PluginModule) => p.keyword
+      (p: PluginModule) => p.keyword!
     ) as PluginModule[]
   ).filter((result) => notMatchExactMatch(term, result));
 
