@@ -1,5 +1,4 @@
-// @ts-ignore
-import { FormComponents } from "@cerebroapp/cerebro-ui";
+import { FormComponents } from "@rokii/ui";
 
 const { Checkbox, Select, Text } = FormComponents;
 
@@ -26,6 +25,8 @@ export const FormItem = ({ type, value, options, ...props }: Props) => {
   }
 
   return (
+    // @ts-ignore
+    // TODO: fix this
     <Component type={type} value={actualValue} options={options} {...props} />
   );
 };

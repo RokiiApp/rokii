@@ -3,15 +3,12 @@
  */
 {
   appId: "dev.dubis.rokii",
+  productName: "Rokii",
   asar: true,
   directories: {
     output: "release/${version}",
   },
   files: ["dist-server", "frontend/dist"],
-  mac: {
-    artifactName: "${productName}_${version}.${ext}",
-    target: ["dmg"],
-  },
   win: {
     target: [
       {

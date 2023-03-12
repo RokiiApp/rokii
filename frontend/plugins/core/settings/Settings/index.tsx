@@ -1,8 +1,7 @@
 import type { SettingsHandler, SettingsSchema } from "@rokii/types";
 
 import { useState } from "react";
-// @ts-ignore
-import { FormComponents } from "@cerebroapp/cerebro-ui";
+import { FormComponents } from "@rokii/ui";
 import { themes } from "common/themes";
 
 import Hotkey from "./Hotkey";
@@ -46,13 +45,13 @@ function Settings({ get, set }: SettingsHandler) {
         description="Choose your country so Rokii can better choose currency, language, etc."
         value={countries.find((c) => c.value === state.country)}
         options={countries}
-        onChange={(value: any) => changeConfig("country", value)}
+        onChange={(newValue) => newValue && changeConfig("country", newValue.value)}
       />
       <Select
         label="Theme"
         value={themes.find((t) => t.value === state.theme)}
         options={themes}
-        onChange={(value: any) => changeConfig("theme", value)}
+        onChange={(newValue) => newValue && changeConfig("theme", newValue.value)}
       />
       <Text
         type="text"

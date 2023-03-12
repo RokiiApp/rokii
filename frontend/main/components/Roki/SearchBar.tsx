@@ -3,9 +3,7 @@ import styles from "./styles.module.css";
 import { useRef } from "react";
 import { clipboard } from "electron";
 import { getCurrentWindow } from "@electron/remote";
-
-// @ts-ignore
-import { focusableSelector } from "@cerebroapp/cerebro-ui";
+import { focusableSelector } from "@rokii/ui";
 
 import { getAutocompleteValue } from "@/main/utils/getAutocompleteValue";
 import { useRokiStore } from "@/state/rokiStore";
@@ -19,7 +17,7 @@ import { useInputStore } from "@/state/inputStore";
  */
 const focusPreview = () => {
   const previewDom = document.getElementById("preview");
-  const firstFocusable = previewDom?.querySelector(focusableSelector);
+  const firstFocusable = previewDom?.querySelector<any>(focusableSelector);
   if (firstFocusable) {
     firstFocusable.focus();
   }

@@ -53,8 +53,7 @@ const getPluginName = (pluginPath: string) => {
 };
 
 const setupPluginsWatcher = () => {
-  // @ts-ignore
-  if (window.isBackground) return;
+  if ((window as any).isBackground) return;
 
   const pluginsWatcher = chokidar.watch(MODULES_DIRECTORY, { depth: 1 });
   pluginsWatcher.on("unlinkDir", (pluginPath) => {

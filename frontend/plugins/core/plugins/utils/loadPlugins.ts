@@ -1,5 +1,4 @@
 import type { PluginInfo } from "../types";
-// @ts-ignore
 import memoize from "memoizee";
 import validVersion from "semver/functions/valid";
 import compareVersions from "semver/functions/gt";

@@ -2,7 +2,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import tar from "tar-fs";
-import zlib from "node:zlib";
+import { createUnzip } from "node:zlib";
 import https from "node:https";
 import { move, remove } from "fs-extra";
 import { NPM_API_BASE } from "@/constants";
@@ -30,8 +30,7 @@ const installPackage = async (
 
   await new Promise((resolve, reject) => {
     https.get(tarPath, (stream) => {
-      // @ts-ignore
-      const result = stream.pipe(zlib.Unzip()).pipe(
+      const result = stream.pipe(createUnzip()).pipe(
         tar.extract(tempPath, {
           map: formatPackageFile,
         })

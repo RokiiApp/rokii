@@ -1,8 +1,7 @@
 import type { PluginInfo } from "../types";
 
 import { useState } from "react";
-// @ts-ignore
-import { KeyboardNav, KeyboardNavItem } from "@cerebroapp/cerebro-ui";
+import { KeyboardNav, KeyboardNavItem } from "@rokii/ui";
 import { ActionButton } from "./ActionButton";
 import { Description } from "./Description";
 import { Settings } from "./Settings";

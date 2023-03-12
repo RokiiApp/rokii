@@ -2,6 +2,7 @@ import type { PluginResult } from "@rokii/types";
 
 import { useEffect, useRef, memo } from "react";
 import { ListChildComponentProps, VariableSizeList } from "react-window";
+import { getCurrentWindow } from "@electron/remote";
 import styles from "./styles.module.css";
 
 import { RESULT_HEIGHT, VISIBLE_RESULTS } from "common/constants/ui";
@@ -9,8 +10,7 @@ import Row from "./Row";
 import { useRokiStore } from "@/state/rokiStore";
 import { useGetPluginResults } from "@/main/hooks/useGetPluginResults";
 import { wrapEvent } from "@/main/utils/events";
-import { getCurrentWindow } from "@electron/remote";
-import { PluginPreview } from "./PluginPreview";
+import { PluginPreview, PluginResultWithPreview } from "./PluginPreview";
 
 const ResultsList = ({ term }: { term: string }) => {
   const electronWindow = useRef(getCurrentWindow());
@@ -78,8 +78,7 @@ const ResultsList = ({ term }: { term: string }) => {
       </VariableSizeList>
 
       {typeof selectedResult.getPreview === "function" && (
-        // @ts-ignore
-        <PluginPreview plugin={selectedResult} />
+        <PluginPreview plugin={selectedResult as PluginResultWithPreview} />
       )}
     </div>
   );

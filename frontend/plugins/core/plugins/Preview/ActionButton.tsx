@@ -1,8 +1,7 @@
-// @ts-ignore
-import { KeyboardNavItem } from "@cerebroapp/cerebro-ui";
+import { KeyboardNavItem } from "@rokii/ui";
 
 type ActionButtonProps = {
-  onSelect: Function;
+  onSelect?: (event: React.SyntheticEvent<Element, Event>) => void;
   text: string;
 };
 

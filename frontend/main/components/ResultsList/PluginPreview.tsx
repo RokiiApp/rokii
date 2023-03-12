@@ -1,4 +1,5 @@
 import type { PluginResult } from "@rokii/types";
+import type { ReactElement } from "react";
 import { ErrorBoundary, FallbackProps } from "react-error-boundary";
 import styles from "./styles.module.css";
 
@@ -10,11 +11,9 @@ const ErrorPluginPreview = ({ error }: FallbackProps) => {
     </div>;
 };
 
-export const PluginPreview = ({
-    plugin,
-}: {
-    plugin: PluginResult & { getPreview: () => JSX.Element };
-}) => {
+export type PluginResultWithPreview = PluginResult & { getPreview: () => ReactElement | null };
+
+export const PluginPreview = ({ plugin }: { plugin: PluginResultWithPreview }) => {
     const preview = plugin.getPreview();
     const previewIsString = typeof preview === "string";
     return (
