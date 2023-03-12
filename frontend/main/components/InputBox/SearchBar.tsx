@@ -181,6 +181,7 @@ export const SearchBar = () => {
   };
 
   return <input
+    spellCheck={false}
     autoFocus
     placeholder="Search in Rokii..."
     id="main-input"
