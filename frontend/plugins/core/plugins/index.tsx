@@ -55,7 +55,6 @@ const pluginToResult = (plugin: PluginInfo | string, update: Function) => {
   if (typeof plugin === "string") return { title: plugin };
 
   const title = `${format.name(plugin.name)} (${format.version(plugin)})`;
-  const subtitle = format.description(plugin.description || "");
 
   const onSelect = plugin.repo
     ? () => shell.openExternal(plugin.repo!)
@@ -65,7 +64,6 @@ const pluginToResult = (plugin: PluginInfo | string, update: Function) => {
     icon,
     id: plugin.name,
     title,
-    subtitle,
     onSelect,
     getPreview: () => (
       <Preview

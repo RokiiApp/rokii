@@ -5,7 +5,7 @@
   --main-font-color: white;
 
   /* border styles */
-  --main-border: 1px solid #5900ff;
+  --main-border: 0.5px solid #58575b50;
 
   /* Secondary fonts and colors */
   --secondary-font-color: #9B9D9F;
@@ -18,7 +18,7 @@
   /* selected result */
   --selected-result-title-color: white;
   --selected-result-subtitle-color: var(--result-subtitle-color);
-  --selected-result-background: #5c46eb;
+  --selected-result-background: #3d3b49;
 
   /* scrollbar */
   --scroll-background: var(--main-background-color);

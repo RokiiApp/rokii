@@ -3,10 +3,10 @@
   display: flex;
   flex-direction: column;
   height: 100%;
+  width: 100%;
 }
 
 .inputWrapper {
-  position: relative;
   z-index: 2;
   width: 100%;
   height: 45px;
@@ -14,12 +14,12 @@
 
 .autocomplete {
   position: absolute;
-  z-index: 1;
+  z-index: 2;
   width: 100%;
   height: 45px;
-  font-size: 1.5em;
-  padding: 0 10px;
-  line-height: 46px;
+  font-size: larger;
+  padding: 0 12px;
+  line-height: 45px;
   box-sizing: border-box;
   color: var(--secondary-font-color);
   white-space: pre;
@@ -66,15 +66,16 @@
 }
 
 .input {
+  z-index: 999;
+  position: absolute;
+  padding: 0 12px;
   width: 100%;
   height: 45px;
   color: var(--main-font-color);
   font-family: var(--main-font);
-  font-size: 1.5em;
+  font-size: larger;
   border: 0;
   outline: none;
-  padding: 0 10px;
-  line-height: 60px;
   box-sizing: border-box;
   background: transparent;
   white-space: nowrap;

@@ -17,8 +17,8 @@ export const Roki = () => {
 
   return (
     <div className={styles.search}>
-      <Autocomplete />
       <div className={styles.inputWrapper}>
+        <Autocomplete />
         <SearchBar />
       </div>
       <ResultsList term={term} />

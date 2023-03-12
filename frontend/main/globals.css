@@ -5,12 +5,12 @@ body {
     position: relative;
     height: 98.5vh;
     font-family: var(--main-font);
-    overflow-y: hidden;
+    overflow: hidden;
 }
 
 #root {
-    border: 3px solid black;
-    border-radius: 5px;
+    border: 1.5px solid rgba(95, 94, 94, 0.522);
+    border-radius: 10px;
     height: 100%;
     color: var(--main-font-color);
     background-color: var(--main-background-color);

@@ -182,7 +182,7 @@ export const SearchBar = () => {
 
   return <input
     autoFocus
-    placeholder="RoKii Search"
+    placeholder="Search in Rokii..."
     id="main-input"
     ref={mainInput}
     value={term}
