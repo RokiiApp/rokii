@@ -5,7 +5,7 @@ import * as config from "common/config";
 import { CHANNELS } from "common/constants/events";
 import { on } from "common/ipc";
 
-import { Roki } from "./components/Roki";
+import { Rokii } from "./components/Rokii";
 import "./globals.css";
 
 window.React = React;
@@ -24,7 +24,7 @@ changeTheme(config.get("theme"));
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
-    <Roki />
+    <Rokii />
   </React.StrictMode>
 );
 

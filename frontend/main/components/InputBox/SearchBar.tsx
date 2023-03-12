@@ -7,7 +7,7 @@ import { focusableSelector } from "@rokii/ui";
 
 import { getAutocompleteValue } from "@/main/utils/getAutocompleteValue";
 import { useRokiStore } from "@/state/rokiStore";
-import { cursorInEndOfInput } from "./utils";
+import { cursorInEndOfInput } from "@/main/utils/cursorInEndOfInput";
 import { wrapEvent } from "@/main/utils/events";
 import { useEventsSubscription } from "@/main/hooks/useEventsSubscription";
 import { useInputStore } from "@/state/inputStore";

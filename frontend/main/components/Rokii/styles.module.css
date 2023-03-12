@@ -1,28 +1,9 @@
-.search {
+.rokiContainer {
   position: relative;
   display: flex;
   flex-direction: column;
   height: 100%;
   width: 100%;
-}
-
-.inputWrapper {
-  z-index: 2;
-  width: 100%;
-  height: 45px;
-}
-
-.autocomplete {
-  position: absolute;
-  z-index: 2;
-  width: 100%;
-  height: 45px;
-  font-size: larger;
-  padding: 0 12px;
-  line-height: 45px;
-  box-sizing: border-box;
-  color: var(--secondary-font-color);
-  white-space: pre;
 }
 
 ::-webkit-scrollbar {
@@ -63,23 +44,4 @@
 
 ::-webkit-scrollbar-thumb:horizontal {
   min-width: 10px;
-}
-
-.input {
-  z-index: 999;
-  position: absolute;
-  padding: 0 12px;
-  width: 100%;
-  height: 45px;
-  color: var(--main-font-color);
-  font-family: var(--main-font);
-  font-size: larger;
-  border: 0;
-  outline: none;
-  box-sizing: border-box;
-  background: transparent;
-  white-space: nowrap;
-  -webkit-app-region: drag;
-  -webkit-user-select: none;
-  user-select: none;
 }
