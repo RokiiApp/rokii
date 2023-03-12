@@ -13,26 +13,33 @@ const notMatchExactMatch = (term: string, plugin: PluginModule) =>
 
 type PluginToResult = (res: PluginModule, actions: PluginContext["actions"]) => PluginResult;
 const pluginToResult: PluginToResult = ({ name, keyword, icon }, actions) => {
+  const mainKeyword = Array.isArray(keyword) ? keyword[0] : keyword;
   return {
-    title: name || keyword!,
+    title: name || mainKeyword!,
     icon: icon || icon,
-    term: `${keyword} `,
+    term: `${mainKeyword} `,
     onSelect: (event) => {
       event.preventDefault();
-      actions.replaceTerm(`${keyword} `);
+      actions.replaceTerm(`${mainKeyword} `);
     },
   };
 };
 
+const hasKeyword = (plugin: PluginModule) => Array.isArray(plugin.keyword) ? plugin.keyword.length > 0 : !!plugin.keyword;
+
+let isFirstStart = true;
+
 /**
  * Plugin for autocomplete other plugins
  */
-const fn: PluginModule["fn"] = ({ term, display, actions }) => {
+const fn: PluginModule["fn"] = async ({ term, display, actions }) => {
+  if (isFirstStart) {
+    await new Promise((resolve) => setTimeout(resolve, 100));
+    isFirstStart = false;
+  }
   const { allPlugins } = pluginsService;
 
-  const pluginsWithKeywords = Object.values(allPlugins).filter(
-    (plugin) => !!plugin.keyword
-  );
+  const pluginsWithKeywords = Object.values(allPlugins).filter(hasKeyword);
 
   if (pluginsWithKeywords.length === 0) return;
 
@@ -40,7 +47,7 @@ const fn: PluginModule["fn"] = ({ term, display, actions }) => {
     search(
       pluginsWithKeywords,
       term,
-      (p: PluginModule) => p.keyword!
+      (p: PluginModule) => Array.isArray(p.keyword) ? p.keyword[0] : p.keyword!
     ) as PluginModule[]
   ).filter((result) => notMatchExactMatch(term, result));
 

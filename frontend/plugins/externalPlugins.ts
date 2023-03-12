@@ -107,7 +107,7 @@ const setupPluginsWatcher = () => {
       plugins[pluginName] = plugin as PluginModule;
       initPlugin(plugin, pluginName);
       console.groupEnd();
-    }, 1000);
+    }, 20);
   });
 };
 

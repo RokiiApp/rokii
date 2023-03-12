@@ -12,7 +12,7 @@ const getAvailableNPMPlugins = memoize(getNPMPlugins, { maxAge: CACHE_PLUGINS_MA
 const parseVersion = (version: string) =>
   validVersion((version || "").replace(/^\^/, "")) || "0.0.0";
 
-export const loadPlugins = async (): Promise<PluginInfo[]> => {
+export const getPlugins = async (): Promise<PluginInfo[]> => {
   const [available, installed, debuggingPlugins] = await Promise.all([
     getAvailableNPMPlugins(),
     getInstalledPlugins(),

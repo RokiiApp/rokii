@@ -2,7 +2,7 @@ import type { PluginModule } from "@rokii/types";
 import type { PluginInfo } from "./types";
 import { search } from "@rokii/utils";
 import { shell } from "electron";
-import { loadPlugins } from "./utils/loadPlugins";
+import { getPlugins } from "./utils/loadPlugins";
 import * as format from "./utils/format";
 import icon from "../icon.png";
 import { Preview } from "./Preview";
@@ -23,14 +23,14 @@ function divideByFilter<T>(array: T[], filter: (element: T) => boolean) {
 type Category = readonly [string, (plugin: PluginInfo) => boolean];
 
 const categories: readonly Category[] = [
-  ["Development", (plugin) => Boolean(plugin.isDebugging)],
-  ["Updates", (plugin) => Boolean(plugin.isUpdateAvailable)],
-  ["Installed", (plugin) => Boolean(plugin.isInstalled)],
-  ["Available", (plugin) => Boolean(plugin.name)],
+  ["🧰 Development", (plugin) => Boolean(plugin.isDebugging)],
+  ["🆕 Updates", (plugin) => Boolean(plugin.isUpdateAvailable)],
+  ["✅ Installed", (plugin) => Boolean(plugin.isInstalled)],
+  ["🌐 Available", (plugin) => Boolean(plugin.name)],
 ] as const;
 
 const updatePlugin = async (update: Function, name: string) => {
-  const plugins = await loadPlugins();
+  const plugins = await getPlugins();
 
   // TODO: This is a hack to get the updated plugin- need to find a better way
   const updatedPlugin = plugins.find((plugin) => plugin.name === name)!;
@@ -99,8 +99,8 @@ const fn: PluginModule["fn"] = async ({ term, display, hide, update }) => {
 
   display({ icon, id: "plugins-loading", title: "Looking for plugins..." });
 
-  const plugins = await loadPlugins();
 
+  const plugins = await getPlugins();
   const matchingPlugins = plugins.filter(
     ({ name }) => search([name], match[1]).length > 0
   );
@@ -129,5 +129,5 @@ const onMessage: PluginModule["onMessage"] = (type) => {
   }
 };
 
-export { fn, name, keyword, onMessage };
+export { fn, name, keyword, onMessage, icon };
 export { default as initializeAsync } from "./initializeAsync";

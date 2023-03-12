@@ -1,7 +1,7 @@
 import type { PluginModule } from "@rokii/types";
 import { client } from "@/services/plugins";
 import * as config from "common/config";
-import { loadPlugins } from "./utils/loadPlugins";
+import { getPlugins } from "./utils/loadPlugins";
 import { getInstalledPlugins } from "./utils/getInstalledPlugins";
 import { DEFAULT_PLUGINS } from "./constants";
 
@@ -10,7 +10,7 @@ import { DEFAULT_PLUGINS } from "./constants";
  */
 async function checkForPluginUpdates() {
   console.log("Run plugins autoupdate");
-  const plugins = await loadPlugins();
+  const plugins = await getPlugins();
 
   const updatePromises = plugins
     .filter((p) => p.isUpdateAvailable === true)

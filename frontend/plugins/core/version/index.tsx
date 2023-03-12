@@ -31,4 +31,4 @@ const plugin: PluginModule["fn"] = ({ term, display }) => {
   display(result);
 };
 
-export { NAME as name, plugin as fn };
+export { NAME as name, plugin as fn, icon };
