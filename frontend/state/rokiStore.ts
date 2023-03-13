@@ -1,9 +1,9 @@
-import type { PluginResult } from "@rokii/types";
+import type { PluginResult } from '@rokii/types';
 
-import { INITIAL_STATE } from "@/constants";
+import { INITIAL_STATE } from '@/constants';
 
-import { create } from "zustand";
-import { isResultValid } from "./utils";
+import { create } from 'zustand';
+import { isResultValid } from './utils';
 
 interface RokiStore {
   results: PluginResult[];
@@ -38,17 +38,17 @@ export const useRokiStore = create<RokiStore>((set) => ({
       const normalizedNewResults = result.map((result) => ({
         ...result,
         id: `${pluginName}-${result.id || result.title}`,
-        term: result.term || "",
+        term: result.term || ''
       }));
 
       const deleteDuplicatesFilter = (element: PluginResult) => {
         return !state.results.some((result) => result.id === element.id);
-      }
+      };
 
       const newResultsWithoutDuplicates = normalizedNewResults.filter(deleteDuplicatesFilter);
 
       return {
-        results: [...state.results, ...newResultsWithoutDuplicates],
+        results: [...state.results, ...newResultsWithoutDuplicates]
       };
     });
   },
@@ -64,7 +64,7 @@ export const useRokiStore = create<RokiStore>((set) => ({
     set((state) => {
       const newResults = state.results.filter((i) => i.id !== id);
       return {
-        results: newResults.concat(result),
+        results: newResults.concat(result)
       };
     }),
 
@@ -77,5 +77,5 @@ export const useRokiStore = create<RokiStore>((set) => ({
       return { selected: newSelected };
     }),
 
-  setSelected: (index: number) => set({ selected: index }),
+  setSelected: (index: number) => set({ selected: index })
 }));

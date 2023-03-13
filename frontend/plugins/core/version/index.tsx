@@ -1,19 +1,19 @@
-import type { PluginModule } from "@rokii/types";
+import type { PluginModule } from '@rokii/types';
 
-import { app } from "@electron/remote";
-import { search } from "@rokii/utils";
+import { app } from '@electron/remote';
+import { search } from '@rokii/utils';
 
-import icon from "../icon.png";
+import icon from '../icon.png';
 
-const NAME = "RoKii Version";
+const NAME = 'RoKii Version';
 const order = 9;
-const KEYWORDS = [NAME, "ver", "version"];
+const KEYWORDS = [NAME, 'ver', 'version'];
 
 /**
  * Plugin to show app settings in results list
  */
-const plugin: PluginModule["fn"] = ({ term, display }) => {
-  const match = search(KEYWORDS, term).length > 0
+const plugin: PluginModule['fn'] = ({ term, display }) => {
+  const match = search(KEYWORDS, term).length > 0;
   if (!match) return;
 
   const result = {
@@ -25,7 +25,7 @@ const plugin: PluginModule["fn"] = ({ term, display }) => {
         <strong>{app.getVersion()}</strong>
       </div>
     ),
-    term: NAME,
+    term: NAME
   };
 
   display(result);

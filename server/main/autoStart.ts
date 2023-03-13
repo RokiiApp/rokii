@@ -1,10 +1,10 @@
-import { app } from "electron";
-import AutoLaunch from "auto-launch";
+import { app } from 'electron';
+import AutoLaunch from 'auto-launch';
 
-const isLinux = !["win32", "darwin"].includes(process.platform);
-const isDevelopment = process.env.NODE_ENV === "development";
+const isLinux = !['win32', 'darwin'].includes(process.platform);
+const isDevelopment = process.env.NODE_ENV === 'development';
 
-const appLauncher = isLinux ? new AutoLaunch({ name: "RoKii" }) : null;
+const appLauncher = isLinux ? new AutoLaunch({ name: 'RoKii' }) : null;
 
 const isAutoStartEnabled = async () =>
   isLinux ? appLauncher.isEnabled() : app.getLoginItemSettings().openAtLogin;

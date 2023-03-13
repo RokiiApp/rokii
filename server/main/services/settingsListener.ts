@@ -1,9 +1,9 @@
-import { BrowserWindow, globalShortcut } from "electron";
-import { CHANNELS } from "../../common/constants/events";
-import * as ipc from "../../common/ipc";
-import { AppTray } from "../AppTray";
-import { isAutoStartEnabled, setAutoStart } from "../autoStart";
-import { toggleWindow } from "./toggleWindow";
+import { BrowserWindow, globalShortcut } from 'electron';
+import { CHANNELS } from '../../common/constants/events';
+import * as ipc from '../../common/ipc';
+import { AppTray } from '../AppTray';
+import { isAutoStartEnabled, setAutoStart } from '../autoStart';
+import { toggleWindow } from './toggleWindow';
 
 type SettingsListenerOptions = {
   win: BrowserWindow;

@@ -1,8 +1,8 @@
-import type { PluginResult, PluginModule, PluginContext } from "@rokii/types";
-import { search } from "@rokii/utils";
+import type { PluginResult, PluginModule, PluginContext } from '@rokii/types';
+import { search } from '@rokii/utils';
 
-import { pluginsService } from "@/plugins";
-import icon from "../icon.png";
+import { pluginsService } from '@/plugins';
+import icon from '../icon.png';
 
 /**
  * If the term is an exact match of the plugin keyword, we don't want to show it
@@ -11,7 +11,7 @@ import icon from "../icon.png";
 const notMatchExactMatch = (term: string, plugin: PluginModule) =>
   plugin.keyword !== term && `${plugin.keyword} ` !== term;
 
-type PluginToResult = (res: PluginModule, actions: PluginContext["actions"]) => PluginResult;
+type PluginToResult = (res: PluginModule, actions: PluginContext['actions']) => PluginResult;
 const pluginToResult: PluginToResult = ({ name, keyword, icon }, actions) => {
   const mainKeyword = Array.isArray(keyword) ? keyword[0] : keyword;
   return {
@@ -21,7 +21,7 @@ const pluginToResult: PluginToResult = ({ name, keyword, icon }, actions) => {
     onSelect: (event) => {
       event.preventDefault();
       actions.replaceTerm(`${mainKeyword} `);
-    },
+    }
   };
 };
 
@@ -32,7 +32,7 @@ let isFirstStart = true;
 /**
  * Plugin for autocomplete other plugins
  */
-const fn: PluginModule["fn"] = async ({ term, display, actions }) => {
+const fn: PluginModule['fn'] = async ({ term, display, actions }) => {
   if (isFirstStart) {
     await new Promise((resolve) => setTimeout(resolve, 100));
     isFirstStart = false;
@@ -43,7 +43,7 @@ const fn: PluginModule["fn"] = async ({ term, display, actions }) => {
 
   if (pluginsWithKeywords.length === 0) return;
 
-  let searchResults = (
+  const searchResults = (
     search(
       pluginsWithKeywords,
       term,
@@ -56,6 +56,6 @@ const fn: PluginModule["fn"] = async ({ term, display, actions }) => {
   display(results);
 };
 
-const name = "Plugins autocomplete";
+const name = 'Plugins autocomplete';
 
 export { fn, name, icon };

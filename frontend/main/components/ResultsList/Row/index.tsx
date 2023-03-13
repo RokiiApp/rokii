@@ -1,7 +1,7 @@
-import { SmartIcon } from "@rokii/ui";
-import { useRokiStore } from "@/state/rokiStore";
-import styles from "./styles.module.css";
-import { useInputStore } from "@/state/inputStore";
+import { SmartIcon } from '@rokii/ui';
+import { useRokiStore } from '@/state/rokiStore';
+import styles from './styles.module.css';
+import { useInputStore } from '@/state/inputStore';
 
 type Props = {
   isSelected: boolean;
@@ -9,11 +9,11 @@ type Props = {
   title?: string;
   onSelect: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
   subtitle?: string;
-  style: Object;
+  style: React.CSSProperties;
   index: number;
 };
 
-function Row({
+function Row ({
   isSelected,
   icon,
   title,
@@ -23,17 +23,17 @@ function Row({
   index
 }: Props) {
   const setSelected = useRokiStore(s => s.setSelected);
-  const inputFocused = useInputStore(s => s.inputFocused)
+  const inputFocused = useInputStore(s => s.inputFocused);
 
   const onMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
     if (isSelected) return;
-    const { movementX, movementY } = event
+    const { movementX, movementY } = event;
 
     const isNotMoving = movementX === 0 && movementY === 0;
     if (isNotMoving || !inputFocused) return;
 
     setSelected(index);
-  }
+  };
 
   const className = isSelected ? `${styles.row} ${styles.selected}` : styles.row;
 
@@ -43,7 +43,7 @@ function Row({
       className={className}
       onClick={onSelect}
       onMouseMove={onMouseMove}
-      onKeyDown={() => { }}
+      onKeyDown={() => undefined}
     >
       {icon && <SmartIcon path={icon} className={styles.icon} />}
 

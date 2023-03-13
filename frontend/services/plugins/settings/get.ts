@@ -1,5 +1,5 @@
-import type { PluginModule } from "@rokii/types";
-import * as config from "common/config";
+import type { PluginModule } from '@rokii/types';
+import * as config from 'common/config';
 
 /**
  * Returns the settings established by the user and previously saved in the config file
@@ -7,7 +7,7 @@ import * as config from "common/config";
  * @returns An object with keys and values of the **stored** plugin settings
  */
 const getExistingSettings = (pluginName: string) =>
-  config.get("plugins")[pluginName] || {};
+  config.get('plugins')[pluginName] || {};
 
 /**
  * Returns the sum of the default settings and the user settings

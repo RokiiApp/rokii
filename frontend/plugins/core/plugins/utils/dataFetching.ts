@@ -1,4 +1,4 @@
-import type { NPMPackageSearchResult, NPM_SearchResult } from "../types";
+import type { NPMPackageSearchResult, NpmSearchResult } from '../types';
 
 const sortByPopularity = (a: NPMPackageSearchResult, b: NPMPackageSearchResult) =>
   a.score.detail.popularity > b.score.detail.popularity ? -1 : 1;
@@ -13,10 +13,10 @@ export const getNPMPlugins = async () => {
    * API endpoint to search all cerebro plugins
   */
   const URL =
-    "https://registry.npmjs.com/-/v1/search?from=0&size=500&text=keywords:cerebro-plugin,cerebro-extracted-plugin";
+    'https://registry.npmjs.com/-/v1/search?from=0&size=500&text=keywords:cerebro-plugin,cerebro-extracted-plugin';
 
   try {
-    const { objects: plugins } = await fetch(URL).then((res) => res.json() as Promise<NPM_SearchResult>);
+    const { objects: plugins } = await fetch(URL).then((res) => res.json() as Promise<NpmSearchResult>);
     plugins.sort(sortByPopularity);
 
     return plugins.map((p) => ({
@@ -24,7 +24,7 @@ export const getNPMPlugins = async () => {
       version: p.package.version,
       description: p.package.description,
       homepage: p.package.links.homepage,
-      repo: p.package.links.repository,
+      repo: p.package.links.repository
     }));
   } catch (err) {
     console.log(err);
@@ -38,5 +38,5 @@ export const getNPMPlugins = async () => {
 export const getReadme = async (repo: string) => {
   const response = await fetch(`https://api.github.com/repos/${repo}/readme`);
   const json = await response.json();
-  return Buffer.from(json.content, "base64").toString();
-}
+  return Buffer.from(json.content, 'base64').toString();
+};

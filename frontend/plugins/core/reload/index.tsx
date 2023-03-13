@@ -1,11 +1,11 @@
-import type { PluginModule } from "@rokii/types";
+import type { PluginModule } from '@rokii/types';
 
-import { app } from "@electron/remote";
-import icon from "../icon.png";
-import { search } from "@rokii/utils";
+import { app } from '@electron/remote';
+import icon from '../icon.png';
+import { search } from '@rokii/utils';
 
-const title = "Reload";
-const subtitle = "Reload RoKii App";
+const title = 'Reload';
+const subtitle = 'Reload RoKii App';
 
 const onSelect = () => {
   app.relaunch();
@@ -15,8 +15,8 @@ const onSelect = () => {
 /**
  * Plugin to reload Rokii
  */
-const fn: PluginModule["fn"] = ({ term, display }) => {
-  const match = search([title], term).length > 0
+const fn: PluginModule['fn'] = ({ term, display }) => {
+  const match = search([title], term).length > 0;
   if (!match) return;
 
   display({ icon, title, subtitle, onSelect, term: title });

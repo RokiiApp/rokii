@@ -1,9 +1,9 @@
 /**
  * This module is used to communicate between renderer processes.
  */
-import EventEmitter from "events";
-import { CHANNELS } from "common/constants/events";
-import * as ipc from "common/ipc";
+import EventEmitter from 'events';
+import { CHANNELS } from 'common/constants/events';
+import * as ipc from 'common/ipc';
 
 const emitter = new EventEmitter();
 

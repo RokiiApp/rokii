@@ -1,14 +1,14 @@
-import type { PluginModule } from "@rokii/types";
-import type { PluginInfo } from "./types";
-import { search } from "@rokii/utils";
-import { shell } from "electron";
-import { getPlugins } from "./utils/loadPlugins";
-import * as format from "./utils/format";
-import icon from "../icon.png";
-import { Preview } from "./Preview";
-import { useRokiStore } from "@/state/rokiStore";
+import type { PluginContext, PluginModule } from '@rokii/types';
+import type { PluginInfo } from './types';
+import { search } from '@rokii/utils';
+import { shell } from 'electron';
+import { getPlugins } from './utils/loadPlugins';
+import * as format from './utils/format';
+import icon from '../icon.png';
+import { Preview } from './Preview';
+import { useRokiStore } from '@/state/rokiStore';
 
-function divideByFilter<T>(array: T[], filter: (element: T) => boolean) {
+function divideByFilter<T> (array: T[], filter: (element: T) => boolean) {
   return array.reduce(
     (acc, element) => {
       const satisfiesFilter = filter(element);
@@ -23,13 +23,13 @@ function divideByFilter<T>(array: T[], filter: (element: T) => boolean) {
 type Category = readonly [string, (plugin: PluginInfo) => boolean];
 
 const categories: readonly Category[] = [
-  ["🧰 Development", (plugin) => Boolean(plugin.isDebugging)],
-  ["🆕 Updates", (plugin) => Boolean(plugin.isUpdateAvailable)],
-  ["✅ Installed", (plugin) => Boolean(plugin.isInstalled)],
-  ["🌐 Available", (plugin) => Boolean(plugin.name)],
+  ['🧰 Development', (plugin) => Boolean(plugin.isDebugging)],
+  ['🆕 Updates', (plugin) => Boolean(plugin.isUpdateAvailable)],
+  ['✅ Installed', (plugin) => Boolean(plugin.isInstalled)],
+  ['🌐 Available', (plugin) => Boolean(plugin.name)]
 ] as const;
 
-const updatePlugin = async (update: Function, name: string) => {
+const updatePlugin = async (update: PluginContext['update'], name: string) => {
   const plugins = await getPlugins();
 
   // TODO: This is a hack to get the updated plugin- need to find a better way
@@ -47,12 +47,12 @@ const updatePlugin = async (update: Function, name: string) => {
         key={name}
         onComplete={() => updatePlugin(update, name)}
       />
-    ),
+    )
   });
 };
 
-const pluginToResult = (plugin: PluginInfo | string, update: Function) => {
-  if (typeof plugin === "string") return { title: plugin };
+const pluginToResult = (plugin: PluginInfo | string, update: PluginContext['update']) => {
+  if (typeof plugin === 'string') return { title: plugin };
 
   const title = `${format.name(plugin.name)} (${format.version(plugin)})`;
 
@@ -71,7 +71,7 @@ const pluginToResult = (plugin: PluginInfo | string, update: Function) => {
         key={plugin.name}
         onComplete={() => updatePlugin(update, plugin.name)}
       />
-    ),
+    )
   };
 };
 
@@ -91,12 +91,11 @@ const categorizePlugins = (plugins: PluginInfo[]) => {
   return result;
 };
 
-const fn: PluginModule["fn"] = async ({ term, display, hide, update }) => {
+const fn: PluginModule['fn'] = async ({ term, display, hide, update }) => {
   const match = term.match(/^plugins?\s*(.+)?$/i);
   if (!match) return;
 
-  display({ icon, id: "plugins-loading", title: "Looking for plugins..." });
-
+  display({ icon, id: 'plugins-loading', title: 'Looking for plugins...' });
 
   const plugins = await getPlugins();
   const matchingPlugins = plugins.filter(
@@ -108,19 +107,19 @@ const fn: PluginModule["fn"] = async ({ term, display, hide, update }) => {
   const orderedPlugins = categorizeResult.map((plugin) =>
     pluginToResult(plugin, update)
   );
-  hide("plugins-loading");
+  hide('plugins-loading');
 
   display(orderedPlugins);
 };
 
-const name = "Manage plugins";
-const keyword = ["plugins"];
+const name = 'Manage plugins';
+const keyword = ['plugins'];
 
-const onMessage: PluginModule["onMessage"] = (type) => {
-  if (type === "plugins:start-installation") {
-    useRokiStore.setState({ statusBarText: "Installing default plugins..." });
+const onMessage: PluginModule['onMessage'] = (type) => {
+  if (type === 'plugins:start-installation') {
+    useRokiStore.setState({ statusBarText: 'Installing default plugins...' });
   }
-  if (type === "plugins:finish-installation") {
+  if (type === 'plugins:finish-installation') {
     setTimeout(() => {
       useRokiStore.setState({ statusBarText: undefined });
     }, 2000);
@@ -128,4 +127,4 @@ const onMessage: PluginModule["onMessage"] = (type) => {
 };
 
 export { fn, name, keyword, onMessage, icon };
-export { default as initializeAsync } from "./initializeAsync";
+export { default as initializeAsync } from './initializeAsync';

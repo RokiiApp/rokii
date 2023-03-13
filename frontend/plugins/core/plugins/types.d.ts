@@ -8,10 +8,9 @@ export type PluginInfo = {
     isUpdateAvailable: boolean;
     isDebugging?: boolean;
     repo?: string;
-  };
+};
 
-
-export type NPM_Package = {
+export type NpmPackage = {
     name: string;
     version: string;
     description: string;
@@ -22,7 +21,7 @@ export type NPM_Package = {
 }
 
 export type NPMPackageSearchResult = {
-    package: NPM_Package;
+    package: NpmPackage;
     score: {
         final: number;
         detail: {
@@ -34,8 +33,6 @@ export type NPMPackageSearchResult = {
     searchScore: number;
 };
 
-
-
-export type NPM_SearchResult = {
+export type NpmSearchResult = {
     objects: NPMPackageSearchResult[];
 }

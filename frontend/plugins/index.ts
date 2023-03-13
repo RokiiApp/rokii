@@ -1,8 +1,8 @@
-import { corePlugins } from "./core";
-import externalPlugins from "./externalPlugins";
+import { corePlugins } from './core';
+import externalPlugins from './externalPlugins';
 
-export const pluginsService= {
+export const pluginsService = {
   corePlugins,
   allPlugins: Object.assign(externalPlugins, corePlugins),
-  externalPlugins,
+  externalPlugins
 } as const;

@@ -1,15 +1,15 @@
-import type { SettingsSchema } from "@rokii/types";
-import Store, { Schema } from "electron-store";
-import { CHANNELS } from "./constants/events";
-import { themes } from "./themes";
-import { send } from "./ipc";
+import type { SettingsSchema } from '@rokii/types';
+import Store, { Schema } from 'electron-store';
+import { CHANNELS } from './constants/events';
+import { themes } from './themes';
+import { send } from './ipc';
 
 const schema: Schema<SettingsSchema> = {
-  locale: { default: "en-US" },
-  lang: { default: "en" },
-  country: { default: "US" },
+  locale: { default: 'en-US' },
+  lang: { default: 'en' },
+  country: { default: 'US' },
   theme: { default: themes[0].value },
-  hotkey: { default: "Control+Space" },
+  hotkey: { default: 'Control+Space' },
   showInTray: { default: true },
   firstStart: { default: true },
   developerMode: { default: false },
@@ -20,18 +20,18 @@ const schema: Schema<SettingsSchema> = {
   isMigratedPlugins: { default: false },
   openAtLogin: { default: true },
   winPosition: { default: [] },
-  proxy: { default: "" },
+  proxy: { default: '' }
 };
 
 const store = new Store({
   schema,
-  clearInvalidConfig: true,
+  clearInvalidConfig: true
 });
 
 /**
  * Get a value from global configuration
  */
-function get<T extends keyof SettingsSchema>(key: T): SettingsSchema[T] {
+function get<T extends keyof SettingsSchema> (key: T): SettingsSchema[T] {
   return store.get(key);
 }
 
@@ -40,11 +40,11 @@ function get<T extends keyof SettingsSchema>(key: T): SettingsSchema[T] {
  * and notifies all listeners about changes
  *
  */
-function set<T extends keyof SettingsSchema>(settingName: T, newValue: SettingsSchema[T]) {
+function set<T extends keyof SettingsSchema> (settingName: T, newValue: SettingsSchema[T]) {
   store.set(settingName, newValue);
 
   // Notify all processes about settings changes
-  console.log("notify settings change", { settingName, newValue });
+  console.log('notify settings change', { settingName, newValue });
   send(CHANNELS.UpdateSettings, { settingName, newValue });
 }
 

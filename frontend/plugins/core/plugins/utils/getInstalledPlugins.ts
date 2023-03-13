@@ -1,10 +1,10 @@
-import { PACKAGE_JSON_PATH } from "@/services/plugins";
-import { readFile } from "fs/promises";
-import { pluginsService } from "@/plugins";
+import { PACKAGE_JSON_PATH } from '@/services/plugins';
+import { readFile } from 'fs/promises';
+import { pluginsService } from '@/plugins';
 
 const readPackageJson = async () => {
   try {
-    const fileContent = await readFile(PACKAGE_JSON_PATH, { encoding: "utf8" });
+    const fileContent = await readFile(PACKAGE_JSON_PATH, { encoding: 'utf8' });
     return JSON.parse(fileContent);
   } catch (err) {
     console.log(err);
@@ -23,7 +23,7 @@ export const getInstalledPlugins = async () => {
     return {
       ...externalPlugins[pluginName],
       name: pluginName,
-      version: packageJson.dependencies[pluginName] as string || "0.0.0",
+      version: packageJson.dependencies[pluginName] as string || '0.0.0'
     };
   });
 

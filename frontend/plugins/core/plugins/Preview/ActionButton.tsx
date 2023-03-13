@@ -1,4 +1,4 @@
-import { KeyboardNavItem } from "@rokii/ui";
+import { KeyboardNavItem } from '@rokii/ui';
 
 type ActionButtonProps = {
   onSelect?: (event: React.SyntheticEvent<Element, Event>) => void;

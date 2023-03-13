@@ -1,17 +1,17 @@
-import type { PluginModule } from "@rokii/types";
-import { search } from "@rokii/utils";
+import type { PluginModule } from '@rokii/types';
+import { search } from '@rokii/utils';
 
-import Settings from "./Settings";
-import icon from "../icon.png";
+import Settings from './Settings';
+import icon from '../icon.png';
 
-const NAME = "RoKii Settings";
+const NAME = 'RoKii Settings';
 const order = 9;
-const KEYWORDS = [NAME, "RoKii Preferences", "cfg", "config", "params"];
+const KEYWORDS = [NAME, 'RoKii Preferences', 'cfg', 'config', 'params'];
 
 /**
  * Plugin to show app settings in results list
  */
-const plugin: PluginModule["fn"] = ({ term, display, config }) => {
+const plugin: PluginModule['fn'] = ({ term, display, config }) => {
   const found = search(KEYWORDS, term).length > 0;
   if (found) {
     const getPreview = () => (

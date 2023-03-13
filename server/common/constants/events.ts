@@ -1,11 +1,11 @@
 export const CHANNELS = {
-    UpdateDownloaded: 'update-downloaded',
-    UpdateTheme: 'update-theme',
-    ClearInput: 'clear-input',
-    UpdateSettings: 'update-settings',
-    ShowTerm: 'show-term',
-    RendererToRenderer: 'renderer-to-renderer',
-} as const
+  UpdateDownloaded: 'update-downloaded',
+  UpdateTheme: 'update-theme',
+  ClearInput: 'clear-input',
+  UpdateSettings: 'update-settings',
+  ShowTerm: 'show-term',
+  RendererToRenderer: 'renderer-to-renderer'
+} as const;
 
 export type ChannelInterfaces = {
     [CHANNELS.UpdateDownloaded]: undefined,
@@ -29,4 +29,3 @@ export type ChannelInterfacesWithoutNeccesaryArgs = {
 export type ChannelInterfacesWithNeccesaryArgs = {
     [K in keyof ChannelInterfaces]: ChannelInterfaces[K] extends undefined ? never : K;
 }[keyof ChannelInterfaces];
-

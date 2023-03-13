@@ -1,15 +1,15 @@
-import type { PluginModule } from "@rokii/types";
-import { client } from "@/services/plugins";
-import * as config from "common/config";
-import { getPlugins } from "./utils/loadPlugins";
-import { getInstalledPlugins } from "./utils/getInstalledPlugins";
-import { DEFAULT_PLUGINS } from "./constants";
+import type { PluginModule } from '@rokii/types';
+import { client } from '@/services/plugins';
+import * as config from 'common/config';
+import { getPlugins } from './utils/loadPlugins';
+import { getInstalledPlugins } from './utils/getInstalledPlugins';
+import { DEFAULT_PLUGINS } from './constants';
 
 /**
  * Check plugins for updates and start plugins autoupdater
  */
-async function checkForPluginUpdates() {
-  console.log("Run plugins autoupdate");
+async function checkForPluginUpdates () {
+  console.log('Run plugins autoupdate');
   const plugins = await getPlugins();
 
   const updatePromises = plugins
@@ -21,7 +21,7 @@ async function checkForPluginUpdates() {
   console.log(
     updatePromises.length > 0
       ? `${updatePromises.length} plugins are updated`
-      : "All plugins are up to date"
+      : 'All plugins are up to date'
   );
 
   // Run autoupdate every 12 hours
@@ -32,13 +32,13 @@ async function checkForPluginUpdates() {
  * Migrate plugins: default plugins were extracted to separate packages
  * so if default plugins are not installed – start installation
  */
-async function migratePlugins(sendMessage: Function) {
-  if (config.get("isMigratedPlugins")) {
+async function migratePlugins (sendMessage: (data: any) => void) {
+  if (config.get('isMigratedPlugins')) {
     // Plugins are already migrated
     return;
   }
 
-  console.log("Start installation of default plugins");
+  console.log('Start installation of default plugins');
 
   const installedPlugins = await getInstalledPlugins();
 
@@ -47,17 +47,17 @@ async function migratePlugins(sendMessage: Function) {
   ).map((plugin) => () => client.install(plugin));
 
   if (promises.length > 0) {
-    sendMessage("plugins:start-installation");
+    sendMessage('plugins:start-installation');
   }
 
   Promise.all(promises).then(() => {
-    console.log("All default plugins are installed!");
-    config.set("isMigratedPlugins", true);
-    sendMessage("plugins:finish-installation");
+    console.log('All default plugins are installed!');
+    config.set('isMigratedPlugins', true);
+    sendMessage('plugins:finish-installation');
   });
 }
 
-const initializeAsync: PluginModule["initializeAsync"] = async (sendMessage) => {
+const initializeAsync: PluginModule['initializeAsync'] = async (sendMessage) => {
   checkForPluginUpdates();
   migratePlugins(sendMessage);
 };

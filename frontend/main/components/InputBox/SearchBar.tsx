@@ -1,22 +1,29 @@
-import type { PluginResult } from "@rokii/types";
-import styles from "./styles.module.css";
-import { useRef } from "react";
-import { clipboard } from "electron";
-import { getCurrentWindow } from "@electron/remote";
-import { focusableSelector } from "@rokii/ui";
+import type { PluginResult } from '@rokii/types';
+import styles from './styles.module.css';
+import { useRef } from 'react';
+import { clipboard } from 'electron';
+import { getCurrentWindow } from '@electron/remote';
+import { focusableSelector } from '@rokii/ui';
 
-import { getAutocompleteValue } from "@/main/utils/getAutocompleteValue";
-import { useRokiStore } from "@/state/rokiStore";
-import { cursorInEndOfInput } from "@/main/utils/cursorInEndOfInput";
-import { wrapEvent } from "@/main/utils/events";
-import { useEventsSubscription } from "@/main/hooks/useEventsSubscription";
-import { useInputStore } from "@/state/inputStore";
+import { getAutocompleteValue } from '@/main/utils/getAutocompleteValue';
+import { useRokiStore } from '@/state/rokiStore';
+import { cursorInEndOfInput } from '@/main/utils/cursorInEndOfInput';
+import { wrapEvent } from '@/main/utils/events';
+import { useEventsSubscription } from '@/main/hooks/useEventsSubscription';
+import { useInputStore } from '@/state/inputStore';
+
+type SelectItemFn = (
+  item: PluginResult,
+  realEvent:
+    | React.KeyboardEvent<HTMLDivElement>
+    | React.MouseEvent<HTMLDivElement>
+) => void;
 
 /**
  * Set focus to first focusable element in preview
  */
 const focusPreview = () => {
-  const previewDom = document.getElementById("preview");
+  const previewDom = document.getElementById('preview');
   const firstFocusable = previewDom?.querySelector<any>(focusableSelector);
   if (firstFocusable) {
     firstFocusable.focus();
@@ -24,7 +31,7 @@ const focusPreview = () => {
 };
 
 export const SearchBar = () => {
-  const { current: electronWindow } = useRef(getCurrentWindow())
+  const { current: electronWindow } = useRef(getCurrentWindow());
 
   const moveCursor = useRokiStore((s) => s.moveCursor);
 
@@ -43,7 +50,7 @@ export const SearchBar = () => {
     item.onSelect?.(event);
 
     if (!event.defaultPrevented) {
-      updateTerm("");
+      updateTerm('');
       electronWindow.hide();
     }
   };
@@ -54,7 +61,7 @@ export const SearchBar = () => {
     const current = getHighlightedResult();
 
     if (current) selectItem(current, event);
-  }
+  };
 
   /**
   * Autocomple search term from highlighted result
@@ -108,13 +115,13 @@ export const SearchBar = () => {
           updateTerm(prevTerm);
         }
         event.preventDefault();
-      },
+      }
     };
 
     // shortcuts for ctrl+...
     if ((event.metaKey || event.ctrlKey) && !event.altKey) {
       // Copy to clipboard on cmd+c
-      if (event.code === "KeyC") {
+      if (event.code === 'KeyC') {
         const text = highlighted?.clipboard || term;
 
         if (text) {
@@ -128,7 +135,7 @@ export const SearchBar = () => {
       }
 
       // Select text on cmd+a
-      if (event.code === "KeyA") {
+      if (event.code === 'KeyA') {
         mainInput.current?.select();
         event.preventDefault();
       }
@@ -143,38 +150,38 @@ export const SearchBar = () => {
 
       // Lightweight vim-mode: cmd/ctrl + jklo
       switch (event.code) {
-        case "KeyJ":
+        case 'KeyJ':
           keyActions.arrowDown();
           break;
-        case "KeyK":
+        case 'KeyK':
           keyActions.arrowUp();
           break;
-        case "KeyL":
+        case 'KeyL':
           keyActions.arrowRight();
           break;
-        case "KeyO":
+        case 'KeyO':
           keyActions.select();
           break;
       }
     }
 
     switch (event.key) {
-      case "Tab":
+      case 'Tab':
         autocomplete(event);
         break;
-      case "ArrowRight":
+      case 'ArrowRight':
         keyActions.arrowRight();
         break;
-      case "ArrowDown":
+      case 'ArrowDown':
         keyActions.arrowDown();
         break;
-      case "ArrowUp":
+      case 'ArrowUp':
         keyActions.arrowUp();
         break;
-      case "Enter":
+      case 'Enter':
         keyActions.select();
         break;
-      case "Escape":
+      case 'Escape':
         electronWindow.hide();
         break;
     }
@@ -192,13 +199,5 @@ export const SearchBar = () => {
     onKeyDown={onKeyDown}
     onFocus={() => setInputFocused(true)}
     onBlur={() => setInputFocused(false)}
-  />
-}
-
-
-type SelectItemFn = (
-  item: PluginResult,
-  realEvent:
-    | React.KeyboardEvent<HTMLDivElement>
-    | React.MouseEvent<HTMLDivElement>
-) => void;
+  />;
+};

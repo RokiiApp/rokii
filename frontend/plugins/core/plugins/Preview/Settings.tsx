@@ -1,23 +1,23 @@
-import type { PluginModule } from "@rokii/types";
-import { useState, useEffect } from "react";
-import * as config from "common/config";
-import { FormItem } from "./FormItem";
-import styles from "./styles.module.css";
+import type { PluginModule } from '@rokii/types';
+import { useState, useEffect } from 'react';
+import * as config from 'common/config';
+import { FormItem } from './FormItem';
+import styles from './styles.module.css';
 
 type SettingsProps = {
-  settings: PluginModule["settings"];
+  settings: PluginModule['settings'];
   name: string;
 };
 
 export const Settings = ({ settings, name }: SettingsProps) => {
   const [values, setValues] = useState<Record<string, any>>(
-    () => config.get("plugins")[name] || {}
+    () => config.get('plugins')[name] || {}
   );
 
   useEffect(() => {
-    config.set("plugins", {
-      ...config.get("plugins"),
-      [name]: values,
+    config.set('plugins', {
+      ...config.get('plugins'),
+      [name]: values
     });
   }, [values]);
 

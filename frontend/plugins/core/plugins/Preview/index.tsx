@@ -1,23 +1,23 @@
-import type { PluginInfo } from "../types";
+import type { PluginInfo } from '../types';
 
-import { useState } from "react";
-import { KeyboardNav, KeyboardNavItem } from "@rokii/ui";
-import { ActionButton } from "./ActionButton";
-import { Description } from "./Description";
-import { Settings } from "./Settings";
+import { useState } from 'react';
+import { KeyboardNav, KeyboardNavItem } from '@rokii/ui';
+import { ActionButton } from './ActionButton';
+import { Description } from './Description';
+import { Settings } from './Settings';
 
-import { client } from "@/services/plugins/index";
-import styles from "./styles.module.css";
-import * as format from "../utils/format";
+import { client } from '@/services/plugins/index';
+import styles from './styles.module.css';
+import * as format from '../utils/format';
 
 enum PluginAction {
-  install = "install",
-  uninstall = "uninstall",
-  update = "update",
+  install = 'install',
+  uninstall = 'uninstall',
+  update = 'update'
 }
 
 type PreviewProps = {
-  onComplete: Function;
+  onComplete: () => void;
   plugin: PluginInfo;
 };
 
@@ -50,7 +50,7 @@ export const Preview = ({ onComplete, plugin }: PreviewProps) => {
     settings
   } = plugin;
 
-  const githubRepo = repo && repo.match(/^.+github.com\/([^\/]+\/[^\/]+).*?/);
+  const githubRepo = repo && repo.match(/^.+github.com\/([^/]+\/[^/]+).*?/);
   return (
     <div className={styles.preview} key={name}>
       <h2>{`${format.name(name)} (${version})`}</h2>
@@ -60,7 +60,7 @@ export const Preview = ({ onComplete, plugin }: PreviewProps) => {
         <div className={styles.header}>
           {settings && (
             <KeyboardNavItem onSelect={() => setShowSettings((prev) => !prev)}>
-              Settings
+              <>Settings</>
             </KeyboardNavItem>
           )}
 
@@ -71,8 +71,8 @@ export const Preview = ({ onComplete, plugin }: PreviewProps) => {
               onSelect={getPluginAction(name, PluginAction.install)}
               text={
                 runningAction === PluginAction.install
-                  ? "Installing..."
-                  : "Install"
+                  ? 'Installing...'
+                  : 'Install'
               }
             />
           )}
@@ -82,8 +82,8 @@ export const Preview = ({ onComplete, plugin }: PreviewProps) => {
               onSelect={getPluginAction(name, PluginAction.uninstall)}
               text={
                 runningAction === PluginAction.uninstall
-                  ? "Uninstalling..."
-                  : "Uninstall"
+                  ? 'Uninstalling...'
+                  : 'Uninstall'
               }
             />
           )}
@@ -93,7 +93,7 @@ export const Preview = ({ onComplete, plugin }: PreviewProps) => {
               onSelect={getPluginAction(name, PluginAction.update)}
               text={
                 runningAction === PluginAction.update
-                  ? "Updating..."
+                  ? 'Updating...'
                   : `Update (${installedVersion} → ${version})`
               }
             />
@@ -103,7 +103,7 @@ export const Preview = ({ onComplete, plugin }: PreviewProps) => {
             <KeyboardNavItem
               onSelect={() => setShowDescription((prev) => !prev)}
             >
-              Details
+              <>Details</>
             </KeyboardNavItem>
           )}
         </div>

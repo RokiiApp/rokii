@@ -1,16 +1,23 @@
-import type { PluginResult } from "@rokii/types";
+import type { PluginResult } from '@rokii/types';
 
-import { useEffect, useRef, memo } from "react";
-import { ListChildComponentProps, VariableSizeList } from "react-window";
-import { getCurrentWindow } from "@electron/remote";
-import styles from "./styles.module.css";
+import { useEffect, useRef, memo } from 'react';
+import { ListChildComponentProps, VariableSizeList } from 'react-window';
+import { getCurrentWindow } from '@electron/remote';
+import styles from './styles.module.css';
 
-import { RESULT_HEIGHT, VISIBLE_RESULTS } from "common/constants/ui";
-import Row from "./Row";
-import { useRokiStore } from "@/state/rokiStore";
-import { useGetPluginResults } from "@/main/hooks/useGetPluginResults";
-import { wrapEvent } from "@/main/utils/events";
-import { PluginPreview, PluginResultWithPreview } from "./PluginPreview";
+import { RESULT_HEIGHT, VISIBLE_RESULTS } from 'common/constants/ui';
+import Row from './Row';
+import { useRokiStore } from '@/state/rokiStore';
+import { useGetPluginResults } from '@/main/hooks/useGetPluginResults';
+import { wrapEvent } from '@/main/utils/events';
+import { PluginPreview, PluginResultWithPreview } from './PluginPreview';
+
+type SelectItemFn = (
+  item: PluginResult,
+  realEvent:
+    | React.KeyboardEvent<HTMLDivElement>
+    | React.MouseEvent<HTMLDivElement>
+) => void;
 
 const ResultsList = ({ term }: { term: string }) => {
   const electronWindow = useRef(getCurrentWindow());
@@ -35,7 +42,7 @@ const ResultsList = ({ term }: { term: string }) => {
 
   useEffect(() => {
     if (listRef.current) {
-      listRef.current.scrollToItem(selected, "smart");
+      listRef.current.scrollToItem(selected, 'smart');
     }
   }, [selected]);
 
@@ -50,7 +57,7 @@ const ResultsList = ({ term }: { term: string }) => {
       // In some cases we should autocomplete value
       isSelected,
       onSelect: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) =>
-        selectItem(result, event),
+        selectItem(result, event)
 
     } as const;
     return <Row style={style} {...attrs} />;
@@ -77,18 +84,11 @@ const ResultsList = ({ term }: { term: string }) => {
         {(a) => rowRenderer(a)}
       </VariableSizeList>
 
-      {typeof selectedResult.getPreview === "function" && (
+      {typeof selectedResult.getPreview === 'function' && (
         <PluginPreview plugin={selectedResult as PluginResultWithPreview} />
       )}
     </div>
   );
 };
-
-type SelectItemFn = (
-  item: PluginResult,
-  realEvent:
-    | React.KeyboardEvent<HTMLDivElement>
-    | React.MouseEvent<HTMLDivElement>
-) => void;
 
 export default memo(ResultsList);

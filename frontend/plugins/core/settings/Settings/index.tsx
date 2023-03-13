@@ -1,27 +1,27 @@
-import type { SettingsHandler, SettingsSchema } from "@rokii/types";
+import type { SettingsHandler, SettingsSchema } from '@rokii/types';
 
-import { useState } from "react";
-import { FormComponents } from "@rokii/ui";
-import { themes } from "common/themes";
+import { useState } from 'react';
+import { FormComponents } from '@rokii/ui';
+import { themes } from 'common/themes';
 
-import Hotkey from "./Hotkey";
-import countries from "./countries";
-import styles from "./styles.module.css";
+import Hotkey from './Hotkey';
+import countries from './countries';
+import styles from './styles.module.css';
 
 const { Select, Checkbox, Wrapper, Text } = FormComponents;
 
-function Settings({ get, set }: SettingsHandler) {
+function Settings ({ get, set }: SettingsHandler) {
   const [state, setState] = useState(() => ({
-    hotkey: get("hotkey"),
-    showInTray: get("showInTray"),
-    country: get("country"),
-    theme: get("theme"),
-    proxy: get("proxy"),
-    developerMode: get("developerMode"),
-    cleanOnHide: get("cleanOnHide"),
-    selectOnShow: get("selectOnShow"),
-    pluginsSettings: get("plugins"),
-    openAtLogin: get("openAtLogin"),
+    hotkey: get('hotkey'),
+    showInTray: get('showInTray'),
+    country: get('country'),
+    theme: get('theme'),
+    proxy: get('proxy'),
+    developerMode: get('developerMode'),
+    cleanOnHide: get('cleanOnHide'),
+    selectOnShow: get('selectOnShow'),
+    pluginsSettings: get('plugins'),
+    openAtLogin: get('openAtLogin')
   }));
 
   const changeConfig = <T extends keyof SettingsSchema>(key: T, value: SettingsSchema[T]) => {
@@ -37,7 +37,7 @@ function Settings({ get, set }: SettingsHandler) {
       >
         <Hotkey
           hotkey={state.hotkey}
-          onChange={(key) => changeConfig("hotkey", key)}
+          onChange={(key) => changeConfig('hotkey', key)}
         />
       </Wrapper>
       <Select
@@ -45,44 +45,44 @@ function Settings({ get, set }: SettingsHandler) {
         description="Choose your country so Rokii can better choose currency, language, etc."
         value={countries.find((c) => c.value === state.country)}
         options={countries}
-        onChange={(newValue) => newValue && changeConfig("country", newValue.value)}
+        onChange={(newValue) => newValue && changeConfig('country', newValue.value)}
       />
       <Select
         label="Theme"
         value={themes.find((t) => t.value === state.theme)}
         options={themes}
-        onChange={(newValue) => newValue && changeConfig("theme", newValue.value)}
+        onChange={(newValue) => newValue && changeConfig('theme', newValue.value)}
       />
       <Text
         type="text"
         label="Proxy"
         value={state.proxy}
-        onChange={(value: string) => changeConfig("proxy", value)}
+        onChange={(value: string) => changeConfig('proxy', value)}
       />
       <Checkbox
         label="Open at login"
         value={state.openAtLogin}
-        onChange={(value: boolean) => changeConfig("openAtLogin", value)}
+        onChange={(value: boolean) => changeConfig('openAtLogin', value)}
       />
       <Checkbox
         label="Show in menu bar"
         value={state.showInTray}
-        onChange={(value: boolean) => changeConfig("showInTray", value)}
+        onChange={(value: boolean) => changeConfig('showInTray', value)}
       />
       <Checkbox
         label="Developer Mode"
         value={state.developerMode}
-        onChange={(value: boolean) => changeConfig("developerMode", value)}
+        onChange={(value: boolean) => changeConfig('developerMode', value)}
       />
       <Checkbox
         label="Clean results on hide"
         value={state.cleanOnHide}
-        onChange={(value: boolean) => changeConfig("cleanOnHide", value)}
+        onChange={(value: boolean) => changeConfig('cleanOnHide', value)}
       />
       <Checkbox
         label="Select input on show"
         value={state.selectOnShow}
-        onChange={(value: boolean) => changeConfig("selectOnShow", value)}
+        onChange={(value: boolean) => changeConfig('selectOnShow', value)}
       />
     </div>
   );

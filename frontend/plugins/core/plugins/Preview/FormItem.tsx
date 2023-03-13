@@ -1,10 +1,10 @@
-import { FormComponents } from "@rokii/ui";
+import { FormComponents } from '@rokii/ui';
 
 const { Checkbox, Select, Text } = FormComponents;
 
 const components = {
   bool: Checkbox,
-  option: Select,
+  option: Select
 };
 
 type Props = {
@@ -19,13 +19,13 @@ export const FormItem = ({ type, value, options, ...props }: Props) => {
   let actualValue = value;
   if (Component === Select) {
     // when the value is a string, we need to find the option that matches it
-    if (typeof value === "string" && options) {
+    if (typeof value === 'string' && options) {
       actualValue = options.find((option) => option.value === value);
     }
   }
 
   return (
-    // @ts-ignore
+    // @ts-expect-error Not all components have type as a prop
     // TODO: fix this
     <Component type={type} value={actualValue} options={options} {...props} />
   );

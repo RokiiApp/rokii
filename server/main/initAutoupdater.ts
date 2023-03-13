@@ -1,12 +1,12 @@
-import { autoUpdater } from "electron-updater";
-import { CHANNELS } from "../common/constants/events";
-import { send } from "../common/ipc";
+import { autoUpdater } from 'electron-updater';
+import { CHANNELS } from '../common/constants/events';
+import { send } from '../common/ipc';
 
 const TEN_SECONDS_IN_MS = 10 * 1000;
 const ONE_HOUR_IN_MS = 60 * 60 * 1000;
 
-export function initAutoUpdater() {
-  if (process.env.NODE_ENV === "development" || process.platform === "linux") {
+export function initAutoUpdater () {
+  if (process.env.NODE_ENV === 'development' || process.platform === 'linux') {
     return;
   }
 

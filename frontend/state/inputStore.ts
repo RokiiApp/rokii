@@ -1,4 +1,4 @@
-import { create } from "zustand";
+import { create } from 'zustand';
 
 interface InputStore {
     /**
@@ -13,9 +13,9 @@ interface InputStore {
 }
 
 export const useInputStore = create<InputStore>((set) => ({
-    term: "",
-    prevTerm: "",
-    inputFocused: true,
-    updateTerm: (term) => set((state) => ({ term, prevTerm: state.term })),
-    setInputFocused: (focused) => set({ inputFocused: focused })
+  term: '',
+  prevTerm: '',
+  inputFocused: true,
+  updateTerm: (term) => set((state) => ({ term, prevTerm: state.term })),
+  setInputFocused: (focused) => set({ inputFocused: focused })
 }));

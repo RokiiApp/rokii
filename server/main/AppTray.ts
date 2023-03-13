@@ -1,7 +1,7 @@
-import { Menu, Tray, app, MenuItemConstructorOptions } from "electron";
-import { showWindowWithTerm } from "./services/showWindowWithTerm";
-import { toggleWindow } from "./services/toggleWindow";
-import { checkForUpdates } from "./services/checkForUpdates";
+import { Menu, Tray, app, MenuItemConstructorOptions } from 'electron';
+import { showWindowWithTerm } from './services/showWindowWithTerm';
+import { toggleWindow } from './services/toggleWindow';
+import { checkForUpdates } from './services/checkForUpdates';
 
 type TrayOptions = {
   src: string | Electron.NativeImage;
@@ -17,7 +17,7 @@ export class AppTray {
   options: TrayOptions;
   tray: Electron.Tray | null;
 
-  constructor(options: TrayOptions) {
+  constructor (options: TrayOptions) {
     this.tray = null;
     this.options = options;
   }
@@ -25,79 +25,79 @@ export class AppTray {
   /**
    * Show application icon in menu bar
    */
-  show() {
+  show () {
     const tray = new Tray(this.options.src);
-    tray.setToolTip("RoKii");
+    tray.setToolTip('RoKii');
     tray.setContextMenu(this.buildMenu());
     this.tray = tray;
   }
 
-  setIsDev(isDev: boolean) {
+  setIsDev (isDev: boolean) {
     this.options.isDev = isDev;
     if (this.tray) {
       this.tray.setContextMenu(this.buildMenu());
     }
   }
 
-  buildMenu() {
+  buildMenu () {
     const { mainWindow, backgroundWindow, isDev } = this.options;
 
-    const separator = { type: "separator" } as const;
+    const separator = { type: 'separator' } as const;
 
     const template: MenuItemConstructorOptions[] = [
       {
-        label: "Toggle RoKii",
-        click: () => toggleWindow(mainWindow),
+        label: 'Toggle RoKii',
+        click: () => toggleWindow(mainWindow)
       },
       separator,
       {
-        label: "Plugins",
-        click: () => showWindowWithTerm(mainWindow, "plugins"),
+        label: 'Plugins',
+        click: () => showWindowWithTerm(mainWindow, 'plugins')
       },
       {
-        label: "Preferences...",
-        click: () => showWindowWithTerm(mainWindow, "RoKii Settings"),
+        label: 'Preferences...',
+        click: () => showWindowWithTerm(mainWindow, 'RoKii Settings')
       },
       separator,
       {
-        label: "Check for updates",
-        click: checkForUpdates,
+        label: 'Check for updates',
+        click: checkForUpdates
       },
-      separator,
+      separator
     ];
 
     if (isDev) {
       template.push(separator);
       template.push({
-        label: "Development",
+        label: 'Development',
         submenu: [
           {
-            label: "DevTools (main)",
-            accelerator: "CmdOrCtrl+Shift+I",
+            label: 'DevTools (main)',
+            accelerator: 'CmdOrCtrl+Shift+I',
             click: () =>
-              mainWindow.webContents.openDevTools({ mode: "detach" }),
+              mainWindow.webContents.openDevTools({ mode: 'detach' })
           },
           {
-            label: "DevTools (background)",
-            accelerator: "CmdOrCtrl+Shift+B",
+            label: 'DevTools (background)',
+            accelerator: 'CmdOrCtrl+Shift+B',
             click: () =>
-              backgroundWindow.webContents.openDevTools({ mode: "detach" }),
+              backgroundWindow.webContents.openDevTools({ mode: 'detach' })
           },
           {
-            label: "Reload",
+            label: 'Reload',
             click: () => {
               app.relaunch();
               app.exit();
-            },
-          },
-        ],
+            }
+          }
+        ]
       });
     }
 
     template.push(separator);
     template.push({
-      label: "Quit RoKii",
-      click: () => app.quit(),
+      label: 'Quit RoKii',
+      click: () => app.quit()
     });
 
     const menu = Menu.buildFromTemplate(template);
@@ -109,7 +109,7 @@ export class AppTray {
   /**
    * Hide icon in menu bar
    */
-  hide() {
+  hide () {
     if (this.tray) {
       this.tray.destroy();
       this.tray = null;

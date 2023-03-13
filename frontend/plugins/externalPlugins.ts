@@ -1,14 +1,14 @@
-import type { PluginModule } from "@rokii/types";
+import type { PluginModule } from '@rokii/types';
 
-import debounce from "just-debounce";
-import { watch } from "chokidar";
-import { parse } from "path";
-import { initPlugin } from "@/services/plugins/initializePlugins";
+import debounce from 'just-debounce';
+import { watch } from 'chokidar';
+import { parse } from 'path';
+import { initPlugin } from '@/services/plugins/initializePlugins';
 import {
   MODULES_DIRECTORY,
   ensureRokiNeededFiles,
-  pluginSettings,
-} from "@/services/plugins";
+  pluginSettings
+} from '@/services/plugins';
 
 const plugins: Record<string, PluginModule> = {};
 
@@ -18,14 +18,14 @@ const requirePlugin = (pluginPath: string) => {
 
     // Fallback for plugins with structure like `{default: {fn: ...}}`
     const keys = Object.keys(plugin);
-    if (keys.length === 1 && keys.includes("default")) {
+    if (keys.length === 1 && keys.includes('default')) {
       return plugin.default;
     }
 
     return plugin;
   } catch (error) {
     // catch all errors from plugin loading
-    console.log("Error requiring", pluginPath);
+    console.log('Error requiring', pluginPath);
     console.log(error);
   }
 };
@@ -36,7 +36,7 @@ const requirePlugin = (pluginPath: string) => {
 const isPluginValid = (plugin: PluginModule) =>
   plugin &&
   // Check existing of main plugin function
-  typeof plugin.fn === "function" &&
+  typeof plugin.fn === 'function' &&
   // Check that plugin function accepts 0 or 1 argument
   plugin.fn.length <= 1;
 
@@ -58,7 +58,7 @@ const setupPluginsWatcher = () => {
   if ((window as any).isBackground) return;
 
   const pluginsWatcher = watch(MODULES_DIRECTORY, { depth: 1 });
-  pluginsWatcher.on("unlinkDir", (pluginPath) => {
+  pluginsWatcher.on('unlinkDir', (pluginPath) => {
     const { base, dir } = parse(pluginPath);
     if (base.match(/node_modules/) || base.match(/^@/)) return;
     if (!dir.match(/node_modules$/) && !dir.match(/@.+$/)) return;
@@ -71,7 +71,7 @@ const setupPluginsWatcher = () => {
     console.log(`[${pluginName}] Plugin removed`);
   });
 
-  pluginsWatcher.on("addDir", (pluginPath) => {
+  pluginsWatcher.on('addDir', (pluginPath) => {
     const { base, dir } = parse(pluginPath);
 
     if (base.match(/node_modules/) || base.match(/^@/)) return;
@@ -84,21 +84,21 @@ const setupPluginsWatcher = () => {
       console.log(`Path: ${pluginPath}...`);
       const plugin = requirePlugin(pluginPath);
       if (!isPluginValid(plugin)) {
-        console.log("Plugin is not valid, skipped");
+        console.log('Plugin is not valid, skipped');
         console.groupEnd();
         return;
       }
       if (!pluginSettings.validate(plugin)) {
-        console.log("Invalid plugins settings");
+        console.log('Invalid plugins settings');
         console.groupEnd();
         return;
       }
 
-      console.log("Loaded.");
+      console.log('Loaded.');
       const requirePath = window.require.resolve(pluginPath);
       const watcher = watch(pluginPath, { depth: 0 });
       watcher.on(
-        "change",
+        'change',
         debounce(() => {
           console.log(`[${pluginName}] Update plugin`);
           delete window.require.cache[requirePath];

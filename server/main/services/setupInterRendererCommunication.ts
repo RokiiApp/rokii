@@ -1,6 +1,6 @@
-import { BrowserWindow } from "electron";
-import { CHANNELS } from "../../common/constants/events";
-import { on } from "../../common/ipc";
+import { BrowserWindow } from 'electron';
+import { CHANNELS } from '../../common/constants/events';
+import { on } from '../../common/ipc';
 
 /**
  * As electron does not support communication between renderer processes,

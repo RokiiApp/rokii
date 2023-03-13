@@ -1,6 +1,6 @@
-import { readdir } from "fs/promises";
-import { MODULES_DIRECTORY } from "@/services/plugins";
-import { getSymlinkedPluginsInFolder, isScopeDir } from "./fsUtils";
+import { readdir } from 'fs/promises';
+import { MODULES_DIRECTORY } from '@/services/plugins';
+import { getSymlinkedPluginsInFolder, isScopeDir } from './fsUtils';
 
 const getNotScopedPluginNames = async () => getSymlinkedPluginsInFolder();
 
@@ -26,7 +26,7 @@ const getScopedPluginNames = async () => {
 export default async () => {
   const [notScoppedPluginNames, scopedPluginNames] = await Promise.all([
     getNotScopedPluginNames(),
-    getScopedPluginNames(),
+    getScopedPluginNames()
   ]);
   return [...notScoppedPluginNames, ...scopedPluginNames];
 };

@@ -10,7 +10,11 @@
     "root": true,
     "rules": {
         "@typescript-eslint/no-namespace": "off",
-        "no-undef": "off"
+        "no-undef": "off",
+        "no-unused-vars": "off",
+        "@typescript-eslint/no-unused-vars": "error",
+        "no-use-before-define": "off",
+        "@typescript-eslint/no-use-before-define": "error"
     },
     "parserOptions": {
         "ecmaVersion": 2022,

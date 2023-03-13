@@ -1,5 +1,5 @@
-import { BrowserWindow } from "electron";
-import { join } from "path";
+import { BrowserWindow } from 'electron';
+import { join } from 'path';
 
 export const createBackgroundWindow = () => {
   const backgroundWindow = new BrowserWindow({
@@ -7,18 +7,18 @@ export const createBackgroundWindow = () => {
     webPreferences: {
       nodeIntegration: true,
       nodeIntegrationInSubFrames: false,
-      contextIsolation: false,
-    },
+      contextIsolation: false
+    }
   });
 
   if (process.env.VITE_DEV_SERVER_URL) {
-    const url = join(process.env.VITE_DEV_SERVER_URL, "worker.html");
+    const url = join(process.env.VITE_DEV_SERVER_URL, 'worker.html');
     // electron-vite-vue#298
     backgroundWindow.loadURL(url);
     // Open devTool if the app is not packaged
-    backgroundWindow.webContents.openDevTools({ mode: "detach" });
+    backgroundWindow.webContents.openDevTools({ mode: 'detach' });
   } else {
-    const indexHtml = join(process.env.DIST, "worker.html");
+    const indexHtml = join(process.env.DIST, 'worker.html');
     backgroundWindow.loadFile(indexHtml);
   }
 
