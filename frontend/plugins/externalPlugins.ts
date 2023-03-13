@@ -14,12 +14,14 @@ const plugins: Record<string, PluginModule> = {};
 
 const requirePlugin = (pluginPath: string) => {
   try {
-    let plugin = window.require(pluginPath);
+    const plugin = window.require(pluginPath);
+
     // Fallback for plugins with structure like `{default: {fn: ...}}`
     const keys = Object.keys(plugin);
-    if (keys.length === 1 && keys[0] === "default") {
-      plugin = plugin.default;
+    if (keys.length === 1 && keys.includes("default")) {
+      return plugin.default;
     }
+
     return plugin;
   } catch (error) {
     // catch all errors from plugin loading
