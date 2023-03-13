@@ -14,7 +14,7 @@ fs.writeFileSync(path.join(__dirname, '.debug.env'), envContent.join('\n'))
 // bootstrap
 spawn(
   // TODO: terminate `npm run dev` when Debug exits.
-  process.platform === 'win32' ? 'npm.cmd' : 'npm',
+  'npm.cmd',
   ['run', 'dev'],
   {
     stdio: 'inherit',

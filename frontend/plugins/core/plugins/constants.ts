@@ -10,7 +10,7 @@ export const PLUGINS_BLACKLIST = [
 ] as readonly string[];
 
 export const DEFAULT_PLUGINS = [
-  process.platform === 'darwin' ? '@cerebroapp/cerebro-mac-apps' : '@cerebroapp/cerebro-basic-apps',
+  '@cerebroapp/cerebro-basic-apps',
   '@cerebroapp/search',
   'cerebro-math',
   'cerebro-converter',

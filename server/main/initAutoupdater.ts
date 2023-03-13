@@ -6,7 +6,7 @@ const TEN_SECONDS_IN_MS = 10 * 1000;
 const ONE_HOUR_IN_MS = 60 * 60 * 1000;
 
 export function initAutoUpdater () {
-  if (process.env.NODE_ENV === 'development' || process.platform === 'linux') {
+  if (process.env.NODE_ENV === 'development') {
     return;
   }
 
