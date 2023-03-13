@@ -10,7 +10,6 @@
 }
 
 .resultsList {
-  overflow-y: hidden !important;
   width: 100%;
   min-width: 250px;
   height: 100%;
@@ -23,6 +22,7 @@
   align-items: center;
   display: flex;
   max-height: 100%;
+  overflow-y: scroll;
 }
 
 .preview::before,
