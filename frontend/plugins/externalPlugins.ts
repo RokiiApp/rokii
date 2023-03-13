@@ -1,7 +1,7 @@
 import type { PluginModule } from "@rokii/types";
 
 import debounce from "just-debounce";
-import chokidar from "chokidar";
+import { watch } from "chokidar";
 import { parse } from "path";
 import { initPlugin } from "@/services/plugins/initializePlugins";
 import {
@@ -57,7 +57,7 @@ const getPluginName = (pluginPath: string) => {
 const setupPluginsWatcher = () => {
   if ((window as any).isBackground) return;
 
-  const pluginsWatcher = chokidar.watch(MODULES_DIRECTORY, { depth: 1 });
+  const pluginsWatcher = watch(MODULES_DIRECTORY, { depth: 1 });
   pluginsWatcher.on("unlinkDir", (pluginPath) => {
     const { base, dir } = parse(pluginPath);
     if (base.match(/node_modules/) || base.match(/^@/)) return;
@@ -96,7 +96,7 @@ const setupPluginsWatcher = () => {
 
       console.log("Loaded.");
       const requirePath = window.require.resolve(pluginPath);
-      const watcher = chokidar.watch(pluginPath, { depth: 0 });
+      const watcher = watch(pluginPath, { depth: 0 });
       watcher.on(
         "change",
         debounce(() => {

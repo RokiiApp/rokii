@@ -1,0 +1,29 @@
+{
+    "extends": [
+        "plugin:@typescript-eslint/recommended",
+        "semistandard"
+    ],
+    "parser": "@typescript-eslint/parser",
+    "plugins": [
+        "@typescript-eslint"
+    ],
+    "root": true,
+    "rules": {
+        "@typescript-eslint/no-namespace": "off",
+        "no-undef": "off"
+    },
+    "parserOptions": {
+        "ecmaVersion": 2022,
+        "sourceType": "module"
+    },
+    "env": {
+        "browser": true,
+        "node": true,
+        "es2020": true
+    },
+    "ignorePatterns": [
+        "**/dist-server/*",
+        "**/dist/*",
+        "**/node_modules/*"
+    ]
+}
