@@ -1,5 +1,5 @@
 .inputWrapper {
-    padding: 0 12px;
+    padding: 0 10px;
     display: flex;
     gap: 12px;
     align-items: center;
@@ -17,10 +17,21 @@
 
 .backButton {
     background-color: var(--secondary-font-color);
-    width: 30px;
-    height: 30px;
+    width: 24px;
+    height: 24px;
+    padding: 2px;
     border-radius: 50%;
     border: 0.5px;
+    border: 0;
+    object-position: -1.5px 0px;
+}
+
+.backButton:hover,
+.backButton:focus {
+    outline: none;
+    background-color: var(--accent-color);
+    opacity: 0.8;
+
 }
 
 .autocomplete {
