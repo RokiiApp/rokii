@@ -11,6 +11,7 @@ import { useRokiStore } from '@/state/rokiStore';
 import { useGetPluginResults } from '@/main/hooks/useGetPluginResults';
 import { wrapEvent } from '@/main/utils/events';
 import { PluginPreview, PluginResultWithPreview } from '@/main/components/PluginPreview';
+import { useInputStore } from '@/state/inputStore';
 
 type SelectItemFn = (
   item: PluginResult,
@@ -19,7 +20,8 @@ type SelectItemFn = (
     | React.MouseEvent<HTMLDivElement>
 ) => void;
 
-const ResultsList = ({ term }: { term: string }) => {
+const ResultsList = () => {
+  const term = useInputStore((s) => s.term);
   const electronWindow = useRef(getCurrentWindow());
   useGetPluginResults(term);
 
