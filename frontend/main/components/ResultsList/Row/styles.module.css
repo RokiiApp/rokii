@@ -2,7 +2,7 @@
   border-radius: 5px;
   position: relative;
   display: flex;
-  gap: 5px;
+  gap: 8px;
   flex-wrap: nowrap;
   flex-direction: row;
   justify-content: flex-start;
@@ -35,7 +35,6 @@
   font-weight: 300;
   color: var(--result-subtitle-color);
   max-width: 100%;
-
 }
 
 .selected {
@@ -55,7 +54,6 @@
   display: flex;
   gap: 5px;
   flex-wrap: wrap;
-  flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
   justify-content: flex-start;
 }

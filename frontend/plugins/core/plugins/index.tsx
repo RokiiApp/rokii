@@ -23,10 +23,10 @@ function divideByFilter<T> (array: T[], filter: (element: T) => boolean) {
 type Category = readonly [string, (plugin: PluginInfo) => boolean];
 
 const categories: readonly Category[] = [
-  ['🧰 Development', (plugin) => Boolean(plugin.isDebugging)],
-  ['🆕 Updates', (plugin) => Boolean(plugin.isUpdateAvailable)],
-  ['✅ Installed', (plugin) => Boolean(plugin.isInstalled)],
-  ['🌐 Available', (plugin) => Boolean(plugin.name)]
+  ['Development', (plugin) => Boolean(plugin.isDebugging)],
+  ['Updates', (plugin) => Boolean(plugin.isUpdateAvailable)],
+  ['Installed', (plugin) => Boolean(plugin.isInstalled)],
+  ['Available', (plugin) => Boolean(plugin.name)]
 ] as const;
 
 const updatePlugin = async (update: PluginContext['update'], name: string) => {
@@ -35,12 +35,11 @@ const updatePlugin = async (update: PluginContext['update'], name: string) => {
   // TODO: This is a hack to get the updated plugin- need to find a better way
   const updatedPlugin = plugins.find((plugin) => plugin.name === name)!;
 
-  const title = `${format.name(updatedPlugin.name)} (${format.version(
-    updatedPlugin
-  )})`;
+  const title = `${format.name(updatedPlugin.name)}`;
 
   update(name, {
     title,
+    subtitle: format.version(updatedPlugin),
     getPreview: () => (
       <Preview
         plugin={updatedPlugin}
@@ -54,16 +53,17 @@ const updatePlugin = async (update: PluginContext['update'], name: string) => {
 const pluginToResult = (plugin: PluginInfo | string, update: PluginContext['update']) => {
   if (typeof plugin === 'string') return { title: plugin };
 
-  const title = `${format.name(plugin.name)} (${format.version(plugin)})`;
+  const title = `${format.name(plugin.name)}`;
+  const subtitle = format.version(plugin);
+  const repoLink = plugin.repo;
 
-  const onSelect = plugin.repo
-    ? () => shell.openExternal(plugin.repo!)
-    : undefined;
+  const onSelect = repoLink ? () => shell.openExternal(repoLink) : undefined;
 
   return {
     icon,
     id: plugin.name,
     title,
+    subtitle,
     onSelect,
     getPreview: () => (
       <Preview
