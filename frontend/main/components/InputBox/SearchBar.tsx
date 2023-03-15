@@ -11,6 +11,7 @@ import { wrapEvent } from '@/main/utils/events';
 import { useEventsSubscription } from '@/main/hooks/useEventsSubscription';
 import { useInputStore } from '@/state/inputStore';
 import { CHANNELS } from 'common/constants/events';
+import { useHashLocation } from '@/main/hooks/useHashLocation';
 
 type SelectItemFn = (
   item: PluginResult,
@@ -20,6 +21,7 @@ type SelectItemFn = (
 ) => void;
 
 export const SearchBar = () => {
+  const [location, navigate] = useHashLocation();
   const { current: electronWindow } = useRef(getCurrentWindow());
 
   const moveCursor = useRokiStore((s) => s.moveCursor);
@@ -171,7 +173,7 @@ export const SearchBar = () => {
         keyActions.select();
         break;
       case 'Escape':
-        electronWindow.hide();
+        location === '/' ? electronWindow.hide() : navigate('/');
         break;
     }
   };

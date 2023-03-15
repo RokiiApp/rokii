@@ -16,12 +16,14 @@ export const Rokii = () => {
     <div className={styles.rokiContainer}>
       <InputBox />
 
-      <Router hook={useHashLocation}>
-        <Route path='/'>
-          <ResultsList />
-        </Route>
-        <Route path='/:plugin' component={PluginPage} />
-      </Router>
+      <div className={styles.resultsContainer}>
+        <Router hook={useHashLocation}>
+          <Route path='/'>
+            <ResultsList />
+          </Route>
+          <Route path='/:plugin' component={PluginPage} />
+        </Router>
+      </div>
 
       <StatusBar />
     </div>

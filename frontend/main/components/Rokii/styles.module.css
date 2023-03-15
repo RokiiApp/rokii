@@ -8,3 +8,11 @@
 ::-webkit-scrollbar {
   display: none;
 }
+
+.resultsContainer {
+  padding: 6px 12px;
+  height: 100%;
+  max-width: 100%;
+  border-top: var(--main-border);
+  overflow: hidden;
+}

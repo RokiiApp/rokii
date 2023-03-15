@@ -11,7 +11,7 @@
   cursor: pointer;
   box-sizing: border-box;
   height: 45px;
-  padding: 10px 12px;
+  padding: 10px 10px;
   align-items: center;
   color: var(--main-font-color);
   background: var(--result-background);

@@ -1,12 +1,7 @@
 .wrapper {
-  padding: 6px 8px;
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
-  border-top: var(--main-border);
-  height: 100%;
-  position: relative;
-  overflow-y: hidden;
 }
 
 .resultsList {
