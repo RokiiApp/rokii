@@ -1,12 +1,11 @@
 import { Router, Route } from 'wouter';
 import { useHashLocation } from '@/main/hooks/useHashLocation';
 
-import ResultsList from '../ResultsList';
-import { StatusBar } from '../StatusBar';
-import styles from './styles.module.css';
-
+import ResultsList from '@/main/components/ResultsList';
+import { StatusBar } from '@/main/components/StatusBar';
 import { PluginPage } from '@/main/components/PluginPage';
 import { InputBox } from '@/main/components/InputBox';
+import styles from './styles.module.css';
 
 /**
  * Main search container

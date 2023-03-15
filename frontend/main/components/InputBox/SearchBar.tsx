@@ -25,6 +25,7 @@ export const SearchBar = () => {
   const { current: electronWindow } = useRef(getCurrentWindow());
 
   const moveCursor = useRokiStore((s) => s.moveCursor);
+  const setSelected = useRokiStore((s) => s.setSelected);
 
   const [term, prevTerm, updateTerm, setInputFocused] = useInputStore(s => [s.term, s.prevTerm, s.updateTerm, s.setInputFocused]);
 
@@ -71,8 +72,6 @@ export const SearchBar = () => {
  */
   const onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     const highlighted = getHighlightedResult();
-    // TODO: go to first result on cmd+up and last result on cmd+down
-
     if (highlighted?.onKeyDown) highlighted.onKeyDown(event);
 
     if (event.defaultPrevented) return;
@@ -139,6 +138,32 @@ export const SearchBar = () => {
         if (result) return selectItem(result, event);
       }
 
+      // Select element on control+arrow
+      if (event.code === 'ArrowUp' || event.code === 'PageUp') {
+        setSelected(0);
+        event.preventDefault();
+      }
+      if (event.code === 'ArrowDown' || event.code === 'PageDown') {
+        setSelected(results.length - 1);
+        event.preventDefault();
+      }
+      if (event.code === 'ArrowRight') {
+        if (results.length > selected + 9) {
+          setSelected(selected + 9);
+        } else {
+          setSelected(results.length - 1);
+        }
+        return;
+      }
+      if (event.code === 'ArrowLeft') {
+        if (selected - 9 > 0) {
+          setSelected(selected - 9);
+        } else {
+          setSelected(0);
+        }
+        return;
+      }
+
       // Lightweight vim-mode: cmd/ctrl + jklo
       switch (event.code) {
         case 'KeyJ':
@@ -183,7 +208,6 @@ export const SearchBar = () => {
       spellCheck={false}
       autoFocus
       placeholder='Search in Rokii...'
-      id='main-input'
       ref={mainInput}
       value={term}
       className={styles.input}
