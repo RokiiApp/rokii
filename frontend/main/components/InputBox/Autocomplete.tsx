@@ -11,8 +11,6 @@ export const Autocomplete = () => {
   const autocompleteTerm = getAutocompleteValue(results[selected], term);
 
   return autocompleteTerm
-    ? (
-    <div className={styles.autocomplete}>{autocompleteTerm}</div>
-      )
+    ? <input tabIndex={-1} disabled className={styles.autocomplete} value={autocompleteTerm} />
     : null;
 };

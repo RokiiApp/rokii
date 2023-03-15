@@ -3,7 +3,6 @@ import styles from './styles.module.css';
 import { useRef } from 'react';
 import { clipboard } from 'electron';
 import { getCurrentWindow } from '@electron/remote';
-import { focusableSelector } from '@rokii/ui';
 
 import { getAutocompleteValue } from '@/main/utils/getAutocompleteValue';
 import { useRokiStore } from '@/state/rokiStore';
@@ -11,6 +10,7 @@ import { cursorInEndOfInput } from '@/main/utils/cursorInEndOfInput';
 import { wrapEvent } from '@/main/utils/events';
 import { useEventsSubscription } from '@/main/hooks/useEventsSubscription';
 import { useInputStore } from '@/state/inputStore';
+import { CHANNELS } from 'common/constants/events';
 
 type SelectItemFn = (
   item: PluginResult,
@@ -18,17 +18,6 @@ type SelectItemFn = (
     | React.KeyboardEvent<HTMLDivElement>
     | React.MouseEvent<HTMLDivElement>
 ) => void;
-
-/**
- * Set focus to first focusable element in preview
- */
-const focusPreview = () => {
-  const previewDom = document.getElementById('preview');
-  const firstFocusable = previewDom?.querySelector<any>(focusableSelector);
-  if (firstFocusable) {
-    firstFocusable.focus();
-  }
-};
 
 export const SearchBar = () => {
   const { current: electronWindow } = useRef(getCurrentWindow());
@@ -97,7 +86,7 @@ export const SearchBar = () => {
             // Autocomplete by arrow right only if autocomple value is shown
             autocomplete(event);
           } else {
-            focusPreview();
+            electronWindow.webContents.send(CHANNELS.FocusPreview);
             event.preventDefault();
           }
         }
@@ -187,17 +176,19 @@ export const SearchBar = () => {
     }
   };
 
-  return <input
-    spellCheck={false}
-    autoFocus
-    placeholder="Search in Rokii..."
-    id="main-input"
-    ref={mainInput}
-    value={term}
-    className={styles.input}
-    onChange={(e) => updateTerm(e.target.value)}
-    onKeyDown={onKeyDown}
-    onFocus={() => setInputFocused(true)}
-    onBlur={() => setInputFocused(false)}
-  />;
+  return (
+    <input
+      spellCheck={false}
+      autoFocus
+      placeholder='Search in Rokii...'
+      id='main-input'
+      ref={mainInput}
+      value={term}
+      className={styles.input}
+      onChange={(e) => updateTerm(e.target.value)}
+      onKeyDown={onKeyDown}
+      onFocus={() => setInputFocused(true)}
+      onBlur={() => setInputFocused(false)}
+    />
+  );
 };

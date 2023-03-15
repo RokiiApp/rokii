@@ -4,7 +4,9 @@ export const CHANNELS = {
   ClearInput: 'clear-input',
   UpdateSettings: 'update-settings',
   ShowTerm: 'show-term',
-  RendererToRenderer: 'renderer-to-renderer'
+  RendererToRenderer: 'renderer-to-renderer',
+  FocusInput: 'focus-input',
+  FocusPreview: 'focus-preview'
 } as const;
 
 export type ChannelInterfaces = {
@@ -20,6 +22,8 @@ export type ChannelInterfaces = {
         message: string,
         payload: any,
     },
+    [CHANNELS.FocusInput]: undefined,
+    [CHANNELS.FocusPreview]: undefined,
 }
 
 export type ChannelInterfacesWithoutNeccesaryArgs = {

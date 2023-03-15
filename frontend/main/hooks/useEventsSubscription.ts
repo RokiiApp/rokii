@@ -9,6 +9,10 @@ import { useEffect } from 'react';
 export const useEventsSubscription = (electronWindow: BrowserWindow, mainInput: any) => {
   const updateTerm = useInputStore(s => s.updateTerm);
 
+  const onFocusInputRequest = () => {
+    mainInput.current?.focus();
+  };
+
   const onDocumentKeydown = (event: KeyboardEvent) => {
     if (event.key === 'Escape') {
       event.preventDefault();
@@ -29,6 +33,7 @@ export const useEventsSubscription = (electronWindow: BrowserWindow, mainInput: 
     electronWindow.removeAllListeners('show');
     ipcRenderer.removeAllListeners(CHANNELS.ClearInput);
     ipcRenderer.removeAllListeners(CHANNELS.ShowTerm);
+    ipcRenderer.removeAllListeners(CHANNELS.FocusInput);
   };
 
   useEffect(() => {
@@ -43,6 +48,7 @@ export const useEventsSubscription = (electronWindow: BrowserWindow, mainInput: 
 
     on(CHANNELS.ClearInput, () => updateTerm(''));
     on(CHANNELS.ShowTerm, (_, term) => updateTerm(term));
+    on(CHANNELS.FocusInput, onFocusInputRequest);
 
     // function to be called when unmounted
     return () => {

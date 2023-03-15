@@ -52,7 +52,7 @@ export class AppTray {
       separator,
       {
         label: 'Plugins',
-        click: () => showWindowWithTerm(mainWindow, 'plugins')
+        click: () => showWindowWithTerm(mainWindow, 'plugins ')
       },
       {
         label: 'Preferences...',

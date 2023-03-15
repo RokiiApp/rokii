@@ -10,7 +10,7 @@ import Row from './Row';
 import { useRokiStore } from '@/state/rokiStore';
 import { useGetPluginResults } from '@/main/hooks/useGetPluginResults';
 import { wrapEvent } from '@/main/utils/events';
-import { PluginPreview, PluginResultWithPreview } from './PluginPreview';
+import { PluginPreview, PluginResultWithPreview } from '@/main/components/PluginPreview';
 
 type SelectItemFn = (
   item: PluginResult,

@@ -22,10 +22,10 @@ export const Rokii = () => {
       <InputBox />
 
       <Router hook={useHashLocation}>
-        <Route path="/" >
+        <Route path='/'>
           <ResultsList term={term} />
         </Route>
-        <Route path="/:plugin" component={PluginPage} />
+        <Route path='/:plugin' component={PluginPage} />
       </Router>
 
       {statusBarText && <StatusBar value={statusBarText} />}
