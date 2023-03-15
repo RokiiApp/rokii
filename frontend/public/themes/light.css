@@ -3,9 +3,11 @@
   --main-background-color: rgba(255, 255, 255, 1);
   --main-font: system, sans-serif;
   --main-font-color: #000000;
+  --accent-color: #7b33ff;
 
   /* border styles */
-  --main-border: 1px solid #eee;
+  --main-border: 0.5px solid #eee;
+  --border-color: #eee;
 
   /* Secondary fonts and colors */
   --secondary-font-color: #999;
@@ -20,22 +22,10 @@
   --selected-result-subtitle-color: var(--result-subtitle-color);
   --selected-result-background: rgba(18, 110, 219, 1);
 
-  /* scrollbar */
-  --scroll-background: var(--main-background-color);
-  --scroll-track: #e0e0e0;
-  --scroll-track-active: var(--scroll-track);
-  --scroll-track-hover: var(--scroll-track);
-  --scroll-thumb: var(--secondary-font-color);
-  --scroll-thumb-hover: var(--scroll-thumb);
-  --scroll-thumb-active: var(--main-font-color);
-  --scroll-width: 5px;
-  --scroll-height: 5px;
-
   /* inputs */
   --preview-input-background: white;
   --preview-input-color: var(--main-font-color);
-  --preview-input-border: 1px solid #ccc;
-
+  --preview-input-border: 0px;
   /* filter for previews */
   --preview-filter: none;
 }

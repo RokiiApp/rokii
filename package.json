@@ -1,6 +1,6 @@
 {
   "name": "rokii",
-  "version": "1.0.0",
+  "version": "1.0.0-alpha.1",
   "main": "dist-server/main/index.js",
   "description": "a new generation launcher",
   "author": "David Jiménez",
@@ -43,7 +43,7 @@
   },
   "dependencies": {
     "@electron/remote": "2.0.9",
-    "@rokii/ui": "1.0.1",
+    "@rokii/ui": "1.0.2",
     "@rokii/utils": "1.0.0",
     "chokidar": "3.5.3",
     "electron-store": "8.1.0",
