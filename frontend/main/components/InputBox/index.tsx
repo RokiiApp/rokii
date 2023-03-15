@@ -6,12 +6,15 @@ import { Autocomplete } from './Autocomplete';
 import { SearchBar } from './SearchBar';
 import { useHashLocation } from '@/main/hooks/useHashLocation';
 import { CHANNELS } from 'common/constants/events';
+import { useInputStore } from '@/state/inputStore';
 
 export const InputBox = () => {
   const [location, setLocation] = useHashLocation();
+  const updateTerm = useInputStore(s => s.updateTerm);
 
   useEffect(() => {
     getCurrentWindow().webContents.send(CHANNELS.FocusInput);
+    updateTerm('');
   }, [location]);
 
   const isRoot = location === '/';
