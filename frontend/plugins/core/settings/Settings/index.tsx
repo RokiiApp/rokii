@@ -5,7 +5,6 @@ import { FormComponents } from '@rokii/ui';
 import { themes } from 'common/themes';
 
 import Hotkey from './Hotkey';
-import countries from './countries';
 import styles from './styles.module.css';
 
 const { Select, Checkbox, Wrapper, Text } = FormComponents;
@@ -40,13 +39,6 @@ function Settings ({ get, set }: SettingsHandler) {
           onChange={(key) => changeConfig('hotkey', key)}
         />
       </Wrapper>
-      <Select
-        label="Country"
-        description="Choose your country so Rokii can better choose currency, language, etc."
-        value={countries.find((c) => c.value === state.country)}
-        options={countries}
-        onChange={(newValue) => newValue && changeConfig('country', newValue.value)}
-      />
       <Select
         label="Theme"
         value={themes.find((t) => t.value === state.theme)}
