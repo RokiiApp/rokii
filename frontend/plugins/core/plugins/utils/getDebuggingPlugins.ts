@@ -1,12 +1,12 @@
 import { readdir } from 'fs/promises';
-import { MODULES_DIRECTORY } from '@/services/plugins';
 import { getSymlinkedPluginsInFolder, isScopeDir } from './fsUtils';
+import { PLUGINS_NODE_MODULES_PATH } from '@/constants';
 
 const getNotScopedPluginNames = async () => getSymlinkedPluginsInFolder();
 
 const getScopedPluginNames = async () => {
   // Get all scoped folders
-  const dirContent = await readdir(MODULES_DIRECTORY);
+  const dirContent = await readdir(PLUGINS_NODE_MODULES_PATH);
   const scopeSubfolders = dirContent.filter(isScopeDir);
 
   const scopePluginsNamePromises = scopeSubfolders.map(async (scope) => {

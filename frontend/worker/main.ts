@@ -1,14 +1,14 @@
 import { pluginsService } from '@/plugins';
 import { on, send } from '@/services/rpc';
-import { pluginSettings, MODULES_DIRECTORY } from '@/services/plugins';
-import { RPCEvents } from '@/constants';
+import { pluginSettings } from '@/services/plugins';
+import { PLUGINS_NODE_MODULES_PATH, RPCEvents } from '@/constants';
 
 on(RPCEvents.InitializePluginAsync, ({ name }: { name: string }) => {
   const { corePlugins } = pluginsService;
   console.group(`Initialize async plugin ${name}`);
 
   try {
-    const plugin = corePlugins[name] || window.require(`${MODULES_DIRECTORY}/${name}`);
+    const plugin = corePlugins[name] || window.require(`${PLUGINS_NODE_MODULES_PATH}/${name}`);
     const { initializeAsync } = plugin;
 
     if (!initializeAsync) {

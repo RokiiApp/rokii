@@ -5,7 +5,7 @@ import { INITIAL_STATE } from '@/constants';
 import { create } from 'zustand';
 import { isResultValid } from './utils';
 
-interface RokiStore {
+export interface RokiStore {
   results: PluginResult[];
   /**
    * Index of selected result

@@ -1,7 +1,6 @@
-import path from 'node:path';
 import { ensureDir, existsSync, writeFileSync } from 'fs-extra';
 import npm from './npm';
-import { app } from '@electron/remote';
+import { PLUGINS_NODE_MODULES_PATH, PLUGINS_PACKAGE_JSON_PATH, PLUGINS_PATH, ROKII_PATH } from '@/constants';
 
 const ensureFile = (src: string, content = '') => {
   if (!existsSync(src)) {
@@ -18,17 +17,12 @@ const EMPTY_PACKAGE_JSON = JSON.stringify(
   2
 );
 
-export const rokiPath = path.join(app.getPath('appData'), 'rokii');
-export const pluginsPath = path.join(rokiPath, 'plugins');
-export const MODULES_DIRECTORY = path.join(pluginsPath, 'node_modules');
-export const PACKAGE_JSON_PATH = path.join(pluginsPath, 'package.json');
-
 export const ensureRokiNeededFiles = async () => {
-  await ensureDir(rokiPath);
-  await ensureDir(pluginsPath);
-  await ensureDir(MODULES_DIRECTORY);
-  ensureFile(PACKAGE_JSON_PATH, EMPTY_PACKAGE_JSON);
+  await ensureDir(ROKII_PATH);
+  await ensureDir(PLUGINS_PATH);
+  await ensureDir(PLUGINS_NODE_MODULES_PATH);
+  ensureFile(PLUGINS_PACKAGE_JSON_PATH, EMPTY_PACKAGE_JSON);
 };
 
-export const client = npm(pluginsPath);
+export const client = npm(PLUGINS_PATH);
 export { default as pluginSettings } from './settings';

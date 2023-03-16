@@ -5,10 +5,10 @@ import { watch } from 'chokidar';
 import { parse } from 'path';
 import { initPlugin } from '@/services/plugins/initializePlugins';
 import {
-  MODULES_DIRECTORY,
   ensureRokiNeededFiles,
   pluginSettings
 } from '@/services/plugins';
+import { PLUGINS_NODE_MODULES_PATH } from '@/constants';
 
 const plugins: Record<string, PluginModule> = {};
 
@@ -57,7 +57,7 @@ const getPluginName = (pluginPath: string) => {
 const setupPluginsWatcher = () => {
   if ((window as any).isBackground) return;
 
-  const pluginsWatcher = watch(MODULES_DIRECTORY, { depth: 1 });
+  const pluginsWatcher = watch(PLUGINS_NODE_MODULES_PATH, { depth: 1 });
   pluginsWatcher.on('unlinkDir', (pluginPath) => {
     const { base, dir } = parse(pluginPath);
     if (base.match(/node_modules/) || base.match(/^@/)) return;
