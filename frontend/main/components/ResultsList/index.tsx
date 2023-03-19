@@ -54,9 +54,6 @@ const ResultsList = () => {
     const attrs = {
       index,
       ...result,
-      // TODO: think about events
-      // In some cases action should be executed and window should be closed
-      // In some cases we should autocomplete value
       isSelected,
       onSelect: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) =>
         selectItem(result, event)

@@ -1,11 +1,14 @@
 import { useEffect } from 'react';
+import { useLocation } from 'wouter';
 import { pluginsService } from '@/plugins';
 import { DEFAULT_SCOPE } from '../utils/pluginDefaultScope';
 import { useRokiStore } from '@/state/rokiStore';
 import { pluginSettings } from '@/services/plugins';
 import { useInputStore } from '@/state/inputStore';
+import { displayCommands } from '@/services/commands/displayCommands';
 
 export const useGetPluginResults = (term: string) => {
+  const [, navigate] = useLocation();
   const updateTerm = useInputStore(s => s.updateTerm);
 
   const addResult = useRokiStore(s => s.addResult);
@@ -38,5 +41,7 @@ export const useGetPluginResults = (term: string) => {
         console.log('Error running plugin', name, error);
       }
     });
+
+    displayCommands(term, addResult, navigate);
   }, [term]);
 };
