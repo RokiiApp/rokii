@@ -43,5 +43,8 @@ export const useGetPluginResults = (term: string) => {
     });
 
     displayCommands(term, addResult, navigate);
+
+    // Reset results state on unmount so we don't have stale results and autocomplete values
+    return () => resetResultsState();
   }, [term]);
 };

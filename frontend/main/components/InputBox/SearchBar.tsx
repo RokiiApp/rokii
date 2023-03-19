@@ -8,7 +8,7 @@ import { getAutocompleteValue } from '@/main/utils/getAutocompleteValue';
 import { useRokiStore } from '@/state/rokiStore';
 import { cursorInEndOfInput } from '@/main/utils/cursorInEndOfInput';
 import { wrapEvent } from '@/main/utils/events';
-import { useEventsSubscription } from '@/main/hooks/useEventsSubscription';
+import { useSearchBarEventsSubscription } from '@/main/hooks/useSearchBarEventsSubscription';
 import { useInputStore } from '@/state/inputStore';
 import { CHANNELS } from 'common/constants/events';
 import { useHashLocation } from '@/main/hooks/useHashLocation';
@@ -32,7 +32,7 @@ export const SearchBar = () => {
   const [results, selected] = useRokiStore((s) => [s.results, s.selected]);
 
   const mainInput = useRef<HTMLInputElement>(null);
-  useEventsSubscription(electronWindow, mainInput);
+  useSearchBarEventsSubscription(electronWindow, mainInput);
 
   /**
    * Select item from results list

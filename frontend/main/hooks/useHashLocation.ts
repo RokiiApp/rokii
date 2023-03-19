@@ -2,7 +2,7 @@ import { useLocationProperty, navigate } from 'wouter/use-location';
 
 const hashLocation = () => window.location.hash.replace(/^#/, '') || '/';
 
-const hashNavigate = (to: any) => navigate('#' + to);
+const hashNavigate = (to: string) => navigate('#' + to);
 
 export const useHashLocation = () => {
   const location = useLocationProperty(hashLocation);

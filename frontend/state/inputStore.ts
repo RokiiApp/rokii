@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-interface InputStore {
+export interface InputStore {
     /**
      * Search term in main input
     */

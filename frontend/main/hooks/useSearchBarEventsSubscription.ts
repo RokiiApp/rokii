@@ -6,7 +6,7 @@ import { BrowserWindow, ipcRenderer } from 'electron';
 
 import { useEffect } from 'react';
 
-export const useEventsSubscription = (electronWindow: BrowserWindow, mainInput: any) => {
+export const useSearchBarEventsSubscription = (electronWindow: BrowserWindow, mainInput: any) => {
   const updateTerm = useInputStore(s => s.updateTerm);
 
   const onFocusInputRequest = () => {

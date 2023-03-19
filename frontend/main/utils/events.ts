@@ -1,10 +1,10 @@
 import { SelectEvent as ISelectEvent } from '@rokii/types';
 
 export class SelectEvent extends Event implements ISelectEvent {
-    altKey = false
-    ctrlKey = false
-    metaKey = false
-    shiftKey = false
+  altKey = false;
+  ctrlKey = false;
+  metaKey = false;
+  shiftKey = false;
 }
 
 /**
