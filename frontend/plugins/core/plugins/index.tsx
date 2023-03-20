@@ -6,7 +6,6 @@ import { getPlugins } from './utils/loadPlugins';
 import * as format from './utils/format';
 import icon from '../icon.png';
 import { Preview } from './Preview';
-import { useRokiStore } from '@/state/rokiStore';
 import { getCurrentWindow } from '@electron/remote';
 import { CHANNELS } from 'common/constants/events';
 
@@ -119,16 +118,5 @@ const fn: PluginModule['fn'] = async ({ term, display, hide, update }) => {
 const name = 'Manage plugins';
 const keyword = ['plugins'];
 
-const onMessage: PluginModule['onMessage'] = (type) => {
-  if (type === 'plugins:start-installation') {
-    useRokiStore.setState({ statusBarText: 'Installing default plugins...' });
-  }
-  if (type === 'plugins:finish-installation') {
-    setTimeout(() => {
-      useRokiStore.setState({ statusBarText: undefined });
-    }, 2000);
-  }
-};
-
-export { fn, name, keyword, onMessage, icon };
-export { default as initializeAsync } from './initializeAsync';
+export { fn, name, keyword, icon };
+export { initializeAsync } from './initializeAsync';

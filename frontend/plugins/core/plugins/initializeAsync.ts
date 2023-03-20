@@ -1,9 +1,7 @@
 import type { PluginModule } from '@rokii/types';
 import { client } from '@/services/plugins';
-import * as config from 'common/config';
 import { getPlugins } from './utils/loadPlugins';
-import { getInstalledPlugins } from './utils/getInstalledPlugins';
-import { DEFAULT_PLUGINS } from './constants';
+import { NpmActions } from '@/services/plugins/npm';
 
 /**
  * Check plugins for updates and start plugins autoupdater
@@ -14,7 +12,7 @@ async function checkForPluginUpdates () {
 
   const updatePromises = plugins
     .filter((p) => p.isUpdateAvailable === true)
-    .map((p) => () => client.update(p.name));
+    .map((p) => () => client[NpmActions.Update](p.name));
 
   await Promise.all(updatePromises);
 
@@ -28,38 +26,6 @@ async function checkForPluginUpdates () {
   setTimeout(checkForPluginUpdates, 12 * 60 * 60 * 1000);
 }
 
-/**
- * Migrate plugins: default plugins were extracted to separate packages
- * so if default plugins are not installed – start installation
- */
-async function migratePlugins (sendMessage: (data: any) => void) {
-  if (config.get('isMigratedPlugins')) {
-    // Plugins are already migrated
-    return;
-  }
-
-  console.log('Start installation of default plugins');
-
-  const installedPlugins = await getInstalledPlugins();
-
-  const promises = DEFAULT_PLUGINS.filter(
-    (plugin) => !installedPlugins.find((p) => p.name === plugin)
-  ).map((plugin) => () => client.install(plugin));
-
-  if (promises.length > 0) {
-    sendMessage('plugins:start-installation');
-  }
-
-  Promise.all(promises).then(() => {
-    console.log('All default plugins are installed!');
-    config.set('isMigratedPlugins', true);
-    sendMessage('plugins:finish-installation');
-  });
-}
-
-const initializeAsync: PluginModule['initializeAsync'] = async (sendMessage) => {
+export const initializeAsync: PluginModule['initializeAsync'] = async () => {
   checkForPluginUpdates();
-  migratePlugins(sendMessage);
 };
-
-export default initializeAsync;

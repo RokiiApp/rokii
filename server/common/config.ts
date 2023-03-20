@@ -17,7 +17,6 @@ const schema: Schema<SettingsSchema> = {
   selectOnShow: { default: false },
   hideOnBlur: { default: true },
   plugins: { default: {} },
-  isMigratedPlugins: { default: false },
   openAtLogin: { default: true },
   winPosition: { default: [] },
   proxy: { default: '' }

@@ -9,13 +9,4 @@ export const PLUGINS_BLACKLIST = [
   'cerebro-brew' // @cerebroapp/cerebro-brew
 ] as readonly string[];
 
-export const DEFAULT_PLUGINS = [
-  '@cerebroapp/cerebro-basic-apps',
-  '@cerebroapp/search',
-  'cerebro-math',
-  'cerebro-converter',
-  'cerebro-open-web',
-  'cerebro-files-nav'
-] as const;
-
 export const CACHE_PLUGINS_MAX_AGE = 5 * 60 * 1000; // 5 minutes
