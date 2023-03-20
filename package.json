@@ -18,7 +18,7 @@
   },
   "devDependencies": {
     "@playwright/test": "1.31.2",
-    "@rokii/types": "1.0.2",
+    "@rokii/types": "2.0.0",
     "@types/memoizee": "0.4.8",
     "@types/react": "18.0.28",
     "@types/react-dom": "18.0.11",
@@ -36,7 +36,7 @@
     "semistandard": "16.0.1",
     "standard": "17.0.0",
     "typescript": "4.9.5",
-    "vite": "4.1.4",
+    "vite": "4.2.1",
     "vite-electron-plugin": "0.8.2",
     "vite-plugin-electron-renderer": "0.11.4"
   },
@@ -51,19 +51,16 @@
     "electron-store": "8.1.0",
     "electron-updater": "5.3.0",
     "escape-string-regexp": "5.0.0",
-    "fs-extra": "11.1.0",
+    "fs-extra": "11.1.1",
     "just-debounce": "1.1.0",
     "memoizee": "0.4.15",
     "normalize.css": "8.0.1",
     "react-error-boundary": "3.1.4",
-    "react-markdown": "8.0.5",
+    "react-markdown": "8.0.6",
     "react-window": "1.8.8",
     "semver": "7.3.8",
     "tar-fs": "2.1.1",
     "wouter": "2.10.0",
     "zustand": "4.3.6"
-  },
-  "resolutions": {
-    "react-virtualized": "patch:react-virtualized@9.22.3#./path/to/react-virtualized-9.22.3.patch"
   }
 }
