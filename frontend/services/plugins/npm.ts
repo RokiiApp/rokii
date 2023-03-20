@@ -7,6 +7,12 @@ import https from 'node:https';
 import { move, remove } from 'fs-extra';
 import { NPM_API_BASE } from '@/constants';
 
+export enum NpmActions {
+  Install,
+  Uninstall,
+  Update
+}
+
 /**
  * Format name of file from package archive.
  * Just remove `./package`prefix from name
@@ -66,7 +72,7 @@ export default (dir: string) => {
     /**
      * Install npm package
      */
-    async install (
+    async [NpmActions.Install] (
       /**
        * Name of npm package in the registry
        */
@@ -113,18 +119,18 @@ export default (dir: string) => {
       }
     },
 
-    update (name: string) {
+    [NpmActions.Update] (name: string) {
       // Plugin update is downloading `.tar` and unarchiving it to temp folder
       // Only if this part was succeeded, current version of plugin is uninstalled
       // and temp folder moved to real plugin location
-      const middleware = () => this.uninstall(name);
-      return this.install(name, { middleware });
+      const middleware = () => this[NpmActions.Uninstall](name);
+      return this[NpmActions.Install](name, { middleware });
     },
 
     /**
      * Uninstall npm package
      */
-    async uninstall (name: string) {
+    async [NpmActions.Uninstall] (name: string) {
       const modulePath = path.join(dir, 'node_modules', name);
       console.group('[npm] Uninstall package', name);
       console.log('Remove package directory ', modulePath);

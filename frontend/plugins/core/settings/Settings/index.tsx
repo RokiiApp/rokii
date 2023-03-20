@@ -31,8 +31,8 @@ function Settings ({ get, set }: SettingsHandler) {
   return (
     <div className={styles.settings}>
       <Wrapper
-        label="Hotkey"
-        description="Type your global shortcut for Rokii in this input"
+        label='Hotkey'
+        description='Type your global shortcut for Rokii in this input'
       >
         <Hotkey
           hotkey={state.hotkey}
@@ -40,39 +40,39 @@ function Settings ({ get, set }: SettingsHandler) {
         />
       </Wrapper>
       <Select
-        label="Theme"
+        label='Theme'
         value={themes.find((t) => t.value === state.theme)}
         options={themes}
         onChange={(newValue) => newValue && changeConfig('theme', newValue.value)}
       />
       <Text
-        type="text"
-        label="Proxy"
+        type='text'
+        label='Proxy'
         value={state.proxy}
         onChange={(value: string) => changeConfig('proxy', value)}
       />
       <Checkbox
-        label="Open at login"
+        label='Open at login'
         value={state.openAtLogin}
         onChange={(value: boolean) => changeConfig('openAtLogin', value)}
       />
       <Checkbox
-        label="Show in menu bar"
+        label='Show in menu bar'
         value={state.showInTray}
         onChange={(value: boolean) => changeConfig('showInTray', value)}
       />
       <Checkbox
-        label="Developer Mode"
+        label='Developer Mode'
         value={state.developerMode}
         onChange={(value: boolean) => changeConfig('developerMode', value)}
       />
       <Checkbox
-        label="Clean results on hide"
+        label='Clean results on hide'
         value={state.cleanOnHide}
         onChange={(value: boolean) => changeConfig('cleanOnHide', value)}
       />
       <Checkbox
-        label="Select input on show"
+        label='Select input on show'
         value={state.selectOnShow}
         onChange={(value: boolean) => changeConfig('selectOnShow', value)}
       />

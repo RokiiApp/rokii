@@ -1,8 +1,13 @@
 .settings {
+  width: 100%;
   display: flex;
   align-self: flex-start;
   flex-direction: column;
   align-items: center;
+}
+
+.settings>div {
+  width: 100%;
 }
 
 .label {

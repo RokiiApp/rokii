@@ -3,7 +3,7 @@
   bottom: 0;
   right: 0;
   padding: 5px;
-  border-radius: 5px 0 0 0;
+  border-radius: 5px 0 10px 0px;
   border: var(--main-border);
   color: var(--secondary-font-color);
   background: var(--preview-input-background);

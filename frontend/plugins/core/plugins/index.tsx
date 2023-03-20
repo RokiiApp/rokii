@@ -7,6 +7,8 @@ import * as format from './utils/format';
 import icon from '../icon.png';
 import { Preview } from './Preview';
 import { useRokiStore } from '@/state/rokiStore';
+import { getCurrentWindow } from '@electron/remote';
+import { CHANNELS } from 'common/constants/events';
 
 function divideByFilter<T> (array: T[], filter: (element: T) => boolean) {
   return array.reduce(
@@ -36,6 +38,8 @@ const updatePlugin = async (update: PluginContext['update'], name: string) => {
   const updatedPlugin = plugins.find((plugin) => plugin.name === name)!;
 
   const title = `${format.name(updatedPlugin.name)}`;
+
+  getCurrentWindow().webContents.send(CHANNELS.FocusInput);
 
   update(name, {
     title,

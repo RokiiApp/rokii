@@ -116,5 +116,10 @@
 }
 
 .settingsWrapper {
+  width: 100%;
   margin: 15px 0;
+}
+
+.settingsWrapper>div {
+  width: 90%;
 }

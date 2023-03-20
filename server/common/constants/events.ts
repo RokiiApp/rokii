@@ -6,7 +6,8 @@ export const CHANNELS = {
   ShowTerm: 'show-term',
   RendererToRenderer: 'renderer-to-renderer',
   FocusInput: 'focus-input',
-  FocusPreview: 'focus-preview'
+  FocusPreview: 'focus-preview',
+  StatusBarUpdate: 'status-bar-update'
 } as const;
 
 export type ChannelInterfaces = {
@@ -24,6 +25,7 @@ export type ChannelInterfaces = {
     },
     [CHANNELS.FocusInput]: undefined,
     [CHANNELS.FocusPreview]: undefined,
+    [CHANNELS.StatusBarUpdate]: StatusBarState
 }
 
 export type ChannelInterfacesWithoutNeccesaryArgs = {
@@ -33,3 +35,12 @@ export type ChannelInterfacesWithoutNeccesaryArgs = {
 export type ChannelInterfacesWithNeccesaryArgs = {
     [K in keyof ChannelInterfaces]: ChannelInterfaces[K] extends undefined ? never : K;
 }[keyof ChannelInterfaces];
+
+export type StatusBarState = {
+    statusBarText: string;
+    icon: 'success' | 'error' | 'info' | 'loading' | null;
+    /**
+     * The time that the status bar should be visible.
+     */
+    timeout: number | null;
+  };

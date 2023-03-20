@@ -76,8 +76,8 @@ const ResultsList = () => {
         overscanCount={5}
         width={
           results[selected] !== undefined && results[selected].getPreview
-            ? 250
-            : 10000
+            ? '30%'
+            : '100%'
         }
       >
         {(a) => rowRenderer(a)}

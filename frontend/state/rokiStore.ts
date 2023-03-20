@@ -1,7 +1,5 @@
 import type { PluginResult } from '@rokii/types';
 
-import { INITIAL_STATE } from '@/constants';
-
 import { create } from 'zustand';
 import { isResultValid } from './utils';
 
@@ -11,8 +9,6 @@ export interface RokiStore {
    * Index of selected result
    */
   selected: number;
-  statusBarText: string;
-  setStatusBarText: (text: string) => void;
   /**
    * Reset state to initial state
    */
@@ -23,6 +19,11 @@ export interface RokiStore {
   moveCursor: (direction: number) => void;
   setSelected: (index: number) => void;
 }
+
+const INITIAL_STATE = {
+  results: [],
+  selected: 0
+};
 
 export const useRokiStore = create<RokiStore>((set) => ({
   ...INITIAL_STATE,
@@ -52,8 +53,6 @@ export const useRokiStore = create<RokiStore>((set) => ({
       };
     });
   },
-
-  setStatusBarText: (text) => set({ statusBarText: text }),
   hide: (id) =>
     set((state) => {
       const newResults = state.results.filter((i) => i.id !== id);

@@ -2,6 +2,7 @@ import type { PluginInfo } from '../types';
 
 import { useState } from 'react';
 import { KeyboardNav, KeyboardNavItem } from '@rokii/ui';
+import { NpmActions } from '@/services/plugins/npm';
 import { ActionButton } from './ActionButton';
 import { Description } from './Description';
 import { Settings } from './Settings';
@@ -10,19 +11,13 @@ import { client } from '@/services/plugins/index';
 import styles from './styles.module.css';
 import * as format from '../utils/format';
 
-enum PluginAction {
-  install = 'install',
-  uninstall = 'uninstall',
-  update = 'update'
-}
-
 type PreviewProps = {
   onComplete: () => void;
   plugin: PluginInfo;
 };
 
 export const Preview = ({ onComplete, plugin }: PreviewProps) => {
-  const [runningAction, setRunningAction] = useState<PluginAction | null>(null);
+  const [runningAction, setRunningAction] = useState<NpmActions | null>(null);
   const [showDescription, setShowDescription] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
 
@@ -31,8 +26,8 @@ export const Preview = ({ onComplete, plugin }: PreviewProps) => {
     onComplete();
   };
 
-  const getPluginAction =
-    (pluginName: string, runningActionName: PluginAction) => async () => {
+  const getNpmActions =
+    (pluginName: string, runningActionName: NpmActions) => async () => {
       setRunningAction(runningActionName);
       await client[runningActionName](pluginName);
       onCompleteAction();
@@ -68,9 +63,9 @@ export const Preview = ({ onComplete, plugin }: PreviewProps) => {
 
           {!isInstalled && !isDebugging && (
             <ActionButton
-              onSelect={getPluginAction(name, PluginAction.install)}
+              onSelect={getNpmActions(name, NpmActions.Install)}
               text={
-                runningAction === PluginAction.install
+                runningAction === NpmActions.Install
                   ? 'Installing...'
                   : 'Install'
               }
@@ -79,9 +74,9 @@ export const Preview = ({ onComplete, plugin }: PreviewProps) => {
 
           {isInstalled && (
             <ActionButton
-              onSelect={getPluginAction(name, PluginAction.uninstall)}
+              onSelect={getNpmActions(name, NpmActions.Uninstall)}
               text={
-                runningAction === PluginAction.uninstall
+                runningAction === NpmActions.Uninstall
                   ? 'Uninstalling...'
                   : 'Uninstall'
               }
@@ -90,9 +85,9 @@ export const Preview = ({ onComplete, plugin }: PreviewProps) => {
 
           {isUpdateAvailable && (
             <ActionButton
-              onSelect={getPluginAction(name, PluginAction.update)}
+              onSelect={getNpmActions(name, NpmActions.Update)}
               text={
-                runningAction === PluginAction.update
+                runningAction === NpmActions.Update
                   ? 'Updating...'
                   : `Update (${installedVersion} → ${version})`
               }
