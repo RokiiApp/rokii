@@ -27,7 +27,7 @@ export const SearchBar = () => {
   const moveCursor = useRokiStore((s) => s.moveCursor);
   const setSelected = useRokiStore((s) => s.setSelected);
 
-  const [term, prevTerm, updateTerm, setInputFocused] = useInputStore(s => [s.term, s.prevTerm, s.updateTerm, s.setInputFocused]);
+  const [term, prevTerm, updateTerm] = useInputStore(s => [s.term, s.prevTerm, s.updateTerm]);
 
   const [results, selected] = useRokiStore((s) => [s.results, s.selected]);
 
@@ -213,8 +213,6 @@ export const SearchBar = () => {
       className={styles.input}
       onChange={(e) => updateTerm(e.target.value)}
       onKeyDown={onKeyDown}
-      onFocus={() => setInputFocused(true)}
-      onBlur={() => setInputFocused(false)}
     />
   );
 };

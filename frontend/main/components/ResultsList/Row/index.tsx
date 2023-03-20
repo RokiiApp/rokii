@@ -23,14 +23,13 @@ function Row ({
   index
 }: Props) {
   const setSelected = useRokiStore(s => s.setSelected);
-  const inputFocused = useInputStore(s => s.inputFocused);
 
   const onMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
     if (isSelected) return;
     const { movementX, movementY } = event;
 
     const isNotMoving = movementX === 0 && movementY === 0;
-    if (isNotMoving || !inputFocused) return;
+    if (isNotMoving) return;
 
     setSelected(index);
   };
