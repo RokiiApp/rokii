@@ -1,5 +1,5 @@
 import { ensureDir, existsSync, writeFileSync } from 'fs-extra';
-import npm from './npm';
+import { NpmClient } from '@/services/NpmClient';
 import { PLUGINS_NODE_MODULES_PATH, PLUGINS_PACKAGE_JSON_PATH, PLUGINS_PATH, ROKII_PATH } from '@/constants';
 
 const ensureFile = (src: string, content = '') => {
@@ -24,5 +24,5 @@ export const ensureRokiNeededFiles = async () => {
   ensureFile(PLUGINS_PACKAGE_JSON_PATH, EMPTY_PACKAGE_JSON);
 };
 
-export const client = npm(PLUGINS_PATH);
+export const client = new NpmClient(PLUGINS_PATH);
 export { default as pluginSettings } from './settings';

@@ -2,7 +2,6 @@ import type { PluginInfo } from '../types';
 
 import { useState } from 'react';
 import { KeyboardNav, KeyboardNavItem } from '@rokii/ui';
-import { NpmActions } from '@/services/plugins/npm';
 import { ActionButton } from './ActionButton';
 import { Description } from './Description';
 import { Settings } from './Settings';
@@ -10,6 +9,8 @@ import { Settings } from './Settings';
 import { client } from '@/services/plugins/index';
 import styles from './styles.module.css';
 import * as format from '../utils/format';
+
+type NpmActions = 'installPackage' | 'uninstallPackage' | 'updatePackage';
 
 type PreviewProps = {
   onComplete: () => void;
@@ -21,16 +22,15 @@ export const Preview = ({ onComplete, plugin }: PreviewProps) => {
   const [showDescription, setShowDescription] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
 
-  const onCompleteAction = () => {
-    setRunningAction(null);
-    onComplete();
-  };
-
   const getNpmActions =
     (pluginName: string, runningActionName: NpmActions) => async () => {
       setRunningAction(runningActionName);
+
       await client[runningActionName](pluginName);
-      onCompleteAction();
+
+      setRunningAction(null);
+
+      onComplete();
     };
 
   const {
@@ -63,34 +63,22 @@ export const Preview = ({ onComplete, plugin }: PreviewProps) => {
 
           {!isInstalled && !isDebugging && (
             <ActionButton
-              onSelect={getNpmActions(name, NpmActions.Install)}
-              text={
-                runningAction === NpmActions.Install
-                  ? 'Installing...'
-                  : 'Install'
-              }
+              onSelect={getNpmActions(name, 'installPackage')}
+              text={runningAction === 'installPackage' ? 'Installing...' : 'Install'}
             />
           )}
 
           {isInstalled && (
             <ActionButton
-              onSelect={getNpmActions(name, NpmActions.Uninstall)}
-              text={
-                runningAction === NpmActions.Uninstall
-                  ? 'Uninstalling...'
-                  : 'Uninstall'
-              }
+              onSelect={getNpmActions(name, 'uninstallPackage')}
+              text={runningAction === 'uninstallPackage' ? 'Uninstalling...' : 'Uninstall'}
             />
           )}
 
           {isUpdateAvailable && (
             <ActionButton
-              onSelect={getNpmActions(name, NpmActions.Update)}
-              text={
-                runningAction === NpmActions.Update
-                  ? 'Updating...'
-                  : `Update (${installedVersion} → ${version})`
-              }
+              onSelect={getNpmActions(name, 'updatePackage')}
+              text={runningAction === 'updatePackage' ? 'Updating...' : `Update (${installedVersion} → ${version})`}
             />
           )}
 

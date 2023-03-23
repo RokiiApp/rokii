@@ -1,7 +1,6 @@
 import type { PluginModule } from '@rokii/types';
 import { client } from '@/services/plugins';
 import { getPlugins } from './utils/loadPlugins';
-import { NpmActions } from '@/services/plugins/npm';
 
 /**
  * Check plugins for updates and start plugins autoupdater
@@ -12,7 +11,7 @@ async function checkForPluginUpdates () {
 
   const updatePromises = plugins
     .filter((p) => p.isUpdateAvailable === true)
-    .map((p) => () => client[NpmActions.Update](p.name));
+    .map((p) => () => client.updatePackage(p.name));
 
   await Promise.all(updatePromises);
 
