@@ -19,12 +19,9 @@ const onSelectFactory = (command: Command, term: string, navigate: any) => {
   const args = getArgs(term);
 
   const commandHandlers: Record<CommandMode, PluginResult['onSelect']> = {
-    statusbar: (e) => {
-      e.preventDefault();
-    },
-
     plugin: (e) => {
-      navigate('/command/' + command.keyword);
+      const route = args ? command.keyword + '/' + encodeURI(args) : command.keyword;
+      navigate('/command/' + route);
       e.preventDefault();
     },
 

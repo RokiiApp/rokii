@@ -17,4 +17,4 @@ export type Command = {
     mode?: CommandMode;
 };
 
-export type CommandMode = 'background' | 'statusbar' | 'plugin';
+export type CommandMode = 'background' | 'plugin';

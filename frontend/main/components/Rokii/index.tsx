@@ -21,8 +21,8 @@ export const Rokii = () => {
           <Route path='/'>
             <ResultsList />
           </Route>
-          <Route path='/command/:keyword' component={CommandPage} />
-          <Route path='/:plugin' component={PluginPage} />
+          <Route path='/command/:keyword/:args?' component={CommandPage} />
+          <Route path='/:plugin/' component={PluginPage} />
         </Router>
       </div>
 
