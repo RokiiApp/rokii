@@ -42,7 +42,7 @@ export const displayCommands = (term: string, addResult: RokiStore['addResult'],
   searchMatchingCommands(commands, term).forEach((command) => {
     const { keyword, name } = command;
     addResult(name, {
-      icon: '/favicon.ico',
+      icon: './favicon.ico',
       title: name,
       subtitle: 'Rokii',
       term: keyword + ' ',

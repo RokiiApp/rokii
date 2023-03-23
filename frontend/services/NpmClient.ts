@@ -21,11 +21,13 @@ const formatPackageFile = (header: Headers) => ({
  */
 export class NpmClient {
   private packageJsonPath: string;
+  private dirPath: string;
 
   /**
    * @param dir Path to npm package directory
    */
   constructor (dir: string) {
+    this.dirPath = dir;
     this.packageJsonPath = path.join(dir, 'package.json');
   }
 
@@ -70,7 +72,7 @@ export class NpmClient {
 
       await this.downloadAndExtractPackage(
         resJson.versions[versionToInstall].dist.tarball,
-        path.join(this.packageJsonPath, 'node_modules', name),
+        path.join(this.dirPath, 'node_modules', name),
         middleware
       );
 
@@ -99,7 +101,7 @@ export class NpmClient {
      * Uninstall npm package
      */
   async uninstallPackage (name: string) {
-    const modulePath = path.join(this.packageJsonPath, 'node_modules', name);
+    const modulePath = path.join(this.dirPath, 'node_modules', name);
     console.group('[NpmClient] Uninstall package', name);
     console.log('Remove package directory ', modulePath);
     try {
