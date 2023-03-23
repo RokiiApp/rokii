@@ -1,6 +1,5 @@
 import { RouteComponentProps } from 'wouter';
-import { Command } from '@/services/commands/types';
-import { getCommands } from '@/services/commands/getCommands';
+import { commandsWatcher } from '@/services/commands/CommandsWatcher';
 import { useHashLocation } from '@/main/hooks/useHashLocation';
 import { useEffect, useState } from 'react';
 import { shellCommand } from '@rokii/utils';
@@ -9,7 +8,7 @@ import styles from './styles.module.css';
 export const CommandPage = ({ params }: RouteComponentProps<{ keyword: string}>) => {
   const [commandResult, setCommandResult] = useState<string>('');
   const [, useLocation] = useHashLocation();
-  const command = getCommands().find((command: Command) => command.keyword === params.keyword);
+  const command = commandsWatcher.getCommands().find((command) => command.keyword === params.keyword);
 
   useEffect(() => {
     if (!command) {

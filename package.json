@@ -2,7 +2,7 @@
   "name": "rokii",
   "version": "1.0.0-alpha.1",
   "main": "dist-server/main/index.js",
-  "description": "a new generation launcher",
+  "description": "Productivity booster for Windows",
   "author": "David Jiménez",
   "private": true,
   "debug": {

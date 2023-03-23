@@ -1,9 +1,11 @@
+import type { PluginResult } from '@rokii/types';
 import type { Command, CommandMode } from './types';
+
+import { app } from '@electron/remote';
+
 import { RokiStore } from '@/state/rokiStore';
 import { search, shellCommand } from '@rokii/utils';
-import { app } from '@electron/remote';
-import { PluginResult } from '@rokii/types';
-import { getCommands } from './getCommands';
+import { commandsWatcher } from './CommandsWatcher';
 
 const searchMatchingCommands = (commandsArray: Command[], term: string) => {
   return search(commandsArray, term.split(' ')[0], (command) => command.keyword + ' ' + command.name);
@@ -38,7 +40,7 @@ const onSelectFactory = (command: Command, term: string, navigate: any) => {
 };
 
 export const displayCommands = (term: string, addResult: RokiStore['addResult'], nav: any) => {
-  const commands = getCommands();
+  const commands = commandsWatcher.getCommands();
 
   searchMatchingCommands(commands, term).forEach((command) => {
     const { keyword, name } = command;
