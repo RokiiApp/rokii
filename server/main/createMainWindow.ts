@@ -65,7 +65,7 @@ export function createMainWindow () {
     // electron-vite-vue#298
     win.loadURL(url);
     // Open devTool if the app is not packaged
-    win.webContents.openDevTools({ mode: 'detach' });
+    win.on('ready-to-show', () => win.webContents.openDevTools({ mode: 'detach' }));
   } else {
     const indexHtml = join(process.env.DIST, 'index.html');
     win.loadFile(indexHtml);

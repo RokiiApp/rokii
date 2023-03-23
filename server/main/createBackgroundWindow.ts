@@ -16,7 +16,7 @@ export const createBackgroundWindow = () => {
     // electron-vite-vue#298
     backgroundWindow.loadURL(url);
     // Open devTool if the app is not packaged
-    backgroundWindow.webContents.openDevTools({ mode: 'detach' });
+    backgroundWindow.on('ready-to-show', () => backgroundWindow.webContents.openDevTools({ mode: 'detach' }));
   } else {
     const indexHtml = join(process.env.DIST, 'worker.html');
     backgroundWindow.loadFile(indexHtml);
