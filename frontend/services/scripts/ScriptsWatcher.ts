@@ -1,14 +1,14 @@
-import { commands } from '@/extensions/commands/Rokii';
+import { scripts } from '@/extensions/scripts/Rokii';
 import { join } from 'node:path';
 import { readFileSync } from 'fs-extra';
 import { FSWatcher, watch } from 'chokidar';
 import { ROKII_PATH } from '@/constants';
-import { Command } from './types';
+import { Script } from './types';
 
 class CommandsWatcher {
-  private customCommands: Command[] = [];
+  private customCommands: Script[] = [];
   private watcher: FSWatcher | undefined;
-  private nativeCommands: Command[] = commands;
+  private nativeCommands: Script[] = scripts;
 
   constructor () {
     this.watch();
@@ -33,4 +33,4 @@ class CommandsWatcher {
   }
 }
 
-export const commandsWatcher = new CommandsWatcher();
+export const scriptsWatcher = new CommandsWatcher();

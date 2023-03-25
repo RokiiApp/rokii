@@ -31,7 +31,6 @@ import('@/services/plugins/initializePlugins').then((module) =>
 );
 
 on(CHANNELS.UpdateDownloaded, () => {
-  // eslint-disable-next-line no-new
   new Notification('RoKii: update is ready to install', {
     body: 'New version is downloaded and will be automatically installed on quit'
   });

@@ -5,7 +5,7 @@ import { DEFAULT_SCOPE } from '../utils/pluginDefaultScope';
 import { useRokiStore } from '@/state/rokiStore';
 import { pluginSettings } from '@/services/plugins';
 import { useInputStore } from '@/state/inputStore';
-import { displayCommands } from '@/services/commands/displayCommands';
+import { displayScripts } from '@/services/scripts/displayScripts';
 
 export const useGetPluginResults = (term: string) => {
   const [, navigate] = useLocation();
@@ -42,7 +42,7 @@ export const useGetPluginResults = (term: string) => {
       }
     });
 
-    displayCommands(term, addResult, navigate);
+    displayScripts(term, addResult, navigate);
 
     // Reset results state on unmount so we don't have stale results and autocomplete values
     return () => resetResultsState();
