@@ -21,7 +21,7 @@ export const InputBox = () => {
 
   return (
     <div className={styles.inputWrapper}>
-      {!isRoot && <input type='image' src='/back-icon.svg' className={styles.backButton} onClick={() => setLocation('/')} />}
+      {!isRoot && <input type='image' src='./back-icon.svg' className={styles.backButton} onClick={() => setLocation('/')} />}
 
       <div className={styles.inputArea}>
         <Autocomplete />
