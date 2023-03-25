@@ -1,5 +1,5 @@
 import { readFile } from 'fs/promises';
-import { pluginsService } from '@/plugins';
+import { pluginsService } from '@/extensions';
 import { PLUGINS_PACKAGE_JSON_PATH } from '@/constants';
 
 const readPackageJson = async () => {

@@ -1,7 +1,7 @@
 import type { PluginModule } from '@rokii/types';
 
 import { on, send } from '@/services/rpc';
-import { pluginsService } from '@/plugins';
+import { pluginsService } from '@/extensions';
 import { pluginSettings } from '@/services/plugins';
 import { RPCEvents } from '@/constants';
 

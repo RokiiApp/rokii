@@ -1,7 +1,7 @@
 import type { PluginResult, PluginModule, PluginContext } from '@rokii/types';
 import { search } from '@rokii/utils';
 
-import { pluginsService } from '@/plugins';
+import { pluginsService } from '@/extensions';
 import icon from '../icon.png';
 
 /**

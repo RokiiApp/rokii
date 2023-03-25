@@ -1,7 +1,6 @@
 import { SmartIcon } from '@rokii/ui';
 import { useRokiStore } from '@/state/rokiStore';
 import styles from './styles.module.css';
-import { useInputStore } from '@/state/inputStore';
 
 type Props = {
   isSelected: boolean;

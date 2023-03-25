@@ -1,4 +1,4 @@
-import { pluginsService } from '@/plugins';
+import { pluginsService } from '@/extensions';
 import { on, send } from '@/services/rpc';
 import { pluginSettings } from '@/services/plugins';
 import { PLUGINS_NODE_MODULES_PATH, RPCEvents } from '@/constants';

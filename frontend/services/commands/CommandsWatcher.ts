@@ -1,4 +1,4 @@
-import { commands } from '@/plugins/commands/Rokii';
+import { commands } from '@/extensions/commands/Rokii';
 import { join } from 'node:path';
 import { readFileSync } from 'fs-extra';
 import { FSWatcher, watch } from 'chokidar';

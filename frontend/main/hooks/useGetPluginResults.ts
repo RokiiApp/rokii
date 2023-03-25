@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useLocation } from 'wouter';
-import { pluginsService } from '@/plugins';
+import { pluginsService } from '@/extensions';
 import { DEFAULT_SCOPE } from '../utils/pluginDefaultScope';
 import { useRokiStore } from '@/state/rokiStore';
 import { pluginSettings } from '@/services/plugins';
