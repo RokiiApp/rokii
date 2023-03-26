@@ -2,7 +2,6 @@ import type { PluginResult } from '@rokii/types';
 
 import { useEffect, useRef, memo } from 'react';
 import { ListChildComponentProps, VariableSizeList } from 'react-window';
-import { getCurrentWindow } from '@electron/remote';
 import styles from './styles.module.css';
 
 import { RESULT_HEIGHT, VISIBLE_RESULTS } from 'common/constants/ui';
@@ -21,8 +20,7 @@ type SelectItemFn = (
 ) => void;
 
 const ResultsList = () => {
-  const term = useInputStore((s) => s.term);
-  const electronWindow = useRef(getCurrentWindow());
+  const [term, updateTerm] = useInputStore((s) => [s.term, s.updateTerm]);
   useGetPluginResults(term);
 
   const [results, selected, reset] = useRokiStore((s) => [
@@ -39,7 +37,7 @@ const ResultsList = () => {
     reset();
     const event = wrapEvent(realEvent);
     item.onSelect?.(event);
-    if (!event.defaultPrevented) electronWindow.current.hide();
+    updateTerm('');
   };
 
   useEffect(() => {

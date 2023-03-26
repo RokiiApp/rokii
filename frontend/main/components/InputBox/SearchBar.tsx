@@ -40,11 +40,7 @@ export const SearchBar = () => {
   const selectItem: SelectItemFn = (item, realEvent) => {
     const event = wrapEvent(realEvent);
     item.onSelect?.(event);
-
-    if (!event.defaultPrevented) {
-      updateTerm('');
-      electronWindow.hide();
-    }
+    updateTerm('');
   };
 
   const getHighlightedResult: () => PluginResult | undefined = () => results[selected];
