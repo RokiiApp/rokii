@@ -15,7 +15,6 @@ export const useSearchBarEventsSubscription = (electronWindow: BrowserWindow, ma
 
   const onDocumentKeydown = (event: KeyboardEvent) => {
     if (event.key === 'Escape') {
-      event.preventDefault();
       mainInput.current?.focus();
     }
   };

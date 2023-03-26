@@ -7,8 +7,8 @@ import { RokiStore } from '@/state/rokiStore';
 import { search, shellCommand } from '@rokii/utils';
 import { scriptsWatcher } from './ScriptsWatcher';
 
-const searchMatchingCommands = (commandsArray: Script[], term: string) => {
-  return search(commandsArray, term.split(' ')[0], (command) => command.keyword + ' ' + command.name);
+const searchMatchingScripts = (scriptsArray: Script[], term: string) => {
+  return search(scriptsArray, term.split(' ')[0], (script) => script.keyword + ' ' + script.title + ' ' + script.subtitle);
 };
 
 const getArgs = (term: string) => {
@@ -27,7 +27,7 @@ const onSelectFactory = (script: Script, term: string, navigate: any) => {
 
     background: async (e) => {
       const commandResult = await shellCommand(script.content + (args || ''), { cwd: app.getPath('home') });
-      new Notification(script.name, { body: commandResult as string });
+      new Notification(script.title, { body: commandResult as string });
       e.preventDefault();
     }
   };
@@ -36,22 +36,22 @@ const onSelectFactory = (script: Script, term: string, navigate: any) => {
 };
 
 const normalizeCommandToDisplayResult = (command: Script): PluginResult => {
-  const { keyword, name } = command;
+  const { keyword, title, subtitle } = command;
   return {
-    title: name,
-    subtitle: 'Rokii',
+    title,
+    subtitle: subtitle || 'Rokii',
     term: keyword + ' ',
     icon: './favicon.ico'
   };
 };
 
 export const displayScripts = (term: string, addResult: RokiStore['addResult'], nav: any) => {
-  const commands = scriptsWatcher.getScripts();
+  const scripts = scriptsWatcher.getScripts();
 
-  searchMatchingCommands(commands, term).forEach((command) => {
-    const { name } = command;
+  searchMatchingScripts(scripts, term).forEach((command) => {
+    const { title } = command;
 
-    addResult(name, {
+    addResult(title, {
       ...normalizeCommandToDisplayResult(command),
       onSelect: onSelectFactory(command, term, nav)
     });

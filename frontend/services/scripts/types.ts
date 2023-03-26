@@ -6,7 +6,11 @@ export type Script = {
     /**
      * The name of the script. Will be displayed in the results
      */
-    name: string;
+    title: string;
+    /**
+     * The subtitle of the script. Will be displayed in the results
+     */
+    subtitle?: string;
     /**
      * The content of the script. Will be executed when the keyword is triggered
      */

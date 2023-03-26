@@ -91,7 +91,6 @@ export const SearchBar = () => {
 
       arrowDown: () => {
         moveCursor(1);
-        event.preventDefault();
       },
 
       arrowUp: () => {
@@ -100,7 +99,6 @@ export const SearchBar = () => {
         } else if (prevTerm) {
           updateTerm(prevTerm);
         }
-        event.preventDefault();
       }
     };
 

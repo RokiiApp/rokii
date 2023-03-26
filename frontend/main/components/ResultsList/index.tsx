@@ -23,10 +23,9 @@ const ResultsList = () => {
   const [term, updateTerm] = useInputStore((s) => [s.term, s.updateTerm]);
   useGetPluginResults(term);
 
-  const [results, selected, reset] = useRokiStore((s) => [
+  const [results, selected] = useRokiStore((s) => [
     s.results,
-    s.selected,
-    s.reset
+    s.selected
   ]);
   const listRef = useRef<VariableSizeList>(null);
 
@@ -34,7 +33,6 @@ const ResultsList = () => {
    * Select item from results list
    */
   const selectItem: SelectItemFn = (item, realEvent) => {
-    reset();
     const event = wrapEvent(realEvent);
     item.onSelect?.(event);
     updateTerm('');
