@@ -13,5 +13,6 @@ export enum RPCEvents {
 
 export const ROKII_PATH = join(app.getPath('appData'), 'rokii');
 export const PLUGINS_PATH = join(ROKII_PATH, 'plugins');
+export const COMMANDS_PATH = join(ROKII_PATH, 'commands');
 export const PLUGINS_NODE_MODULES_PATH = join(PLUGINS_PATH, 'node_modules');
 export const PLUGINS_PACKAGE_JSON_PATH = join(PLUGINS_PATH, 'package.json');

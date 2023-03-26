@@ -51,6 +51,8 @@ export function createMainWindow () {
     icon: join(process.env.PUBLIC, 'favicon.ico'),
     show: config.get('firstStart'),
     webPreferences: {
+      webSecurity: false,
+      allowRunningInsecureContent: false,
       nodeIntegration: true,
       contextIsolation: false
     }

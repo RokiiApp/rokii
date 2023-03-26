@@ -5,10 +5,10 @@ import { FSWatcher, watch } from 'chokidar';
 import { ROKII_PATH } from '@/constants';
 import { Script } from './types';
 
-class CommandsWatcher {
-  private customCommands: Script[] = [];
+class ScriptsWatcher {
+  private customScripts: Script[] = [];
   private watcher: FSWatcher | undefined;
-  private nativeCommands: Script[] = scripts;
+  private nativeScripts: Script[] = scripts;
 
   constructor () {
     this.watch();
@@ -17,20 +17,20 @@ class CommandsWatcher {
   private watch () {
     if (this.watcher) return;
 
-    const watcher = watch(join(ROKII_PATH, 'commands', 'custom.json'), {
+    const watcher = watch(join(ROKII_PATH, 'scripts', 'custom.json'), {
       awaitWriteFinish: true
     });
 
     watcher.on('all', (e, path) => {
-      console.log('[CommandsWatcher] - Event: ', e, path);
-      this.customCommands = JSON.parse(readFileSync(path, 'utf-8'));
-      console.log('[CommandsWatcher] - Updating commands...');
+      console.log('[ScriptsWatcher] - Event: ', e, path);
+      this.customScripts = JSON.parse(readFileSync(path, 'utf-8'));
+      console.log('[ScriptsWatcher] - Updating commands...');
     });
   }
 
-  getCommands () {
-    return [...this.nativeCommands, ...this.customCommands];
+  getScripts () {
+    return [...this.nativeScripts, ...this.customScripts];
   }
 }
 
-export const scriptsWatcher = new CommandsWatcher();
+export const scriptsWatcher = new ScriptsWatcher();

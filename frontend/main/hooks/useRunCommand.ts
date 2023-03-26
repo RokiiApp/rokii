@@ -8,7 +8,7 @@ export const useRunCommand = (params: { keyword: string, args?: string }) => {
   const [loading, setLoading] = useState<boolean>(true);
   const [, useLocation] = useHashLocation();
 
-  const script = scriptsWatcher.getCommands().find((command) => command.keyword === params.keyword);
+  const script = scriptsWatcher.getScripts().find(({ keyword }) => keyword === params.keyword);
   const args = params.args && decodeURI(params.args);
   const commandToExecute = script?.content ? script.content + args : args;
 

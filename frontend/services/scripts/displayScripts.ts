@@ -46,7 +46,7 @@ const normalizeCommandToDisplayResult = (command: Script): PluginResult => {
 };
 
 export const displayScripts = (term: string, addResult: RokiStore['addResult'], nav: any) => {
-  const commands = scriptsWatcher.getCommands();
+  const commands = scriptsWatcher.getScripts();
 
   searchMatchingCommands(commands, term).forEach((command) => {
     const { name } = command;
