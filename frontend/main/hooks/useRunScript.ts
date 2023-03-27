@@ -3,28 +3,28 @@ import { shellCommand } from '@rokii/utils';
 import { useEffect, useState } from 'react';
 import { useHashLocation } from './useHashLocation';
 
-export const useRunCommand = (params: { keyword: string, args?: string }) => {
-  const [commandResult, setCommandResult] = useState<string>('');
+export const useRunScript = (params: { keyword: string, args?: string }) => {
+  const [scriptResult, setScriptResult] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(true);
   const [, useLocation] = useHashLocation();
 
   const script = scriptsWatcher.getScripts().find(({ keyword }) => keyword === params.keyword);
   const args = params.args && decodeURI(params.args);
-  const commandToExecute = script?.content ? script.content + args : args;
+  const scriptToExecute = script?.content ? script.content + args : args;
 
   useEffect(() => {
-    if (!script || !commandToExecute) {
+    if (!script || !scriptToExecute) {
       return useLocation('/');
     }
 
-    shellCommand(commandToExecute).then((result) => {
-      setCommandResult(result as string);
+    shellCommand(scriptToExecute).then((result) => {
+      setScriptResult(result as string);
       setLoading(false);
     }).catch((error) => {
       setLoading(false);
-      setCommandResult(error.message);
+      setScriptResult(error.message);
     });
   }, []);
 
-  return [commandResult, loading, script] as const;
+  return [scriptResult, loading, script] as const;
 };

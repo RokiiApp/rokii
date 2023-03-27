@@ -21,7 +21,7 @@ const onSelectFactory = (script: Script, term: string, navigate: any) => {
   const scriptHandlers: Record<ScriptMode, PluginResult['onSelect']> = {
     plugin: (e) => {
       const route = args ? script.keyword + '/' + encodeURI(args) : script.keyword;
-      navigate('/command/' + route);
+      navigate('/script/' + route);
       e.preventDefault();
     },
 
