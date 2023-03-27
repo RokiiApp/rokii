@@ -1,6 +1,6 @@
 import { FSWatcher, watch } from 'chokidar';
 import { COMMANDS_PATH } from '@/constants';
-import { CommandInfo } from './types';
+import { CommandApiInfo, CommandInfo } from './types';
 import { readFileSync } from 'fs-extra';
 import { join } from 'path';
 
@@ -30,10 +30,11 @@ class CommandsWatcher {
   private getCommandsFromPackageJson (extensionFolderPath: string) {
     const pkgJson = JSON.parse(readFileSync(join(extensionFolderPath, 'package.json'), 'utf8'));
 
-    const commands = pkgJson.commands.map((command: any) => ({
+    const commands = pkgJson.commands.map((command: CommandApiInfo) => ({
       title: command.title,
       subtitle: command.subtitle,
-      path: join(extensionFolderPath, 'dist', command.name + '.js')
+      path: join(extensionFolderPath, 'dist', command.name + '.js'),
+      mode: command.mode
     }));
 
     return commands;
