@@ -8,6 +8,8 @@ import { on } from 'common/ipc';
 import { Rokii } from './components/Rokii';
 import './globals.css';
 
+window.React = React;
+
 /**
  * Change current theme
  *

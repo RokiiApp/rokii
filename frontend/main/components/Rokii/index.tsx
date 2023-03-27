@@ -6,6 +6,7 @@ import { StatusBar } from '@/main/components/StatusBar';
 import { PluginPage } from '@/main/components/PluginPage';
 import { InputBox } from '@/main/components/InputBox';
 import { ScriptPage } from '@/main/components/ScriptPage';
+import { CommandPage } from '../CommandPage';
 import styles from './styles.module.css';
 
 /**
@@ -22,6 +23,7 @@ export const Rokii = () => {
             <ResultsList />
           </Route>
           <Route path='/script/:keyword/:args?' component={ScriptPage} />
+          <Route path='/command/:modulePath?' component={CommandPage} />
           <Route path='/:plugin/' component={PluginPage} />
         </Router>
       </div>
