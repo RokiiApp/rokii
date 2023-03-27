@@ -18,6 +18,7 @@ function Settings ({ get, set }: SettingsHandler) {
     proxy: get('proxy'),
     developerMode: get('developerMode'),
     cleanOnHide: get('cleanOnHide'),
+    hideOnBlur: get('hideOnBlur'),
     selectOnShow: get('selectOnShow'),
     pluginsSettings: get('plugins'),
     openAtLogin: get('openAtLogin')
@@ -65,6 +66,11 @@ function Settings ({ get, set }: SettingsHandler) {
         label='Developer Mode'
         value={state.developerMode}
         onChange={(value: boolean) => changeConfig('developerMode', value)}
+      />
+      <Checkbox
+        label='Hide window on blur'
+        value={state.hideOnBlur}
+        onChange={(value: boolean) => changeConfig('hideOnBlur', value)}
       />
       <Checkbox
         label='Clean results on hide'
