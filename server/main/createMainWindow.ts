@@ -49,7 +49,6 @@ export function createMainWindow () {
     transparent: true,
     title: 'RoKii',
     icon: join(process.env.PUBLIC, 'favicon.ico'),
-    show: config.get('firstStart'),
     alwaysOnTop: true,
     webPreferences: {
       webSecurity: false,

@@ -20,7 +20,7 @@
     "@playwright/test": "1.32.1",
     "@rokii/types": "2.0.0",
     "@types/memoizee": "0.4.8",
-    "@types/react": "18.0.28",
+    "@types/react": "18.0.29",
     "@types/react-dom": "18.0.11",
     "@types/react-window": "1.8.5",
     "@types/tar-fs": "2.0.1",

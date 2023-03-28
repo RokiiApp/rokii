@@ -11,6 +11,7 @@ const schema: Schema<SettingsSchema> = {
   theme: { default: themes[0].value },
   hotkey: { default: 'Control+Space' },
   showInTray: { default: true },
+  // TODO remove this
   firstStart: { default: true },
   developerMode: { default: false },
   cleanOnHide: { default: true },

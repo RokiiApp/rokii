@@ -26,8 +26,7 @@ const onSelectFactory = (script: Script, term: string, navigate: any) => {
     },
 
     background: async (e) => {
-      const commandResult = await shellCommand(script.content + (args || ''), { cwd: app.getPath('home') });
-      new Notification(script.title, { body: commandResult as string });
+      await shellCommand(script.content + (args || ''), { cwd: app.getPath('home') });
       e.preventDefault();
     }
   };
