@@ -8,7 +8,6 @@ type Props = {
   title?: string;
   onSelect: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
   subtitle?: string;
-  style: React.CSSProperties;
   index: number;
 };
 
@@ -18,7 +17,6 @@ function Row ({
   title,
   onSelect,
   subtitle,
-  style,
   index
 }: Props) {
   const setSelected = useRokiStore(s => s.setSelected);
@@ -37,7 +35,6 @@ function Row ({
 
   return (
     <div
-      style={style}
       className={className}
       onClick={onSelect}
       onMouseMove={onMouseMove}

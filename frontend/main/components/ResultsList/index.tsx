@@ -1,7 +1,7 @@
 import type { PluginResult } from '@rokii/types';
 
 import { useEffect, useRef, memo } from 'react';
-import { ListChildComponentProps, VariableSizeList } from 'react-window';
+import { Virtuoso, type VirtuosoHandle } from 'react-virtuoso';
 import styles from './styles.module.css';
 
 import { RESULT_HEIGHT, VISIBLE_RESULTS } from 'common/constants/ui';
@@ -23,11 +23,8 @@ const ResultsList = () => {
   const [term, updateTerm] = useInputStore((s) => [s.term, s.updateTerm]);
   useGetPluginResults(term);
 
-  const [results, selected] = useRokiStore((s) => [
-    s.results,
-    s.selected
-  ]);
-  const listRef = useRef<VariableSizeList>(null);
+  const [results, selected] = useRokiStore((s) => [s.results, s.selected]);
+  const listRef = useRef<VirtuosoHandle>(null);
 
   /**
    * Select item from results list
@@ -40,11 +37,11 @@ const ResultsList = () => {
 
   useEffect(() => {
     if (listRef.current) {
-      listRef.current.scrollToItem(selected, 'smart');
+      listRef.current.scrollToIndex({ index: selected, align: 'end', behavior: 'smooth' });
     }
   }, [selected]);
 
-  const rowRenderer = ({ index, style }: ListChildComponentProps) => {
+  const rowRenderer = ({ index }: { index: number }) => {
     const result = results[index];
     const isSelected = index === selected;
     const attrs = {
@@ -55,7 +52,7 @@ const ResultsList = () => {
         selectItem(result, event)
 
     } as const;
-    return <Row style={style} {...attrs} />;
+    return <Row {...attrs} />;
   };
 
   if (results.length === 0) return null;
@@ -63,21 +60,16 @@ const ResultsList = () => {
   const selectedResult = results[selected];
   return (
     <div className={styles.wrapper}>
-      <VariableSizeList
+      <Virtuoso
+        style={{ flexGrow: 1 }}
         ref={listRef}
         className={styles.resultsList}
+        overscan={5}
         height={VISIBLE_RESULTS * RESULT_HEIGHT}
-        itemSize={() => RESULT_HEIGHT}
-        itemCount={results.length}
-        overscanCount={5}
-        width={
-          results[selected] !== undefined && results[selected].getPreview
-            ? '30%'
-            : '100%'
-        }
-      >
-        {(a) => rowRenderer(a)}
-      </VariableSizeList>
+        fixedItemHeight={RESULT_HEIGHT}
+        totalCount={results.length}
+        itemContent={(index) => (rowRenderer({ index }))}
+      />
 
       {typeof selectedResult.getPreview === 'function' && (
         <PluginPreview plugin={selectedResult as PluginResultWithPreview} />
